@@ -34,9 +34,11 @@ export default class Cube {
     this.tl.to(this.cube.position, { y: -3, duration: 1 })
     this.tl.to(this.cube.position, { x: 3, duration: 1 })
   }
+
   setWheel() {
     window.addEventListener('mousewheel', e => this.animProgress(e))
   }
+
   animProgress(e) {
     this.normalizedScroll = gsap.utils.clamp(0, 100, (this.scrolled += Math.sign(e.deltaY))) / 100
     gsap.to(this.tl, {
