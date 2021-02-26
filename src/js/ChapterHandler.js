@@ -38,6 +38,7 @@ export default class ChapterHandler {
         this.timelineSlider.max = this.chapters.length
         this.timelineSlider.addEventListener("input", () => {
             this.realProgress = parseFloat(this.timelineSlider.value)
+            this.updateCurrentChapter()
         });
     }
 
@@ -45,7 +46,6 @@ export default class ChapterHandler {
         this.setUI()
         this.chapters[this.currentChapter].start()
         this.time.on('tick', this.updateProgress)
-        this.time.on('tick', this.updateCurrentChapter.bind(this))
         window.addEventListener('mousewheel', e => this.mouseWheel(e))
     }
 
@@ -56,7 +56,7 @@ export default class ChapterHandler {
 
     updateProgress() {
         this.chapters[this.currentChapter].progress = this.chapProgress
-        this.globProgress = lerp(this.globProgress, this.realProgress, 0.1)
+        this.globProgress = lerp(this.globProgress, this.realProgress, 0.03)
         this.chapProgress = this.globProgress % 1
         if (this.currentChapter != Math.floor(this.globProgress)) {
             this.chapters[this.currentChapter].end()
@@ -65,9 +65,9 @@ export default class ChapterHandler {
             this.chapters[this.currentChapter].start()
         }
 
-        this.realProgressLabel.textContent = 'real progress: ' + Math.round(this.realProgress, 2)
-        this.globProgressLabel.textContent = 'glob progress: ' + Math.round(this.globProgress, 2)
-        this.chapProgressLabel.textContent = 'chap progress: ' + Math.round(this.chapProgress, 2)
+        this.realProgressLabel.textContent = 'real progress: ' + Math.round(this.realProgress * 100) / 100
+        this.globProgressLabel.textContent = 'glob progress: ' + Math.round(this.globProgress * 100) / 100
+        this.chapProgressLabel.textContent = 'chap progress: ' + Math.round(this.chapProgress * 100) / 100
         this.chapLabel.textContent = 'chap : ' + this.currentChapter
     }
 
@@ -75,6 +75,7 @@ export default class ChapterHandler {
         this.realProgress += event.deltaY / 2000
         this.realProgress = clamp(this.realProgress, 0, this.chapters.length)
         this.timelineSlider.value = this.realProgress
+        this.updateCurrentChapter()
     }
 
     async importAll() {
