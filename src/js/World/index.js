@@ -1,6 +1,7 @@
 import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './AmbientLight'
+import Cube from './Cube'
 import PointLightSource from './PointLight'
 import Suzanne from './Suzanne'
 
@@ -26,7 +27,8 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setPointLight()
-    this.setSuzanne()
+    // this.setSuzanne()
+    this.setCube()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -66,6 +68,12 @@ export default class World {
       debug: this.debugFolder,
     })
     this.container.add(this.light.container)
+  }
+  setCube() {
+    this.cube = new Cube({
+      debug: this.debugFolder,
+    })
+    this.container.add(this.cube.container)
   }
   setSuzanne() {
     this.suzanne = new Suzanne({

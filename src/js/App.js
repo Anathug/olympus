@@ -7,6 +7,7 @@ import Assets from '@tools/Loader'
 
 import Camera from './Camera'
 import World from '@world/index'
+import gsap from 'gsap/gsap-core'
 
 export default class App {
   constructor(options) {
@@ -32,7 +33,7 @@ export default class App {
       canvas: this.canvas,
       alpha: true,
       antialias: true,
-      powerPreference: 'high-performance'
+      powerPreference: 'high-performance',
     })
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
@@ -69,7 +70,7 @@ export default class App {
     this.camera = new Camera({
       sizes: this.sizes,
       renderer: this.renderer,
-      debug: this.debug
+      debug: this.debug,
     })
     // Add camera to scene
     this.scene.add(this.camera.container)
@@ -80,7 +81,7 @@ export default class App {
     this.world = new World({
       time: this.time,
       debug: this.debug,
-      assets: this.assets
+      assets: this.assets,
     })
     // Add world to scene
     this.scene.add(this.world.container)

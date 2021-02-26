@@ -27,8 +27,7 @@ export default class Camera {
     this.container.add(this.camera)
     // Change camera aspect on resize
     this.sizes.on('resize', () => {
-      this.camera.aspect =
-        this.sizes.viewport.width / this.sizes.viewport.height
+      this.camera.aspect = this.sizes.viewport.width / this.sizes.viewport.height
       // Call this method because of the above change
       this.camera.updateProjectionMatrix()
     })
@@ -41,10 +40,7 @@ export default class Camera {
   }
   setOrbitControls() {
     // Set orbit control
-    this.orbitControls = new OrbitControls(
-      this.camera,
-      this.renderer.domElement
-    )
+    this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement)
     this.orbitControls.enabled = false
     this.orbitControls.enableKeys = true
     this.orbitControls.zoomSpeed = 1
@@ -52,9 +48,7 @@ export default class Camera {
     if (this.debug) {
       this.debugFolder = this.debug.addFolder('Camera')
       this.debugFolder.open()
-      this.debugFolder
-        .add(this.orbitControls, 'enabled')
-        .name('Enable Orbit Control')
+      this.debugFolder.add(this.orbitControls, 'enabled').name('Enable Orbit Control')
     }
   }
 }

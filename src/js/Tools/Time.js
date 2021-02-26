@@ -1,5 +1,6 @@
 // Steal from https://github.com/brunosimon/folio-2019
 import EventEmitter from './EventEmitter'
+import gsap from 'gsap'
 
 export default class Time extends EventEmitter {
   constructor() {
@@ -13,19 +14,23 @@ export default class Time extends EventEmitter {
     this.delta = 16
 
     this.tick = this.tick.bind(this)
+    this.setTicker = this.setTicker.bind(this)
+    this.startTicker = this.startTicker.bind(this)
+    this.stopTicker = this.stopTicker.bind(this)
+    this.setTicker()
+  }
+
+  setTicker() {
+    gsap.ticker.add(this.startTicker)
+  }
+  startTicker() {
     this.tick()
+    this.trigger('tick')
   }
   // on('tick')
   tick() {
-    // Call tick method on each frame
-    setTimeout(() => {
-      window.requestAnimationFrame(this.tick)
-      this.trigger('tick')
-    }, 1000 / 60)
-
     // Get current time
     const current = Date.now()
-
     // delta
     this.delta = current - this.current
     // elapsed = time between start and now
@@ -39,8 +44,9 @@ export default class Time extends EventEmitter {
     // Add trigger event
     this.trigger('tick')
   }
+
   // Cancel animation frame
-  stop() {
-    window.cancelAnimationFrame(this.ticker)
+  stopTicker() {
+    gsap.ticker.add(this.startTicker)
   }
 }

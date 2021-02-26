@@ -55,5 +55,8 @@
   "bugs": {
     "url": "https://github.com/Lissandre/three_template/issues"
   },
-  "homepage": "https://github.com/Lissandre/three_template#readme"
+  "homepage": "https://github.com/Lissandre/three_template#readme",
+  "dependencies": {
+    "gsap": "^3.6.0"
+  }
 }
