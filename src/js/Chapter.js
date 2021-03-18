@@ -1,6 +1,7 @@
 export default class Chapter {
     constructor(index) {
         this.index = index
+        this.objects = []
     }
 
     init() {
