@@ -8,10 +8,12 @@ import regeneratorRuntime from "regenerator-runtime";
 //import * as chapters from './chapters'
 
 export default class ChapterHandler {
-    constructor(scene, world, time) {
-        this.scene = scene
-        this.world = world
-        this.time = time
+    constructor(options) {
+        this.options = options
+        this.scene = options.scene
+        this.world = options.world
+        this.time = options.time
+        this.assets = options.assets
 
         this.globProgress = 0
         this.realProgress = 0
@@ -84,9 +86,10 @@ export default class ChapterHandler {
         r.keys().forEach(k => {
             import(`./chapters${k.substring(1)}`)
                 .then(chap => {
+                    console.log(this.options)
                     chap.default.scene = this.scene
                     chap.default.world = this.world
-                    chap.default.init()
+                    chap.default.init(this.options)
                     a.push(chap.default)
                     if (a.length == r.keys().length) {
                         this.chapters = a

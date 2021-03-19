@@ -7,7 +7,6 @@ import Assets from '@tools/Loader'
 
 import Camera from './Camera'
 import World from '@world/index'
-import ChapterHandler from './ChapterHandler'
 import gsap from 'gsap'
 
 export default class App {
@@ -24,7 +23,6 @@ export default class App {
     this.setRenderer()
     this.setCamera()
     this.setWorld()
-    this.setChapterHandler()
   }
 
   setRenderer() {
@@ -60,10 +58,6 @@ export default class App {
       folder.open()
       folder.add(this.renderOnBlur, 'activated').name('Render on window blur')
     }
-  }
-
-  setChapterHandler() {
-    this.ChapterHandler = new ChapterHandler(this.scene, this.world, this.time)
   }
 
   setCamera() {
