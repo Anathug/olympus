@@ -29,8 +29,8 @@ Go to your-url/#debug
 - **@shaders**: `src/shaders/`
 - **@textures**: `src/textures/`
 - **@js**: `src/js/`
-- **@tools**: `src/js/Tools/`
-- **@world**: `src/js/World/`
+- **@tools**: `src/js/tools/`
+- **@world**: `src/js/world/`
 
 ## Deployment
 

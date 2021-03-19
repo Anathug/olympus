@@ -1,9 +1,9 @@
 import { Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
 
-import Sizes from '@tools/Sizes'
-import Time from '@tools/Time'
-import Assets from '@tools/Loader'
+import Sizes from './tools/Sizes'
+import Time from './tools/Time'
+import Assets from './tools/Loader'
 
 import Camera from './Camera'
 import World from '@world/index'
