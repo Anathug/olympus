@@ -1,5 +1,6 @@
 import Chapter from '../Chapter'
-import Starship from '../world/Starship.js'
+// import { BoxGeometry, MeshNormalMaterial, Mesh } from 'three'
+import Starship from '../World/Starship.js'
 let c = new Chapter(2)
 
 c.init = (options) => {

@@ -6,7 +6,7 @@ import Time from './tools/Time'
 import Assets from './tools/Loader'
 
 import Camera from './Camera'
-import World from './world/index'
+import World from '@world/index'
 // import gsap from 'gsap'
 
 export default class App {
