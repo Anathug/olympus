@@ -47,7 +47,10 @@ export default class ChapterHandler {
     setup() {
         this.setUI()
         this.chapters[this.currentChapter].start()
-        this.time.on('tick', this.updateProgress)
+        this.time.on('tick', () => {
+            this.updateProgress()
+            this.updateCurrentChapter()
+        })
         window.addEventListener('mousewheel', e => this.mouseWheel(e))
     }
 
@@ -86,7 +89,6 @@ export default class ChapterHandler {
         r.keys().forEach(k => {
             import(`./chapters${k.substring(1)}`)
                 .then(chap => {
-                    console.log(this.options)
                     chap.default.scene = this.scene
                     chap.default.world = this.world
                     chap.default.init(this.options)
