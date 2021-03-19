@@ -23,7 +23,7 @@ module.exports = {
     }
   },
   plugins: [
-    new CopyWebpackPlugin({ 
+    new CopyWebpackPlugin({
       patterns: [
         { from: 'static', to: '' },
         { from: '*.json', to: 'assets/fonts', context: "src/fonts", noErrorOnMissing: true },
