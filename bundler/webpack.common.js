@@ -18,8 +18,8 @@ module.exports = {
       '@sounds': path.resolve(__dirname, '../src/sounds/'),
       '@textures': path.resolve(__dirname, '../src/textures/'),
       '@js': path.resolve(__dirname, '../src/js/'),
-      '@tools': path.resolve(__dirname, '../src/js/Tools/'),
-      '@world': path.resolve(__dirname, '../src/js/World/'),
+      '@tools': path.resolve(__dirname, '../tools/'),
+      '@world': path.resolve(__dirname, '../world/'),
     }
   },
   plugins: [

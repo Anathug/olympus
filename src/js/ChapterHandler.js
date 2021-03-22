@@ -2,8 +2,8 @@
 import lerp from '@tools/Lerp'
 import clamp from '@tools/Clamp'
 // import Chapter from './Chapter'
-import regeneratorRuntime from "regenerator-runtime";
 
+import regeneratorRuntime from "regenerator-runtime";
 
 //import * as chapters from './chapters'
 
