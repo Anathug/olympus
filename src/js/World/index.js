@@ -1,12 +1,14 @@
 import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './AmbientLight'
-import Cube from './Cube'
+import Cube from './chapter_0/Cube'
 import PointLightSource from './PointLight'
 import Suzanne from './Suzanne'
+import ChapterHandler from '../ChapterHandler'
 
 export default class World {
   constructor(options) {
+    console.log('index', options)
     // Set options
     this.time = options.time
     this.debug = options.debug
@@ -25,10 +27,11 @@ export default class World {
     this.setLoader()
   }
   init() {
-    this.setAmbientLight()
-    this.setPointLight()
+    this.setChapterHandler()
+    //this.setAmbientLight()
+    //this.setPointLight()
     // this.setSuzanne()
-    this.setCube()
+    //this.setCube()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -40,10 +43,9 @@ export default class World {
       this.loadDiv.remove()
     } else {
       this.assets.on('ressourceLoad', () => {
-        this.progress.style.width = this.loadModels.innerHTML = `${
-          Math.floor((this.assets.done / this.assets.total) * 100) +
+        this.progress.style.width = this.loadModels.innerHTML = `${Math.floor((this.assets.done / this.assets.total) * 100) +
           Math.floor((1 / this.assets.total) * this.assets.currentPercent)
-        }%`
+          }%`
       })
 
       this.assets.on('ressourcesReady', () => {
@@ -81,5 +83,13 @@ export default class World {
       assets: this.assets,
     })
     this.container.add(this.suzanne.container)
+  }
+
+  setChapterHandler() {
+    this.ChapterHandler = new ChapterHandler({
+      time: this.time,
+      assets: this.assets,
+      world: this
+    })
   }
 }

@@ -1,5 +1,5 @@
 import Chapter from '../Chapter'
-let c = new Chapter()
+let c = new Chapter(1)
 
 c.init = () => {
 }

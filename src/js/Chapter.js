@@ -1,20 +1,21 @@
 export default class Chapter {
-    constructor(index) {
-        this.index = index
-    }
+  constructor(index) {
+    this.index = index
+    this.objects = []
+  }
 
-    init() {
-    }
+  init() {
+  }
 
-    start() {
+  start() {
 
-    }
+  }
 
-    update() {
+  update() {
 
-    }
+  }
 
-    end() {
+  end() {
 
-    }
+  }
 }

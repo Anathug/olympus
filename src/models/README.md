@@ -4,7 +4,7 @@ By placing your model here (.glb, .gltf or .fbx), it will be automatically impor
 The name of your file will be used to name the variable that will contains your model.
 
 Example:
-Take a look at `js/World/Suzanne.js`:
+Take a look at `js/world/Suzanne.js`:
 With a file `./suzanne.glb`, you can access your model with `this.assets.models.suzanne`
 
 You can also organize your models with different directories.
