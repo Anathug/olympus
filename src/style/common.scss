@@ -17,8 +17,12 @@ canvas {
   z-index: -1;
 }
 
-#timelineSlider{
+#timelineSlider {
   height: 30px;
   width: calc(100vw - 30px);
   margin: 15px;
+}
+
+img {
+  opacity: 0.6;
 }
