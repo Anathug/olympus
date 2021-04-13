@@ -14,14 +14,15 @@ export default class Image {
     this.textureLoader = new TextureLoader()
   }
   createImage(camera) {
-    this.texture = this.textureLoader.load(this.img.src)
+    this.texture = this.textureLoader.load(this.img.src,
+      () => {
+        this.setBounds(camera)
+      })
     this.geometry = new PlaneBufferGeometry(1, 1, 32, 32)
     this.material = new MeshStandardMaterial({ map: this.texture })
     this.mesh = new Mesh(this.geometry, this.material)
+    this.mesh.visible = false
     this.container.add(this.mesh)
-    setTimeout(() => {
-      this.setBounds(camera)
-    }, 200);
   }
   setBounds(camera) {
     this.rect = this.img.getBoundingClientRect()
@@ -31,7 +32,6 @@ export default class Image {
       width: this.rect.width,
       height: this.rect.height,
     }
-    console.log(this.bounds)
     this.updateSize(camera)
     this.updatePosition()
   }

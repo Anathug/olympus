@@ -1,5 +1,6 @@
 import { Object3D, PerspectiveCamera } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import gsap from 'gsap'
 
 export default class Camera {
   constructor(options) {
@@ -12,12 +13,15 @@ export default class Camera {
     this.container = new Object3D()
     this.container.name = 'Camera'
 
+    this.camera = null
+
     this.setCamera()
     this.setPosition()
-    this.setOrbitControls()
+    this.mouseMove = this.mouseMove.bind(this)
+    window.addEventListener('mousemove', this.mouseMove)
+    // this.setOrbitControls()
   }
   setCamera() {
-    // Create camera
     this.camera = new PerspectiveCamera(
       45,
       this.sizes.viewport.width / this.sizes.viewport.height,
@@ -25,10 +29,8 @@ export default class Camera {
       1000
     )
     this.container.add(this.camera)
-    // Change camera aspect on resize
     this.sizes.on('resize', () => {
       this.camera.aspect = this.sizes.viewport.width / this.sizes.viewport.height
-      // Call this method because of the above change
       this.camera.updateProjectionMatrix()
     })
   }
@@ -50,5 +52,33 @@ export default class Camera {
       this.debugFolder.open()
       this.debugFolder.add(this.orbitControls, 'enabled').name('Enable Orbit Control')
     }
+  }
+  mouseMove(e) {
+    let mouseX = e.clientX / window.innerWidth - 0.5
+    let mouseY = e.clientY / window.innerHeight - 0.5
+
+    gsap.to(this.camera.position, {
+      x: mouseX * 2,
+      duration: 0.6,
+      ease: 'power3.out'
+    })
+
+    gsap.to(this.camera.rotation, {
+      y: -mouseX / 5,
+      duration: 0.6,
+      ease: 'power3.out'
+    })
+
+    gsap.to(this.camera.position, {
+      y: -mouseY * 2,
+      duration: 0.6,
+      ease: 'power3.out'
+    })
+
+    gsap.to(this.camera.rotation, {
+      x: -mouseY / 5,
+      duration: 0.6,
+      ease: 'power3.out'
+    })
   }
 }

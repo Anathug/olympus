@@ -2,6 +2,7 @@ import Chapter from '../Chapter'
 import Image from '../World/chapter_0/Image.js'
 
 let c = new Chapter(0)
+const chapterImages = []
 
 
 c.init = (options) => {
@@ -11,9 +12,18 @@ c.init = (options) => {
 }
 
 c.start = () => {
+  chapterImages.forEach(chapterImage => {
+    chapterImage.visible = true
+  })
 }
 
 c.update = () => {
+}
+
+c.end = () => {
+  chapterImages.forEach(chapterImage => {
+    chapterImage.visible = false
+  })
 }
 
 function createImages(camera) {
@@ -25,12 +35,14 @@ function createImages(camera) {
     //creating image in html
     const img = document.createElement('img')
     img.src = image.default
+    img.classList.add(`img`)
     img.classList.add(`img-${i}`)
     section.appendChild(img);
 
     //creating three image
     const threeimg = new Image(img)
     threeimg.createImage(camera)
+    chapterImages.push(threeimg.mesh)
     c.world.container.add(threeimg.container)
   })
 
