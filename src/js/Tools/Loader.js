@@ -4,7 +4,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
-import { AudioLoader, FontLoader, TextureLoader } from 'three'
+import { AudioLoader, FontLoader, TextureLoader, MeshToonMaterial } from 'three'
 
 export default class Loader extends EventEmitter {
   constructor() {
@@ -45,7 +45,9 @@ export default class Loader extends EventEmitter {
           gltfLoader.load(
             model.src,
             loaded => {
+
               this.loadComplete(model, loaded)
+              console.log(loaded)
             },
             xhr => {
               this.progress(xhr)
@@ -196,6 +198,7 @@ export default class Loader extends EventEmitter {
   }
   loadComplete(ressource, loaded) {
     this.done++
+    this.changeMaterial(loaded)
     this.createNestedObject(this[`${ressource.type}s`], ressource.name.split('/'), loaded)
     this.trigger('ressourceLoad', [ressource, loaded])
     if (this.total === this.done) {
@@ -209,5 +212,16 @@ export default class Loader extends EventEmitter {
     }
     if (lastName) base = base[lastName] = value
     return base
+  }
+
+  changeMaterial(object) {
+    for (let i = 0; i < object.scene.children.length; i++) {
+      object.scene.children[i].traverse((child) => {
+        if (child.material) {
+          let c = child.material.color
+          child.material = new MeshToonMaterial({ color: c })
+        }
+      })
+    }
   }
 }
