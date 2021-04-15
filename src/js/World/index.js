@@ -1,20 +1,20 @@
 import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './AmbientLight'
-import Cube from './chapter_0/Cube'
 import PointLightSource from './PointLight'
 import Suzanne from './Suzanne'
 import ChapterHandler from '../ChapterHandler'
 
 export default class World {
   constructor(options) {
-    console.log('index', options)
-    // Set options
     this.time = options.time
     this.debug = options.debug
     this.assets = options.assets
+    this.camera = options.camera
+    this.mouse = options.mouse
+    this.renderer = options.renderer
+    this.scene = options.scene
 
-    // Set up
     this.container = new Object3D()
     this.container.name = 'World'
 
@@ -28,6 +28,8 @@ export default class World {
   }
   init() {
     this.setChapterHandler()
+    this.setAmbientLight()
+    //this.setPointLight()
     //this.setAmbientLight()
     this.setPointLight()
     // this.setSuzanne()
@@ -71,12 +73,6 @@ export default class World {
     })
     this.container.add(this.light.container)
   }
-  setCube() {
-    this.cube = new Cube({
-      debug: this.debugFolder,
-    })
-    this.container.add(this.cube.container)
-  }
   setSuzanne() {
     this.suzanne = new Suzanne({
       time: this.time,
@@ -89,7 +85,9 @@ export default class World {
     this.ChapterHandler = new ChapterHandler({
       time: this.time,
       assets: this.assets,
-      world: this
+      world: this,
+      renderer: this.renderer,
+      scene: this.scene
     })
   }
 }

@@ -38,13 +38,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(jpg|png|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: { outputPath: 'assets/images/' },
-          },
-        ],
+        //IMAGE LOADER
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: 'file-loader'
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -56,8 +52,9 @@ module.exports = {
         ],
       },
       {
-        test: /\.(html)$/,
-        use: ['html-loader'],
+        // HTML LOADER
+        test: /\.html$/,
+        loader: 'html-loader'
       },
       {
         test: /\.(js)$/,

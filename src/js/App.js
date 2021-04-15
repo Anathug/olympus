@@ -1,24 +1,23 @@
 import { Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
-
 import Sizes from './Tools/Sizes'
 import Time from './Tools/Time'
 import Assets from './Tools/Loader'
 
 import Camera from './Camera'
 import World from './World/index'
+import Mouse from './Mouse'
 
 // import gsap from 'gsap'
 
 export default class App {
   constructor(options) {
-    // Set options
     this.canvas = options.canvas
 
-    // Set up
     this.time = new Time()
     this.sizes = new Sizes()
     this.assets = new Assets()
+    this.mouse = new Mouse()
 
     this.setConfig()
     this.setRenderer()
@@ -27,9 +26,7 @@ export default class App {
   }
 
   setRenderer() {
-    // Set scene
     this.scene = new Scene()
-    // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
@@ -47,7 +44,6 @@ export default class App {
       this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     })
     this.time.on('tick', () => {
-
       if (!(this.renderOnBlur?.activated && !document.hasFocus())) {
         this.renderer.render(this.scene, this.camera.camera)
       }
@@ -66,6 +62,7 @@ export default class App {
       sizes: this.sizes,
       renderer: this.renderer,
       debug: this.debug,
+      mouse: this.mouse,
     })
 
     this.scene.add(this.camera.container)
@@ -76,8 +73,11 @@ export default class App {
       time: this.time,
       debug: this.debug,
       assets: this.assets,
+      camera: this.camera,
+      scene: this.scene,
+      mouse: this.mouse,
+      renderer: this.renderer,
     })
-
     this.scene.add(this.world.container)
   }
 

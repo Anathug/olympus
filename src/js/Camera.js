@@ -7,39 +7,39 @@ export default class Camera {
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.debug = options.debug
+    this.mouse = options.mouse.mouse
 
     // Set up
     this.container = new Object3D()
     this.container.name = 'Camera'
 
+    this.camera = null
+
     this.setCamera()
     this.setPosition()
-    this.setOrbitControls()
+    // this.setOrbitControls()
   }
   setCamera() {
-    // Create camera
     this.camera = new PerspectiveCamera(
-      75,
+      45,
       this.sizes.viewport.width / this.sizes.viewport.height,
       0.1,
       1000
     )
     this.container.add(this.camera)
-    // Change camera aspect on resize
     this.sizes.on('resize', () => {
       this.camera.aspect = this.sizes.viewport.width / this.sizes.viewport.height
-      // Call this method because of the above change
       this.camera.updateProjectionMatrix()
     })
   }
   setPosition() {
     // Set camera position
     this.camera.position.x = 0
-    this.camera.position.y = 1
+    this.camera.position.y = 0
     this.camera.position.z = 5
   }
+
   setOrbitControls() {
-    // Set orbit control
     this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement)
     this.orbitControls.enabled = false
     this.orbitControls.enableKeys = true
