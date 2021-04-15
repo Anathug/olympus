@@ -7,12 +7,14 @@ import ChapterHandler from '../ChapterHandler'
 
 export default class World {
   constructor(options) {
-    // Set options
     this.time = options.time
     this.debug = options.debug
     this.assets = options.assets
     this.camera = options.camera
-    // Set up
+    this.mouse = options.mouse
+    this.renderer = options.renderer
+    this.scene = options.scene
+
     this.container = new Object3D()
     this.container.name = 'World'
 
@@ -81,7 +83,9 @@ export default class World {
     this.ChapterHandler = new ChapterHandler({
       time: this.time,
       assets: this.assets,
-      world: this
+      world: this,
+      renderer: this.renderer,
+      scene: this.scene
     })
   }
 }

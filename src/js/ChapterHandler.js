@@ -14,6 +14,9 @@ export default class ChapterHandler {
     this.world = options.world
     this.time = options.time
     this.assets = options.assets
+    this.mouse = options.mouse
+    this.scene = options.scene
+    this.renderer = options.renderer
 
     this.globProgress = 0
     this.realProgress = 0
