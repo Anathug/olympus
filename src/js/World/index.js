@@ -29,7 +29,7 @@ export default class World {
   init() {
     this.setChapterHandler()
     //this.setAmbientLight()
-    //this.setPointLight()
+    this.setPointLight()
     // this.setSuzanne()
     //this.setCube()
   }

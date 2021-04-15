@@ -7,6 +7,7 @@ import Assets from './Tools/Loader'
 
 import Camera from './Camera'
 import World from './World/index'
+
 // import gsap from 'gsap'
 
 export default class App {
