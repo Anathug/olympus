@@ -12,18 +12,21 @@ c.init = (options) => {
   c.camera = options.world.camera.camera
   c.world = options.world
   c.scene = options.scene
+  c.assets = options.assets.textures.images.chapter0
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
   createImages(c.camera)
 }
 
 c.start = () => {
-  setEvent()
-  defaultScaleValues = c.objects.map(object => object.scale)
-  interaction = new Interaction(c.renderer, c.scene, c.camera);
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = true
-  })
+  setTimeout(() => {
+    setEvent()
+    defaultScaleValues = c.objects.map(object => object.scale)
+    interaction = new Interaction(c.renderer, c.scene, c.camera);
+    c.objects.forEach(chapterImage => {
+      chapterImage.visible = true
+    })
+  }, 100);
 }
 
 c.update = () => {
@@ -32,7 +35,6 @@ c.update = () => {
 
 c.end = () => {
   interaction.destroy()
-  console.log(interaction)
   c.objects.forEach(chapterImage => {
     chapterImage.visible = false
   })
@@ -92,23 +94,23 @@ const scaleDown = (mesh, i) => {
 }
 
 const createImages = (camera) => {
-  const images = importAll(require.context('../../images/chapter_0', false, /\.(png|jpe?g|svg)$/));
+  const images = importAll(require.context('../../textures/images/chapter0', false, /\.(png|jpe?g|svg)$/));
   const section = document.querySelector('.chapter_0')
 
   images.forEach((image, i) => {
 
     const img = document.createElement('img')
+    img.onload = () => {
+      const threeimg = new Image(img, c.assets[i])
+      threeimg.createImage(camera)
+      c.objects.push(threeimg.mesh)
+      c.world.container.add(threeimg.container)
+    }
     img.src = image.default
     img.classList.add(`img`)
     img.classList.add(`img-${i}`)
     section.appendChild(img);
-
-    const threeimg = new Image(img)
-    threeimg.createImage(camera)
-    c.objects.push(threeimg.mesh)
-    c.world.container.add(threeimg.container)
   })
-
 }
 
 function importAll(r) {
