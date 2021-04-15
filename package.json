@@ -58,6 +58,7 @@
   "homepage": "https://github.com/Lissandre/three_template#readme",
   "dependencies": {
     "gsap": "^3.6.0",
-    "regenerator-runtime": "^0.13.7"
+    "regenerator-runtime": "^0.13.7",
+    "three-nebula": "^10.0.1"
   }
 }
