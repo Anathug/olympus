@@ -8,6 +8,8 @@ import Camera from './Camera'
 import World from './World/index'
 import Mouse from './Mouse'
 
+// import gsap from 'gsap'
+
 export default class App {
   constructor(options) {
     this.canvas = options.canvas
