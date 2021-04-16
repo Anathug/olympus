@@ -43,6 +43,15 @@ module.exports = {
         loader: 'file-loader'
       },
       {
+        // HTML LOADER
+        // test: /\.html$/,
+        // loader: 'html-loader',
+        // options: {
+        //   // THIS will resolve relative URLs to reference from the app/ directory
+        //   root: path.resolve(__dirname, 'app')
+        // }
+      },
+      {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
@@ -50,11 +59,6 @@ module.exports = {
             options: { outputPath: 'assets/fonts/' },
           },
         ],
-      },
-      {
-        // HTML LOADER
-        test: /\.html$/,
-        loader: 'html-loader'
       },
       {
         test: /\.(js)$/,
