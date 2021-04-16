@@ -27,8 +27,8 @@ c.start = () => {
 }
 
 c.update = () => {
-    c.starship.container.position.x = c.progress * 48 - 24
-    c.starship.container.rotation.x += 0.001
+    c.starship.container.position.y = c.progress * 48 - 24
+    c.starship.container.rotation.y += 0.001
     c.starship.thrusters.update()
 }
 
