@@ -215,6 +215,7 @@ export default class Loader extends EventEmitter {
   }
 
   changeMaterial(object) {
+    if (!object.scene) return
     for (let i = 0; i < object.scene.children.length; i++) {
       object.scene.children[i].traverse((child) => {
         if (child.material) {

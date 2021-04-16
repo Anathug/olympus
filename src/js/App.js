@@ -63,6 +63,7 @@ export default class App {
       renderer: this.renderer,
       debug: this.debug,
       mouse: this.mouse,
+      assets: this.assets
     })
 
     this.scene.add(this.camera.container)

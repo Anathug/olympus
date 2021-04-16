@@ -2,7 +2,6 @@ import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './AmbientLight'
 import PointLightSource from './PointLight'
-import Suzanne from './Suzanne'
 import ChapterHandler from '../ChapterHandler'
 
 export default class World {
@@ -32,8 +31,6 @@ export default class World {
     //this.setPointLight()
     //this.setAmbientLight()
     this.setPointLight()
-    // this.setSuzanne()
-    //this.setCube()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -72,13 +69,6 @@ export default class World {
       debug: this.debugFolder,
     })
     this.container.add(this.light.container)
-  }
-  setSuzanne() {
-    this.suzanne = new Suzanne({
-      time: this.time,
-      assets: this.assets,
-    })
-    this.container.add(this.suzanne.container)
   }
 
   setChapterHandler() {

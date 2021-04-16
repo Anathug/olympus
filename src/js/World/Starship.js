@@ -104,10 +104,10 @@ export default class Starship {
   }
 
   setScale() {
-    this.container.scale.set(0.05, 0.05, 0.05);
+    this.container.scale.set(0.02, 0.02, 0.02);
   }
   setPosition() {
-    this.container.rotation.z = -Math.PI / 2
+    //this.container.rotation.z = -Math.PI / 2
   }
 
 }
