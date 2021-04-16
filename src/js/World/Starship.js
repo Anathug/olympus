@@ -71,7 +71,6 @@ export default class Starship {
 
     const mesh = this.assets.models.cloud.scene.children[0]//new Mesh(new SphereGeometry(10, 8, 8), new MeshToonMaterial({ color: '#ffd436', emissive: '#300500', transparent: true }))
     mesh.material.transparent = true
-    console.log(mesh.material)
     const system = new ParticleSystem();
     const thrustersEmitter1 = createEmitter({
       position: {

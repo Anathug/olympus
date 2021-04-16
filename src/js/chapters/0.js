@@ -3,7 +3,6 @@ import Image from '../World/chapter_0/Image.js'
 import gsap from 'gsap'
 import { Interaction } from '../../assets/lib/threeinteraction'
 
-
 let c = new Chapter(0)
 let defaultScaleValues;
 let interaction;
@@ -12,6 +11,7 @@ c.init = (options) => {
   c.camera = options.world.camera.camera
   c.world = options.world
   c.scene = options.scene
+  c.assets = options.assets.textures.images.chapter0
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
   createImages(c.camera)
@@ -32,7 +32,6 @@ c.update = () => {
 
 c.end = () => {
   interaction.destroy()
-  console.log(interaction)
   c.objects.forEach(chapterImage => {
     chapterImage.visible = false
   })
@@ -92,28 +91,13 @@ const scaleDown = (mesh, i) => {
 }
 
 const createImages = (camera) => {
-  const images = importAll(require.context('../../images/chapter_0', false, /\.(png|jpe?g|svg)$/));
-  const section = document.querySelector('.chapter_0')
-
+  const images = document.querySelectorAll('.chapter_0 img')
   images.forEach((image, i) => {
-
-    const img = document.createElement('img')
-    img.src = image.default
-    img.classList.add(`img`)
-    img.classList.add(`img-${i}`)
-    section.appendChild(img);
-
-    const threeimg = new Image(img)
+    const threeimg = new Image(image, c.assets[i])
     threeimg.createImage(camera)
     c.objects.push(threeimg.mesh)
     c.world.container.add(threeimg.container)
   })
-
 }
-
-function importAll(r) {
-  return r.keys().map(r);
-}
-
 
 export default c;

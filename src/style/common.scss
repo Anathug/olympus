@@ -25,6 +25,8 @@ canvas {
 
 img {
   opacity: 0;
+  z-index: 20;
+  position: relative;
 }
 
 .infos {
