@@ -101,9 +101,6 @@ export default class Loader extends EventEmitter {
           soundLoader.load(
             sound.src,
             loaded => {
-
-
-
               this.loadComplete(sound, loaded)
             },
             xhr => {
@@ -114,6 +111,7 @@ export default class Loader extends EventEmitter {
       },
     ]
   }
+
   progress(xhr) {
     if (xhr.lengthComputable) {
       this.currentPercent = Math.floor((xhr.loaded / xhr.total) * 100)
@@ -144,6 +142,7 @@ export default class Loader extends EventEmitter {
       const textureSrc = require('../../textures/' + newKey)
       this.ressourcesList.push({
         name: key.substring(2, key.length - (key.length - newKey.lastIndexOf('.') - 2)),
+        // ici bitch
         src: textureSrc.default,
         type: 'texture',
       })
@@ -175,6 +174,7 @@ export default class Loader extends EventEmitter {
     this.loadRessources(this.ressourcesList)
   }
   loadRessources(ressources) {
+    console.log(ressources)
     ressources.forEach(ressource => {
       this.total++
       const ressourceExtension =

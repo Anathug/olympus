@@ -16,12 +16,13 @@ export default class Image {
   }
   createImage(camera) {
     this.geometry = new PlaneBufferGeometry(1, 1, 32, 32)
-    this.material = new MeshStandardMaterial({ map: this.texture })
+    this.material = new MeshStandardMaterial({ map: this.texture, transparent: true })
     this.mesh = new Mesh(this.geometry, this.material)
     this.setBounds(camera)
     this.container.add(this.mesh)
     this.mesh.visible = false
   }
+
   setBounds(camera) {
     this.rect = this.img.getBoundingClientRect()
     this.bounds = {
