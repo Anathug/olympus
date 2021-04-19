@@ -27,27 +27,57 @@ export default class Starship {
     // Options
     this.time = options.time
     this.assets = options.assets
+    this.debug = options.debug
 
     // Set up
     this.container = new Object3D()
     this.container.name = 'Starship'
 
+    this.createEmitter = null
+    this.emitter = null
+    this.thrustersEmitter1 = null
+    this.thrustersEmitter2 = null
+    this.thrustersEmitter3 = null
+    this.params = {
+      particles: {
+        left: {
+          positionX: 0.5,
+          positionY: -1.5,
+          positionZ: 0.5,
+          size: 20
+        },
+        middle: {
+          positionX: 0,
+          positionY: 5,
+          positionZ: 8,
+          size: 0.1
+        },
+        right: {
+          positionX: 0,
+          positionY: 5,
+          positionZ: -8,
+          size: 0.1
+        },
+      }
+    }
+
     this.createStarship()
     this.createThrusters()
     this.setScale()
-    this.setPosition()
-
-
+    if (this.debug) {
+      this.setDebug()
+    }
   }
   createStarship() {
     this.starship = this.assets.models.starship.scene
+    this.starship.scale.set(10, 10, 10)
     this.container.add(this.starship)
   }
   createThrusters() {
-    const createEmitter = ({ position, size, body }) => {
-      const emitter = new Emitter();
+    this.createEmitter = ({ position, size, body }) => {
+      this.emitter = new Emitter();
 
-      return emitter
+      return this.emitter
         .setRate(new Rate(1, 0.1))
         .addInitializers([
           new Mass(1),
@@ -72,41 +102,60 @@ export default class Starship {
     const mesh = this.assets.models.cloud.scene.children[0]//new Mesh(new SphereGeometry(10, 8, 8), new MeshToonMaterial({ color: '#ffd436', emissive: '#300500', transparent: true }))
     mesh.material.transparent = true
     const system = new ParticleSystem();
-    const thrustersEmitter1 = createEmitter({
+    this.thrustersEmitter1 = this.createEmitter({
       position: {
         x: 0, y: 5, z: 0,
       },
-      size: 1,
+      size: 0.8,
       body: mesh,
     });
 
-    const thrustersEmitter2 = createEmitter({
+    this.thrustersEmitter2 = this.createEmitter({
       position: {
         x: 0, y: 5, z: 16.8
       },
-      size: 0.6,
+      size: 0.5,
       body: mesh,
     });
 
-    const thrustersEmitter3 = createEmitter({
+    this.thrustersEmitter3 = this.createEmitter({
       position: {
         x: 0, y: 5, z: -16.8,
       },
-      size: 0.6,
+      size: 0.5,
       body: mesh,
     });
+
     this.thrusters = system
-      .addEmitter(thrustersEmitter1)
-      .addEmitter(thrustersEmitter2)
-      .addEmitter(thrustersEmitter3)
+      .addEmitter(this.thrustersEmitter1)
+      .addEmitter(this.thrustersEmitter2)
+      .addEmitter(this.thrustersEmitter3)
       .addRenderer(new MeshRenderer(this.container, THREE))
   }
 
   setScale() {
     this.container.scale.set(0.02, 0.02, 0.02);
   }
-  setPosition() {
-    //this.container.rotation.z = -Math.PI / 2
+  setDebug() {
+    this.debugFolder = this.debug.addFolder('Starship')
+      .addFolder('Reactor 1')
+    this.debugFolder
+      .add(this.thrustersEmitter1.position, 'x')
+      .step(0.1)
+      .min(-10)
+      .max(10)
+      .name('Position X')
+    this.debugFolder
+      .add(this.thrustersEmitter1.position, 'y')
+      .step(0.1)
+      .min(-10)
+      .max(10)
+      .name('Position Y')
+    this.debugFolder
+      .add(this.thrustersEmitter1.position, 'z')
+      .step(0.1)
+      .min(-10)
+      .max(10)
+      .name('Position Z')
   }
-
 }

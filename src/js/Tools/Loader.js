@@ -174,7 +174,6 @@ export default class Loader extends EventEmitter {
     this.loadRessources(this.ressourcesList)
   }
   loadRessources(ressources) {
-    console.log(ressources)
     ressources.forEach(ressource => {
       this.total++
       const ressourceExtension =

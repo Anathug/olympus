@@ -76,6 +76,7 @@ export default class World {
       time: this.time,
       assets: this.assets,
       world: this,
+      debug: this.debugFolder,
       renderer: this.renderer,
       scene: this.scene
     })
