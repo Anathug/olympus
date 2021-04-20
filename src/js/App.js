@@ -44,6 +44,7 @@ export default class App {
     this.setStarship()
     this.setMars()
     this.setEarth()
+    this.createRenderer()
     this.setCamera()
     this.setRenderer()
     this.setWorld()
@@ -65,14 +66,13 @@ export default class App {
     this.scene.background = cubeMap
   }
 
-  setRenderer() {
+  createRenderer() {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
       antialias: true,
       powerPreference: 'high-performance',
     })
-
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
 
@@ -83,7 +83,9 @@ export default class App {
     this.sizes.on('resize', () => {
       this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     })
+  }
 
+  setRenderer() {
     const composer = new EffectComposer(this.renderer)
     composer.addPass(new RenderPass(this.scene, this.camera.camera))
 

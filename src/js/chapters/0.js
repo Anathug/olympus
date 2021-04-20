@@ -31,7 +31,7 @@ c.start = () => {
 }
 
 c.update = () => {
-  mouseMove(c.camera)
+  // mouseMove(c.camera)
 }
 
 c.end = () => {

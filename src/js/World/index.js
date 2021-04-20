@@ -6,6 +6,7 @@ import ChapterHandler from '../ChapterHandler'
 
 export default class World {
   constructor(options) {
+
     this.time = options.time
     this.debug = options.debug
     this.assets = options.assets
@@ -17,14 +18,12 @@ export default class World {
     this.starship = options.starship
     this.container = new Object3D()
     this.container.name = 'World'
-    this.init()
-
     if (this.debug) {
       this.container.add(new AxesHelper(5))
       this.debugFolder = this.debug.addFolder('World')
       this.debugFolder.open()
     }
-
+    this.init()
   }
   init() {
     this.setChapterHandler()

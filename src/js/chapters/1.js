@@ -17,9 +17,11 @@ c.init = (options) => {
   c.launcher = new Launcher({
     time: options.time,
     assets: options.assets,
-    world: options.world
+    world: options.world,
+    debug: options.debug
   })
   c.objects.push(c.launcher.container)
+  c.world.container.add(c.launcher.container)
   //make everything invisible at first
   c.objects.forEach(object => {
     object.visible = false
