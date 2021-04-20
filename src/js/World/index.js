@@ -13,7 +13,7 @@ export default class World {
     this.mouse = options.mouse
     this.renderer = options.renderer
     this.scene = options.scene
-
+    this.starship = options.starship
     this.container = new Object3D()
     this.container.name = 'World'
 
@@ -78,7 +78,8 @@ export default class World {
       world: this,
       debug: this.debugFolder,
       renderer: this.renderer,
-      scene: this.scene
+      scene: this.scene,
+      starship: this.starship
     })
   }
 }

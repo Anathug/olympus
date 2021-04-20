@@ -13,16 +13,22 @@ c.init = (options) => {
   c.scene = options.scene
   c.assets = options.assets.textures.images.chapter0
   c.renderer = c.world.renderer
+  c.starship = options.starship
   c.mouse = c.world.mouse.mouse
   createImages(c.camera)
+  c.objects.push(c.starship.container)
+  c.objects.forEach(object => {
+    object.visible = false
+  })
 }
 
 c.start = () => {
   setEvent()
   defaultScaleValues = c.objects.map(object => object.scale)
   interaction = new Interaction(c.renderer, c.scene, c.camera);
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = true
+  c.starship.container.position.set(0, 0, 0)
+  c.objects.forEach(object => {
+    object.visible = true
   })
 }
 
@@ -32,8 +38,8 @@ c.update = () => {
 
 c.end = () => {
   interaction.destroy()
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = false
+  c.objects.forEach(object => {
+    object.visible = false
   })
 }
 

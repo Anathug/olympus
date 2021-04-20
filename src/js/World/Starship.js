@@ -60,7 +60,6 @@ export default class Starship {
         },
       }
     }
-
     this.createStarship()
     this.createThrusters()
     this.setScale()

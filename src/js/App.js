@@ -15,6 +15,7 @@ import Assets from './Tools/Loader'
 import Camera from './Camera'
 import World from './World/index'
 import Mouse from './Mouse'
+import Starship from './World/Starship.js'
 
 import postVertexShader from '../shaders/post/vertexShader.glsl'
 import postFragmentShader from '../shaders/post/fragmentShader.glsl'
@@ -32,14 +33,18 @@ export default class App {
     this.mouse = new Mouse()
 
     this.counter = 0.0
+    this.starship = null
     this.myEffect = null
     this.lut = true
 
-    this.setConfig()
-    this.setScene()
-    this.setCamera()
-    this.setRenderer()
-    this.setWorld()
+    setTimeout(() => {
+      this.setConfig()
+      this.setScene()
+      this.setStarship()
+      this.setCamera()
+      this.setRenderer()
+      this.setWorld()
+    }, 1000);
   }
 
   setScene() {
@@ -138,6 +143,15 @@ export default class App {
     }
   }
 
+  setStarship() {
+    this.starship = new Starship({
+      time: this.time,
+      assets: this.assets,
+      world: this.world,
+      debug: this.debug
+    })
+    this.scene.add(this.starship.container)
+  }
   setCamera() {
     this.camera = new Camera({
       sizes: this.sizes,
@@ -159,6 +173,7 @@ export default class App {
       camera: this.camera,
       scene: this.scene,
       mouse: this.mouse,
+      starship: this.starship,
       renderer: this.renderer,
     })
     this.scene.add(this.world.container)
