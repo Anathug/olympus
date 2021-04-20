@@ -1,4 +1,4 @@
-import { Scene, sRGBEncoding, WebGLRenderer, CubeTextureLoader, LinearFilter } from 'three'
+import { Scene, sRGBEncoding, WebGLRenderer, CubeTextureLoader, LinearFilter, MeshBasicMaterial, CubeTexture } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
@@ -10,12 +10,14 @@ import * as dat from 'dat.gui'
 
 import Sizes from './Tools/Sizes'
 import Time from './Tools/Time'
-import Assets from './Tools/Loader'
 
 import Camera from './Camera'
 import World from './World/index'
 import Mouse from './Mouse'
+
 import Starship from './World/Starship.js'
+import Mars from './World/Mars.js'
+import Earth from './World/Earth.js'
 
 import postVertexShader from '../shaders/post/vertexShader.glsl'
 import postFragmentShader from '../shaders/post/fragmentShader.glsl'
@@ -26,10 +28,10 @@ import postFragmentShader from '../shaders/post/fragmentShader.glsl'
 export default class App {
   constructor(options) {
     this.canvas = options.canvas
+    this.assets = options.assets
 
     this.time = new Time()
     this.sizes = new Sizes()
-    this.assets = new Assets()
     this.mouse = new Mouse()
 
     this.counter = 0.0
@@ -37,27 +39,30 @@ export default class App {
     this.myEffect = null
     this.lut = true
 
-    setTimeout(() => {
-      this.setConfig()
-      this.setScene()
-      this.setStarship()
-      this.setCamera()
-      this.setRenderer()
-      this.setWorld()
-    }, 1000);
+    this.setConfig()
+    this.setScene()
+    this.setStarship()
+    this.setMars()
+    this.setEarth()
+    this.setCamera()
+    this.setRenderer()
+    this.setWorld()
   }
 
   setScene() {
     this.scene = new Scene()
-    const cubeLoader = new CubeTextureLoader
+    const t = this.assets.textures.hdri
+    const cubeMap = new CubeTexture()
 
-    const textureCube = cubeLoader.load([
-      require('../textures/hdri/px.png').default, require('../textures/hdri/nx.png').default,
-      require('../textures/hdri/py.png').default, require('../textures/hdri/ny.png').default,
-      require('../textures/hdri/pz.png').default, require('../textures/hdri/nz.png').default
-    ]);
-    textureCube.minFilter = LinearFilter
-    this.scene.background = textureCube
+    cubeMap.images[0] = t.px.image
+    cubeMap.images[1] = t.nx.image
+    cubeMap.images[2] = t.py.image
+    cubeMap.images[3] = t.ny.image
+    cubeMap.images[4] = t.pz.image
+    cubeMap.images[5] = t.nz.image
+    cubeMap.needsUpdate = true
+
+    this.scene.background = cubeMap
   }
 
   setRenderer() {
@@ -106,16 +111,6 @@ export default class App {
         composer.addPass(lutPass)
       })
 
-    // const filmPass = new FilmPass(
-    //   0.35,  
-    //   0.025, 
-    //   648, 
-    //   false,
-    // );
-    // filmPass.renderToScreen = true
-    // composer.addPass(filmPass)
-
-
     this.time.on('tick', () => {
       this.counter += 0.01
       if (!this.lut) {
@@ -152,6 +147,24 @@ export default class App {
     })
     this.scene.add(this.starship.container)
   }
+  setMars() {
+    this.mars = new Mars({
+      time: this.time,
+      assets: this.assets,
+      world: this.world,
+      debug: this.debug
+    })
+    this.scene.add(this.mars.container)
+  }
+  setEarth() {
+    // this.earth = new Earth({
+    //   time: this.time,
+    //   assets: this.assets,
+    //   world: this.world,
+    //   debug: this.debug
+    // })
+    // this.scene.add(this.earth.container)
+  }
   setCamera() {
     this.camera = new Camera({
       sizes: this.sizes,
@@ -174,6 +187,8 @@ export default class App {
       scene: this.scene,
       mouse: this.mouse,
       starship: this.starship,
+      mars: this.mars,
+      earth: this.earth,
       renderer: this.renderer,
     })
     this.scene.add(this.world.container)

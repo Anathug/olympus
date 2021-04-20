@@ -1,6 +1,6 @@
 import { Object3D } from 'three'
 
-export default class Launcher {
+export default class Launch {
   constructor(options) {
     this.time = options.time
     this.assets = options.assets
@@ -15,12 +15,12 @@ export default class Launcher {
 
   }
   createLauncher() {
-    this.starship = this.assets.models.launcher.scene
-    this.container.add(this.starship)
+    this.launcher = this.assets.models.launcher.scene
+    this.container.add(this.launcher)
   }
 
   setScale() {
-    this.container.scale.set(0.02, 0.02, 0.02);
+    // this.container.scale.set(0.02, 0.02, 0.02);
   }
   setPosition() {
     //this.container.rotation.z = -Math.PI / 2
