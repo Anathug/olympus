@@ -34,8 +34,8 @@ export default class Starship {
       scale: 0.02
     }
 
-    this.createStarship()
-    this.createThrusters()
+    this.createStarship = this.createStarship.bind(this)
+    this.createThrusters = this.createThrusters.bind(this)
     this.setScale()
     if (this.debug) {
       this.setDebug()
