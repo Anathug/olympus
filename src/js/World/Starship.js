@@ -36,6 +36,7 @@ export default class Starship {
 
     this.createStarship = this.createStarship.bind(this)
     this.createThrusters = this.createThrusters.bind(this)
+    this.createStarship()
     this.setScale()
     if (this.debug) {
       this.setDebug()

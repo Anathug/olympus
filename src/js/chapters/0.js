@@ -10,11 +10,14 @@ let imagesArray = []
 
 c.init = (options) => {
   c.camera = options.world.camera.camera
+  c.starship = options.starship
   c.world = options.world
   c.scene = options.scene
   c.assets = options.assets.textures.images.chapter0
+  c.debug = options.debug
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
+  c.allowScroll = true
   createImages(c.camera)
   c.objects.forEach(object => {
     object.visible = false
@@ -23,6 +26,7 @@ c.init = (options) => {
 
 c.start = () => {
   setEvent()
+  c.starship.container.visible = false
   defaultScaleValues = c.objects.map(object => object.scale)
   interaction = new Interaction(c.renderer, c.scene, c.camera);
   c.objects.forEach(object => {
@@ -31,7 +35,9 @@ c.start = () => {
 }
 
 c.update = () => {
-  // mouseMove(c.camera)
+  if (!c.debug) {
+    mouseMove(c.camera)
+  }
 }
 
 c.end = () => {
