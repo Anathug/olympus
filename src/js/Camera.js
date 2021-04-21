@@ -17,7 +17,9 @@ export default class Camera {
 
     this.setCamera()
     this.setPosition()
-    this.setOrbitControls()
+    if (this.debug) {
+      this.setOrbitControls()
+    }
   }
   setCamera() {
     this.camera = new PerspectiveCamera(
