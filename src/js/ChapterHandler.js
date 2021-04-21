@@ -18,6 +18,8 @@ export default class ChapterHandler {
     this.scene = options.scene
     this.renderer = options.renderer
     this.debug = options.debug
+    this.starship = options.starship
+    this.mars = options.mars
 
     this.globProgress = 0
     this.realProgress = 0

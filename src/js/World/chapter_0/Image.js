@@ -20,7 +20,6 @@ export default class Image {
     this.mesh = new Mesh(this.geometry, this.material)
     this.setBounds(camera)
     this.container.add(this.mesh)
-    this.mesh.visible = false
   }
 
   setBounds(camera) {

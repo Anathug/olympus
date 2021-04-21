@@ -24,45 +24,18 @@ import ParticleSystem, {
 
 export default class Starship {
   constructor(options) {
-    // Options
     this.time = options.time
     this.assets = options.assets
     this.debug = options.debug
 
-    // Set up
     this.container = new Object3D()
     this.container.name = 'Starship'
-
-    this.createEmitter = null
-    this.emitter = null
-    this.thrustersEmitter1 = null
-    this.thrustersEmitter2 = null
-    this.thrustersEmitter3 = null
     this.params = {
-      particles: {
-        left: {
-          positionX: 0.5,
-          positionY: -1.5,
-          positionZ: 0.5,
-          size: 20
-        },
-        middle: {
-          positionX: 0,
-          positionY: 5,
-          positionZ: 8,
-          size: 0.1
-        },
-        right: {
-          positionX: 0,
-          positionY: 5,
-          positionZ: -8,
-          size: 0.1
-        },
-      }
+      scale: 0.02
     }
 
-    this.createStarship()
-    this.createThrusters()
+    this.createStarship = this.createStarship.bind(this)
+    this.createThrusters = this.createThrusters.bind(this)
     this.setScale()
     if (this.debug) {
       this.setDebug()
@@ -74,10 +47,10 @@ export default class Starship {
     this.container.add(this.starship)
   }
   createThrusters() {
-    this.createEmitter = ({ position, size, body }) => {
-      this.emitter = new Emitter();
+    const createEmitter = ({ position, size, body }) => {
+      const emitter = new Emitter();
 
-      return this.emitter
+      return emitter
         .setRate(new Rate(1, 0.1))
         .addInitializers([
           new Mass(1),
@@ -102,7 +75,7 @@ export default class Starship {
     const mesh = this.assets.models.cloud.scene.children[0]//new Mesh(new SphereGeometry(10, 8, 8), new MeshToonMaterial({ color: '#ffd436', emissive: '#300500', transparent: true }))
     mesh.material.transparent = true
     const system = new ParticleSystem();
-    this.thrustersEmitter1 = this.createEmitter({
+    const thrustersEmitter1 = createEmitter({
       position: {
         x: 0, y: 5, z: 0,
       },
@@ -110,7 +83,7 @@ export default class Starship {
       body: mesh,
     });
 
-    this.thrustersEmitter2 = this.createEmitter({
+    const thrustersEmitter2 = createEmitter({
       position: {
         x: 0, y: 5, z: 16.8
       },
@@ -118,7 +91,7 @@ export default class Starship {
       body: mesh,
     });
 
-    this.thrustersEmitter3 = this.createEmitter({
+    const thrustersEmitter3 = createEmitter({
       position: {
         x: 0, y: 5, z: -16.8,
       },
@@ -127,35 +100,46 @@ export default class Starship {
     });
 
     this.thrusters = system
-      .addEmitter(this.thrustersEmitter1)
-      .addEmitter(this.thrustersEmitter2)
-      .addEmitter(this.thrustersEmitter3)
+      .addEmitter(thrustersEmitter1)
+      .addEmitter(thrustersEmitter2)
+      .addEmitter(thrustersEmitter3)
       .addRenderer(new MeshRenderer(this.container, THREE))
   }
 
   setScale() {
-    this.container.scale.set(0.02, 0.02, 0.02);
+    this.container.scale.set(this.params.scale, this.params.scale, this.params.scale);
   }
   setDebug() {
     this.debugFolder = this.debug.addFolder('Starship')
-      .addFolder('Reactor 1')
+    this.debugFolder.open()
     this.debugFolder
-      .add(this.thrustersEmitter1.position, 'x')
+      .add(this.starship.position, 'x')
       .step(0.1)
-      .min(-10)
-      .max(10)
+      .min(-5)
+      .max(5)
       .name('Position X')
     this.debugFolder
-      .add(this.thrustersEmitter1.position, 'y')
+      .add(this.starship.position, 'y')
       .step(0.1)
-      .min(-10)
-      .max(10)
+      .min(-5)
+      .max(5)
       .name('Position Y')
     this.debugFolder
-      .add(this.thrustersEmitter1.position, 'z')
+      .add(this.starship.position, 'z')
       .step(0.1)
-      .min(-10)
-      .max(10)
+      .min(-5)
+      .max(5)
       .name('Position Z')
+    this.debugFolder
+      .add(this.params, 'scale')
+      .step(0.001)
+      .min(0)
+      .max(0.2)
+      .name('Scale')
+      .onChange(() => {
+        this.container.scale.x = this.params.scale
+        this.container.scale.y = this.params.scale
+        this.container.scale.z = this.params.scale
+      })
   }
 }

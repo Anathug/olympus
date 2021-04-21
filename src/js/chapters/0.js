@@ -4,8 +4,9 @@ import gsap from 'gsap'
 import { Interaction } from '../../assets/lib/threeinteraction'
 
 let c = new Chapter(0)
-let defaultScaleValues;
-let interaction;
+let defaultScaleValues
+let interaction
+let imagesArray = []
 
 c.init = (options) => {
   c.camera = options.world.camera.camera
@@ -15,25 +16,28 @@ c.init = (options) => {
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
   createImages(c.camera)
+  c.objects.forEach(object => {
+    object.visible = false
+  })
 }
 
 c.start = () => {
   setEvent()
   defaultScaleValues = c.objects.map(object => object.scale)
   interaction = new Interaction(c.renderer, c.scene, c.camera);
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = true
+  c.objects.forEach(object => {
+    object.visible = true
   })
 }
 
 c.update = () => {
-  mouseMove(c.camera)
+  // mouseMove(c.camera)
 }
 
 c.end = () => {
   interaction.destroy()
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = false
+  c.objects.forEach(object => {
+    object.visible = false
   })
 }
 
@@ -64,9 +68,9 @@ const mouseMove = (camera) => {
 }
 
 const setEvent = () => {
-  for (let i = 0; i < c.objects.length; i++) {
-    c.objects[i].on('mouseover', () => scaleUp(c.objects[i], i))
-    c.objects[i].on('mouseout', () => scaleDown(c.objects[i], i))
+  for (let i = 0; i < imagesArray.length; i++) {
+    imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
+    imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
   }
 }
 
@@ -96,6 +100,7 @@ const createImages = (camera) => {
     const threeimg = new Image(image, c.assets[i])
     threeimg.createImage(camera)
     c.objects.push(threeimg.mesh)
+    imagesArray.push(threeimg.mesh)
     c.world.container.add(threeimg.container)
   })
 }
