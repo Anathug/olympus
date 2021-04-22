@@ -17,6 +17,7 @@ c.init = (options) => {
   c.starship = options.starship
   c.mars = options.mars
   c.allowScroll = false
+  c.allowMouseMove = true
 
   c.launcher = new Launcher({
     time: options.time,
@@ -45,11 +46,12 @@ c.start = () => {
 }
 
 c.update = () => {
-  if (!c.debug) {
+  if (!c.debug && c.allowMouseMove) {
     mouseMove(c.camera)
   }
   if (updateThrusters) {
     c.starship.container.position.y = clock.getElapsedTime()
+    c.camera.position.y = clock.getElapsedTime()
     c.starship.thrusters.update()
   }
 }
@@ -106,7 +108,12 @@ const removeStarship = () => {
 
 const launchStarship = () => {
   clock.start()
+  c.allowMouseMove = false
   c.allowScroll = true
+  gsap.to(c.camera.position, {
+    y: 0,
+    duration: 1,
+  })
   updateThrusters = true
 }
 
