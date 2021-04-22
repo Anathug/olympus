@@ -9,7 +9,8 @@ export default class Mars {
     this.container = new Object3D()
     this.container.name = 'Mars'
     this.params = {
-      scale: 0.08
+      // scale: 0.08
+      scale: 0
     }
     this.createMars()
     this.setScale()

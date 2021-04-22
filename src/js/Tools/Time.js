@@ -38,6 +38,7 @@ export default class Time extends EventEmitter {
     // current = current time
     this.current = current
 
+
     if (this.delta > 60) {
       this.delta = 60
     }
@@ -47,6 +48,6 @@ export default class Time extends EventEmitter {
 
   // Cancel animation frame
   stopTicker() {
-    gsap.ticker.add(this.startTicker)
+    gsap.ticker.remove(this.startTicker)
   }
 }

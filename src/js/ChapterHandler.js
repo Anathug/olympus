@@ -83,10 +83,12 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
-    this.realProgress += event.deltaY / 2000
-    this.realProgress = clamp(this.realProgress, 0, this.chapters.length)
-    this.timelineSlider.value = this.realProgress
-    this.updateCurrentChapter()
+    if (this.chapters[this.currentChapter].allowScroll) {
+      this.realProgress += event.deltaY / 2000
+      this.realProgress = clamp(this.realProgress, 0, this.chapters.length)
+      this.timelineSlider.value = this.realProgress
+      this.updateCurrentChapter()
+    }
   }
 
   async importAll() {
