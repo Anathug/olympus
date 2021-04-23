@@ -1,5 +1,6 @@
 import * as THREE from 'three'
-import { Object3D, SphereGeometry, MeshToonMaterial, Mesh } from 'three'
+import { MeshStandardMaterial } from 'three';
+import { Object3D, SphereGeometry, MeshBasicMaterial, Mesh } from 'three'
 import ParticleSystem, {
   Body,
   BoxZone,
@@ -45,6 +46,7 @@ export default class Starship {
   createStarship() {
     this.starship = this.assets.models.starship.scene
     this.starship.scale.set(10, 10, 10)
+    this.setMaterial()
     this.container.add(this.starship)
   }
   createThrusters() {
@@ -106,7 +108,36 @@ export default class Starship {
       .addEmitter(thrustersEmitter3)
       .addRenderer(new MeshRenderer(this.container, THREE))
   }
+  setMaterial() {
+    const starshipTexture = this.assets.textures.global.starship
+    const colorTexture = starshipTexture.MetalPlates007_1K_Color
+    const displacementTexture = starshipTexture.MetalPlates007_1K_Displacement
+    const metalnessTexture = starshipTexture.MetalPlates007_1K_Metalness
+    const roughnessTexture = starshipTexture.MetalPlates007_1K_Roughness
+    const normalTexture = starshipTexture.MetalPlates007_1K_Normal
 
+    const truc = this.starship.children[13].children[0]
+
+    truc.material = new MeshStandardMaterial({ map: colorTexture })
+    truc.material.metalnessMap = metalnessTexture
+    truc.material.roughnessMap = roughnessTexture
+
+
+    // this.starship.children[13].traverse((child) => {
+    //   console.log(child.material)
+    //   child.material = new MeshBasicMaterial({ map: colorTexture })
+    //   // child.material.map = colorTexture
+    // })
+    this.starship.traverse((child) => {
+
+      if (child.type === 'Mesh') {
+        // child.material.displacementMap = displacementTexture
+        // child.material.normalMap = normalTexture
+        // child.material.metalnessMap = metalnessTexture
+        // child.material.roughnessMap = roughnessTexture
+      }
+    })
+  }
   setScale() {
     this.container.scale.set(this.params.scale, this.params.scale, this.params.scale);
   }
