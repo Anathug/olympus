@@ -13,7 +13,7 @@ c.init = (options) => {
   c.starship = options.starship
   c.world = options.world
   c.scene = options.scene
-  c.assets = options.assets.textures.images.chapter0
+  c.assets = options.assets.textures.chapter0
   c.debug = options.debug
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
