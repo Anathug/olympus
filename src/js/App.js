@@ -1,4 +1,4 @@
-import { Scene, sRGBEncoding, WebGLRenderer, CubeTextureLoader, LinearFilter, MeshBasicMaterial, CubeTexture } from 'three'
+import { Scene, sRGBEncoding, WebGLRenderer, Color, CubeTexture, Fog } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
@@ -29,6 +29,13 @@ export default class App {
   constructor(options) {
     this.canvas = options.canvas
     this.assets = options.assets
+    this.params = {
+      fog: {
+        color: 0xFFFFFF,
+        near: 10,
+        far: 100
+      }
+    }
 
     this.time = new Time()
     this.sizes = new Sizes()
@@ -39,8 +46,8 @@ export default class App {
     this.myEffect = null
     this.lut = true
 
-    this.setConfig()
     this.setScene()
+    this.setConfig()
     this.setStarship()
     this.setMars()
     this.setEarth()
@@ -48,6 +55,7 @@ export default class App {
     this.setCamera()
     this.setRenderer()
     this.setWorld()
+
   }
 
   setScene() {
@@ -62,6 +70,8 @@ export default class App {
     cubeMap.images[4] = t.pz.image
     cubeMap.images[5] = t.nz.image
     cubeMap.needsUpdate = true
+
+    this.scene.fog = new Fog(this.params.fog.color, this.params.fog.near, this.params.fog.far);
 
     this.scene.background = cubeMap
   }
@@ -199,6 +209,28 @@ export default class App {
   setConfig() {
     if (window.location.hash === '#debug') {
       this.debug = new dat.GUI({ width: 450 })
+    }
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('Fog')
+      this.debugFolder.open()
+      this.debugFolder
+        .addColor(this.params.fog, 'color')
+        .name('Color')
+        .onChange(() => {
+          this.scene.fog.color = new Color(this.params.color)
+        })
+      this.debugFolder
+        .add(this.scene.fog, 'far')
+        .step(1)
+        .min(0)
+        .max(100)
+        .name('Far')
+      this.debugFolder
+        .add(this.scene.fog, 'near')
+        .step(0.1)
+        .min(0)
+        .max(10)
+        .name('Near')
     }
   }
 }
