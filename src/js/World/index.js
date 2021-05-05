@@ -1,6 +1,6 @@
 import { AxesHelper, Object3D } from 'three'
 
-import AmbientLightSource from './AmbientLight'
+import DirectionalLightSource from './DirectionalLight'
 import PointLightSource from './PointLight'
 import ChapterHandler from '../ChapterHandler'
 
@@ -27,16 +27,14 @@ export default class World {
   }
   init() {
     this.setChapterHandler()
-    this.setAmbientLight()
-    //this.setPointLight()
-    //this.setAmbientLight()
     this.setPointLight()
+    this.setDirectionalLight()
   }
-  setAmbientLight() {
-    this.ambientlight = new AmbientLightSource({
+  setDirectionalLight() {
+    this.directionalLight = new DirectionalLightSource({
       debug: this.debugFolder,
     })
-    this.container.add(this.ambientlight.container)
+    this.container.add(this.directionalLight.container)
   }
   setPointLight() {
     this.light = new PointLightSource({
