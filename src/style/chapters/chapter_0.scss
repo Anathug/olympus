@@ -1,7 +1,92 @@
 .chapter_0 {
   pointer-events: none;
-  img {
-    width: 30%;
-    margin: 3vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  .black-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: #000;
+    z-index: 10;
+    button {
+      position: absolute;
+      top: 5rem;
+      right: 5rem;
+      pointer-events: auto;
+    }
   }
+  .exposition-images-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    img {
+      width: 30%;
+      margin: 3vw;
+      opacity: 0;
+      position: relative;
+    }
+  }
+  .zoomed-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    .container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      display: flex;
+      opacity: 0;
+      .left-container {
+        width: 50%;
+        height: 100%;
+        position: relative;
+        .left {
+          width: 100%;
+          height: 100%;
+          img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+      .right-container {
+        width: 50%;
+        height: 100%;
+        position: relative;
+        .right {
+          width: 100%;
+          height: 100%;
+          .infos {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+    }
+  }
+}
+
+//interactions
+
+.container.is-active {
+  opacity: 1 !important;
+}
+
+.black-overlay.is-active {
+  opacity: 0.9;
 }

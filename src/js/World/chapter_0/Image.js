@@ -23,6 +23,7 @@ export default class Image {
   }
 
   setBounds(camera) {
+    // console.log(this.img.dataset.index)
     this.rect = this.img.getBoundingClientRect()
     this.bounds = {
       left: this.rect.left,

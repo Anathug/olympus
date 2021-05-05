@@ -2,6 +2,8 @@ import Chapter from '../Chapter'
 import Image from '../World/chapter_0/Image.js'
 import gsap from 'gsap'
 import { Interaction } from '../../assets/lib/threeinteraction'
+import data from '../../../static/database/chap0'
+
 
 let c = new Chapter(0)
 let defaultScaleValues
@@ -18,7 +20,13 @@ c.init = (options) => {
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
   c.allowScroll = true
+  c.currentImageIndex = null
+
+  const blackoverlaybutton = document.querySelector('.black-overlay button')
+  blackoverlaybutton.addEventListener('click', () => hideInfos(c.currentImageIndex))
+
   createImages(c.camera)
+  createInfos()
   c.objects.forEach(object => {
     object.visible = false
   })
@@ -77,6 +85,7 @@ const setEvent = () => {
   for (let i = 0; i < imagesArray.length; i++) {
     imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
     imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
+    imagesArray[i].on('click', (e) => showInfos(e.data.target.index))
   }
 }
 
@@ -105,10 +114,80 @@ const createImages = (camera) => {
   images.forEach((image, i) => {
     const threeimg = new Image(image, c.assets[i])
     threeimg.createImage(camera)
+    threeimg.mesh.index = i
     c.objects.push(threeimg.mesh)
     imagesArray.push(threeimg.mesh)
     c.world.container.add(threeimg.container)
   })
+}
+
+const showInfos = (i) => {
+  c.currentImageIndex = i
+  const blackoverlay = document.querySelector('.black-overlay')
+  const container = document.querySelector(`.container-${i}`)
+  blackoverlay.classList.add('is-active')
+  container.classList.add('is-active')
+}
+
+const hideInfos = (i) => {
+  const blackoverlay = document.querySelector('.black-overlay')
+  const container = document.querySelector(`.container-${i}`)
+  blackoverlay.classList.remove('is-active')
+  container.classList.remove('is-active')
+}
+
+const createInfos = () => {
+  const container = document.querySelector('.zoomed-image-container')
+
+  data.images.forEach((image, i) => {
+
+    const indexdiv = document.createElement('div')
+    indexdiv.classList.add(`container`)
+    indexdiv.classList.add(`container-${i}`)
+
+    const left = document.createElement('div')
+    left.classList.add('left-container')
+
+    const right = document.createElement('div')
+    right.classList.add('right-container')
+
+    indexdiv.appendChild(left)
+    indexdiv.appendChild(right)
+
+    container.appendChild(indexdiv)
+
+    const innerright = document.createElement('div')
+    innerright.classList.add('right')
+
+    const innerleft = document.createElement('div')
+    innerleft.classList.add('left')
+
+    const img = document.createElement('img')
+    img.src = image.src
+
+    innerleft.appendChild(img)
+
+    const infos = document.createElement('div')
+    infos.classList.add('infos')
+
+    const h2 = document.createElement('h2')
+    var h2text = document.createTextNode(image.title);
+    h2.appendChild(h2text)
+
+
+    const p = document.createElement('p')
+    var ptext = document.createTextNode(image.description);
+    p.appendChild(ptext)
+
+    infos.appendChild(h2)
+    infos.appendChild(p)
+
+    innerright.appendChild(infos)
+
+    left.appendChild(innerleft)
+    right.appendChild(innerright)
+  })
+
 }
 
 export default c;
