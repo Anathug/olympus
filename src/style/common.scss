@@ -5,6 +5,7 @@ body {
   overflow: hidden;
   color: white;
   font-family: 'Favorit Pro', sans-serif;
+  font-weight: 300;
 }
 
 canvas {
@@ -24,12 +25,6 @@ canvas {
   margin: 15px;
 }
 
-img {
-  opacity: 0;
-  z-index: 20;
-  position: relative;
-}
-
 .infos {
   z-index: 10;
   position: relative;
@@ -37,4 +32,44 @@ img {
 
 .dg.ac {
   z-index: 10 !important;
+}
+
+h2,
+p {
+  font-weight: 300;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 8px;
+}
+
+p {
+  line-height: 1.2;
+  letter-spacing: 4px;
+  font-size: 12px;
+}
+
+.movie-layout {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  pointer-events: none;
+  .bottom,
+  .top {
+    height: 60px;
+    width: 100%;
+    background-color: black;
+    position: absolute;
+    left: 0;
+  }
+  .bottom {
+    bottom: 0;
+  }
+  .top {
+    top: 0;
+  }
 }

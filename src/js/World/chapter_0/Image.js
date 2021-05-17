@@ -4,6 +4,7 @@ export default class Image {
   constructor(img, texture) {
     this.container = new Object3D()
     this.createImage = this.createImage.bind(this)
+    this.setPosition = this.setPosition.bind(this)
     this.setBounds = this.setBounds.bind(this)
     this.updateSize = this.updateSize.bind(this)
     this.mesh = null
@@ -16,10 +17,15 @@ export default class Image {
   }
   createImage(camera) {
     this.geometry = new PlaneBufferGeometry(1, 1, 32, 32)
-    this.material = new MeshStandardMaterial({ map: this.texture, transparent: true })
+    this.material = new MeshStandardMaterial({ map: this.texture })
     this.mesh = new Mesh(this.geometry, this.material)
     this.setBounds(camera)
     this.container.add(this.mesh)
+  }
+
+  setPosition() {
+    this.mesh.rotation.z = 0.1
+    this.mesh.position.z = (11 - this.mesh.index) * 0.1
   }
 
   setBounds(camera) {

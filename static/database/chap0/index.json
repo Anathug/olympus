@@ -1,0 +1,52 @@
+{
+  "images": [
+    {
+      "src": "./textures/images/chapter0/board-1.jpg",
+      "alt": "",
+      "title": "Emily Brennan",
+      "description": ""
+    },
+    {
+      "src": "./textures/images/chapter0/board-2.jpg",
+      "alt": "",
+      "title": "Emily Brennan",
+      "description": ""
+    },
+    {
+      "src": "./textures/images/chapter0/board-3.jpg",
+      "alt": "",
+      "title": "A child's dream",
+      "description": "At the age of four, Emily took her first steps into the world of space. Elbow to elbow with her grandfather, he passed on his knowledge and passion for this universe, still too little known to humans. <br><br> Every weekend, the appointment is fixed. They go to the observatory and spend hours behind their telescope. When she was six years old, she came face to face with the Red Planet and was hypnotised, her passion for the planet began.<br>She said to her grandfather at that moment: 'Grandpa, I want to be an astronaut and be one of the people who go to Mars'. True to her word, she is currently undergoing rigorous training with ISDA to be part of the first human mission to Mars in 2034.<br><br>When she was seven years old, her grandfather took her to a space boot camp for the first time. She would return 18 times."
+    },
+    {
+      "src": "./textures/images/chapter0/board-4.jpg",
+      "alt": "",
+      "title": "",
+      "description": ""
+    },
+    {
+      "src": "./textures/images/chapter0/board-5.jpg",
+      "alt": "",
+      "title": "Cape CanaveralSpace force Station",
+      "description": "Cape Canaveral Space Force Station is Olympus' primary launch pad. <br><br>The facility is located on Cape Canaveral, Florida, facing the Atlantic Ocean. It was established in 1950 to safely test long-range rockets. Later, it was used to test ballistic and cruise missiles.<br>When astronautics took off in 1957, the base's launch facilities were put to use. The first launch vehicles carrying satellites and space probes, as well as the manned missions of the Mercury and Gemini programmes, were launched from Cape Canaveral.<br><br>In 2020, most of the launch pads built over the years on the base (some 40) are no longer in use. Only five of them have significant activity, each dedicated to a family of launchers: Delta IV, Atlas V, Delta II, Falcon 9 and the new Olympus spacecraft.<br>American astronautical activity fell sharply in 2000, then picked up again in 2014 with more than 15 launches per year from Cape Canaveral."
+    },
+    {
+      "src": "./textures/images/chapter0/board-6.jpg",
+      "alt": "",
+      "title": "PAD 39A",
+      "description": "The pad was prepared to support the launch of the spacecraft for Olympus missions to Mars, deep space destinations and the Moon with Artemis.<br><br>NASA will develop a sustainable presence at the Moon and apply knowledge gained to pave the way for human exploration of Mars.<br>Apollo 10 was the first mission to begin at Launch Pad 39B when it lifted off May 18, 1969, to rehearse the first moon landing. Three crews of astronauts launched to the Skylab space station in 1973 from Pad B. Three Apollo astronauts who flew the historic Apollo-Soyuz Test Project mission to link up in space also launched from Pad B."
+    },
+    {
+      "src": "./textures/images/chapter0/board-7.jpg",
+      "alt": "",
+      "title": "The distance",
+      "description": "Mars is the second closest planet to our own, after Venus.<br><br> It is on average 220 million km from the Sun (the Earth is 150 million km from our star). The calculation seems simple: if we make the difference between the two, we get 70 million km. In reality, however, both stars are in motion around the Sun, and what is more, their orbits are not circular but elliptical.<br><br>Theoretically, the closest the Red Planet can come to us is 54.6 million km.<br>But for this to happen, the two planets must be aligned with the Sun, one at aphelion (Earth) and the other at perihelion (Mars)."
+    },
+    {
+      "src": "./textures/images/chapter0/board-8.jpg",
+      "alt": "",
+      "title": "The red planet",
+      "description": "Mars is the second closest planet to our own, after Venus.<br><br> It is on average 220 million km from the Sun (the Earth is 150 million km from our star). The calculation seems simple: if we make the difference between the two, we get 70 million km. In reality, however, both stars are in motion around the Sun, and what is more, their orbits are not circular but elliptical.<br><br>Theoretically, the closest the Red Planet can come to us is 54.6 million km.<br>But for this to happen, the two planets must be aligned with the Sun, one at aphelion (Earth) and the other at perihelion (Mars)."
+    }
+  ]
+}
