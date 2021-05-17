@@ -17,6 +17,9 @@ export default class ChapterHandler {
     this.mouse = options.mouse
     this.scene = options.scene
     this.renderer = options.renderer
+    this.debug = options.debug
+    this.starship = options.starship
+    this.mars = options.mars
 
     this.globProgress = 0
     this.realProgress = 0
@@ -80,10 +83,12 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
-    this.realProgress += event.deltaY / 2000
-    this.realProgress = clamp(this.realProgress, 0, this.chapters.length)
-    this.timelineSlider.value = this.realProgress
-    this.updateCurrentChapter()
+    if (this.chapters[this.currentChapter].allowScroll) {
+      this.realProgress += event.deltaY / 2000
+      this.realProgress = clamp(this.realProgress, 0, this.chapters.length)
+      this.timelineSlider.value = this.realProgress
+      this.updateCurrentChapter()
+    }
   }
 
   async importAll() {

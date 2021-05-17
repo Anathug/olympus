@@ -3,13 +3,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export default class Camera {
   constructor(options) {
-    // Set Options
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.debug = options.debug
     this.mouse = options.mouse.mouse
+    this.assets = options.assets
+    this.scene = options.scene
 
-    // Set up
     this.container = new Object3D()
     this.container.name = 'Camera'
 
@@ -17,7 +17,9 @@ export default class Camera {
 
     this.setCamera()
     this.setPosition()
-    // this.setOrbitControls()
+    if (this.debug) {
+      this.setOrbitControls()
+    }
   }
   setCamera() {
     this.camera = new PerspectiveCamera(
@@ -40,10 +42,29 @@ export default class Camera {
   }
 
   setOrbitControls() {
-    this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement)
-    this.orbitControls.enabled = false
-    this.orbitControls.enableKeys = true
-    this.orbitControls.zoomSpeed = 1
+    this.orbitControls = new OrbitControls(
+      this.camera,
+      this.renderer.domElement
+    )
+    // this.orbitControls.enabled = true
+    // this.orbitControls.enableKeys = true
+    // this.orbitControls.enableZoom = false
+    // this.orbitControls.enablePan = false
+
+    // this.orbitControls.minPolarAngle = Math.PI / 3
+    // this.orbitControls.maxPolarAngle = Math.PI / 2
+
+    // this.orbitControls.enableDamping = true
+    // this.orbitControls.dampingFactor = 0.05
+
+    // this.orbitControls.autoRotate = true
+    // this.orbitControls.autoRotateSpeed = 0.2
+
+    this.orbitControls.target.set(0, 0, 0)
+    // this.camera.lookAt(0, 0, 0)
+
+    // this.orbitControls.saveState()
+
 
     if (this.debug) {
       this.debugFolder = this.debug.addFolder('Camera')

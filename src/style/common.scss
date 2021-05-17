@@ -4,6 +4,7 @@ body {
   padding: 0;
   overflow: hidden;
   color: white;
+  font-family: 'Favorit Pro', sans-serif;
 }
 
 canvas {
@@ -25,9 +26,15 @@ canvas {
 
 img {
   opacity: 0;
+  z-index: 20;
+  position: relative;
 }
 
 .infos {
   z-index: 10;
   position: relative;
+}
+
+.dg.ac {
+  z-index: 10 !important;
 }

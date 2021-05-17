@@ -1,29 +1,27 @@
 import { Object3D, PlaneBufferGeometry, MeshStandardMaterial, Mesh, TextureLoader } from 'three'
 import gsap from 'gsap'
 export default class Image {
-  constructor(img) {
+  constructor(img, texture) {
     this.container = new Object3D()
     this.createImage = this.createImage.bind(this)
     this.setBounds = this.setBounds.bind(this)
     this.updateSize = this.updateSize.bind(this)
     this.mesh = null
     this.img = img
+    this.texture = texture
     this.camUnit = 0
     this.material = null
     this.geometry = null
     this.textureLoader = new TextureLoader()
   }
   createImage(camera) {
-    this.texture = this.textureLoader.load(this.img.src,
-      () => {
-        this.setBounds(camera)
-      })
     this.geometry = new PlaneBufferGeometry(1, 1, 32, 32)
-    this.material = new MeshStandardMaterial({ map: this.texture })
+    this.material = new MeshStandardMaterial({ map: this.texture, transparent: true })
     this.mesh = new Mesh(this.geometry, this.material)
-    this.mesh.visible = false
+    this.setBounds(camera)
     this.container.add(this.mesh)
   }
+
   setBounds(camera) {
     this.rect = this.img.getBoundingClientRect()
     this.bounds = {

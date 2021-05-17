@@ -13,6 +13,7 @@ export default class PointLightSource {
       positionX: 0,
       positionY: 2,
       positionZ: 5,
+      visible: true,
     }
 
     this.createPointLight()
@@ -32,6 +33,7 @@ export default class PointLightSource {
     this.container.add(this.light)
   }
   setDebug() {
+    console.log(this.light)
     // Color debug
     this.debugFolder = this.debug.addFolder('Point Light')
     this.debugFolder.open()
@@ -40,6 +42,13 @@ export default class PointLightSource {
       .name('Color')
       .onChange(() => {
         this.light.color = new Color(this.params.color)
+      })
+    //active
+
+    this.debugFolder
+      .add(this.params, 'visible', false).onChange(() => {
+        this.light.visible = this.params.visible
+        console.log(this.light)
       })
     //Position debug
     this.debugFolder

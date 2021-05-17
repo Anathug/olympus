@@ -3,38 +3,47 @@ import Image from '../World/chapter_0/Image.js'
 import gsap from 'gsap'
 import { Interaction } from '../../assets/lib/threeinteraction'
 
-
 let c = new Chapter(0)
-let defaultScaleValues;
-let interaction;
+let defaultScaleValues
+let interaction
+let imagesArray = []
 
 c.init = (options) => {
   c.camera = options.world.camera.camera
+  c.starship = options.starship
   c.world = options.world
   c.scene = options.scene
+  c.assets = options.assets.textures.chapter0
+  c.debug = options.debug
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
+  c.allowScroll = true
   createImages(c.camera)
+  c.objects.forEach(object => {
+    object.visible = false
+  })
 }
 
 c.start = () => {
   setEvent()
+  c.starship.container.visible = false
   defaultScaleValues = c.objects.map(object => object.scale)
   interaction = new Interaction(c.renderer, c.scene, c.camera);
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = true
+  c.objects.forEach(object => {
+    object.visible = true
   })
 }
 
 c.update = () => {
-  mouseMove(c.camera)
+  if (!c.debug) {
+    mouseMove(c.camera)
+  }
 }
 
 c.end = () => {
   interaction.destroy()
-  console.log(interaction)
-  c.objects.forEach(chapterImage => {
-    chapterImage.visible = false
+  c.objects.forEach(object => {
+    object.visible = false
   })
 }
 
@@ -65,9 +74,9 @@ const mouseMove = (camera) => {
 }
 
 const setEvent = () => {
-  for (let i = 0; i < c.objects.length; i++) {
-    c.objects[i].on('mouseover', () => scaleUp(c.objects[i], i))
-    c.objects[i].on('mouseout', () => scaleDown(c.objects[i], i))
+  for (let i = 0; i < imagesArray.length; i++) {
+    imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
+    imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
   }
 }
 
@@ -92,28 +101,14 @@ const scaleDown = (mesh, i) => {
 }
 
 const createImages = (camera) => {
-  const images = importAll(require.context('../../images/chapter_0', false, /\.(png|jpe?g|svg)$/));
-  const section = document.querySelector('.chapter_0')
-
+  const images = document.querySelectorAll('.chapter_0 img')
   images.forEach((image, i) => {
-
-    const img = document.createElement('img')
-    img.src = image.default
-    img.classList.add(`img`)
-    img.classList.add(`img-${i}`)
-    section.appendChild(img);
-
-    const threeimg = new Image(img)
+    const threeimg = new Image(image, c.assets[i])
     threeimg.createImage(camera)
     c.objects.push(threeimg.mesh)
+    imagesArray.push(threeimg.mesh)
     c.world.container.add(threeimg.container)
   })
-
 }
-
-function importAll(r) {
-  return r.keys().map(r);
-}
-
 
 export default c;

@@ -1,11 +1,8 @@
-@font-face {
-  src: url('@fonts/Montserrat-Regular.ttf');
-  font-family: Montserrat;
-}
-
 @import './common.scss';
 @import './loading.scss';
+@import './fonts.scss';
 
 //chapters
 
 @import './chapters/chapter_0.scss';
+@import './chapters/chapter_1.scss';
