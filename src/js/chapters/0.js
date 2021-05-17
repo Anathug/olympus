@@ -1,5 +1,6 @@
 import Chapter from '../Chapter'
-import Image from '../World/chapter_0/Image.js'
+import Image from '../World/chapter_0/Image'
+import Background from '../World/chapter_0/Background'
 import gsap from 'gsap'
 import { Interaction } from '../../assets/lib/threeinteraction'
 import data from '../../../static/database/chap0'
@@ -26,6 +27,7 @@ c.init = (options) => {
   blackoverlaybutton.addEventListener('click', () => hideInfos(c.currentImageIndex))
 
   createImages(c.camera)
+  createBackground(options)
   createInfos()
   c.objects.forEach(object => {
     object.visible = false
@@ -33,10 +35,10 @@ c.init = (options) => {
 }
 
 c.start = () => {
-  setEvent()
   c.starship.container.visible = false
-  defaultScaleValues = c.objects.map(object => object.scale)
   interaction = new Interaction(c.renderer, c.scene, c.camera);
+  setEvent()
+  defaultScaleValues = c.objects.map(object => object.scale)
   c.objects.forEach(object => {
     object.visible = true
   })
@@ -82,6 +84,7 @@ const mouseMove = (camera) => {
 }
 
 const setEvent = () => {
+  console.log('setEvents')
   for (let i = 0; i < imagesArray.length; i++) {
     imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
     imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
@@ -121,7 +124,15 @@ const createImages = (camera) => {
   })
 }
 
+const createBackground = (options) => {
+  const background = new Background(options)
+  c.background = background
+  c.objects.push(background.mesh)
+  c.world.container.add(background.container)
+}
+
 const showInfos = (i) => {
+  interaction.destroy()
   c.currentImageIndex = i
   const blackoverlay = document.querySelector('.black-overlay')
   const container = document.querySelector(`.container-${i}`)
@@ -134,6 +145,8 @@ const hideInfos = (i) => {
   const container = document.querySelector(`.container-${i}`)
   blackoverlay.classList.remove('is-active')
   container.classList.remove('is-active')
+  interaction = new Interaction(c.renderer, c.scene, c.camera);
+  setEvent()
 }
 
 const createInfos = () => {
