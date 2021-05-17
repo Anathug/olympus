@@ -84,7 +84,6 @@ const mouseMove = (camera) => {
 }
 
 const setEvent = () => {
-  console.log('setEvents')
   for (let i = 0; i < imagesArray.length; i++) {
     imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
     imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
@@ -115,9 +114,11 @@ const scaleDown = (mesh, i) => {
 const createImages = (camera) => {
   const images = document.querySelectorAll('.chapter_0 img')
   images.forEach((image, i) => {
-    const threeimg = new Image(image, c.assets[i])
+    const imageName = `board-${i + 1}`
+    const threeimg = new Image(image, c.assets[imageName])
     threeimg.createImage(camera)
     threeimg.mesh.index = i
+    threeimg.setPosition()
     c.objects.push(threeimg.mesh)
     imagesArray.push(threeimg.mesh)
     c.world.container.add(threeimg.container)
@@ -184,13 +185,11 @@ const createInfos = () => {
     infos.classList.add('infos')
 
     const h2 = document.createElement('h2')
-    var h2text = document.createTextNode(image.title);
-    h2.appendChild(h2text)
+    h2.innerHTML = image.title
 
 
     const p = document.createElement('p')
-    var ptext = document.createTextNode(image.description);
-    p.appendChild(ptext)
+    p.innerHTML = image.description
 
     infos.appendChild(h2)
     infos.appendChild(p)
