@@ -69,7 +69,42 @@ export default class Camera {
     if (this.debug) {
       this.debugFolder = this.debug.addFolder('Camera')
       this.debugFolder.open()
-      this.debugFolder.add(this.orbitControls, 'enabled').name('Enable Orbit Control')
+      this.debugFolder
+        .add(this.camera.position, 'x')
+        .step(0.1)
+        .min(-15)
+        .max(15)
+        .name('Position X')
+      this.debugFolder
+        .add(this.camera.position, 'y')
+        .step(0.1)
+        .min(-15)
+        .max(15)
+        .name('Position Y')
+      this.debugFolder
+        .add(this.camera.position, 'z')
+        .step(0.1)
+        .min(-15)
+        .max(15)
+        .name('Position Z')
+      this.debugFolder
+        .add(this.camera.rotation, 'x')
+        .step(0.1)
+        .min(-15)
+        .max(15)
+        .name('Rotation X')
+      this.debugFolder
+        .add(this.camera.rotation, 'y')
+        .step(0.1)
+        .min(-15)
+        .max(15)
+        .name('Rotation Y')
+      this.debugFolder
+        .add(this.camera.rotation, 'z')
+        .step(0.1)
+        .min(-15)
+        .max(15)
+        .name('Rotation Z')
     }
   }
 }

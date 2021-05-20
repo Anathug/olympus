@@ -180,6 +180,13 @@
       }
     }
   }
+  .start-experience-wrapper {
+    position: absolute;
+    bottom: 5rem;
+    left: 50%;
+    z-index: 50;
+    display: none;
+  }
 }
 
 //global to chapter
@@ -195,6 +202,13 @@
 }
 
 //interactions
+
+.chapter_0.is-active {
+  .start-experience-wrapper {
+    pointer-events: auto;
+    display: block;
+  }
+}
 
 .container.is-active {
   opacity: 1 !important;

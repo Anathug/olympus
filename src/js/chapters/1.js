@@ -9,7 +9,6 @@ const startButton = document.querySelector('.chapter_1 button')
 let clock = new Clock()
 
 c.init = (options) => {
-  hideChapterHtml()
   c.camera = options.world.camera.camera
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
@@ -17,7 +16,7 @@ c.init = (options) => {
   c.starship = options.starship
   c.mars = options.mars
   c.allowScroll = false
-  c.allowMouseMove = true
+  c.allowMouseMove = false
 
   c.launcher = new Launcher({
     time: options.time,
@@ -34,7 +33,7 @@ c.init = (options) => {
 }
 
 c.start = () => {
-  showChapterHtml()
+  c.showChapter('chapter_1')
   setEvents()
   c.starship.container.visible = true
   c.starship.createStarship()
@@ -43,11 +42,12 @@ c.start = () => {
   c.objects.forEach(object => {
     object.visible = true
   })
+  chapterBegin()
 }
 
 c.update = () => {
   if (!c.debug && c.allowMouseMove) {
-    mouseMove(c.camera)
+    // mouseMove(c.camera)
   }
   if (updateThrusters) {
     c.starship.container.position.y = clock.getElapsedTime()
@@ -58,12 +58,33 @@ c.update = () => {
 
 c.end = () => {
   removeEvents()
-  hideChapterHtml()
+  c.hideChapter('chapter_1')
   removeStarship()
   c.allowScroll = false
   c.objects.forEach(object => {
     object.visible = false
   });
+}
+
+const chapterBegin = () => {
+  const beginnintl = gsap.timeline({ ease: "power2.inOut" })
+  c.camera.rotation.set(0, -7.9, 0)
+  c.camera.position.set(-2, 7, 0)
+
+  beginnintl
+    .to(c.camera.position, {
+      y: 1,
+      delay: 0.5,
+      duration: 5,
+    })
+    .to(c.camera.position, {
+      x: -13,
+      duration: 4,
+    }, 4)
+
+  setTimeout(() => {
+    c.allowMouseMove = true
+  }, 9000);
 }
 
 const setEvents = () => {
@@ -76,19 +97,19 @@ const removeEvents = () => {
 
 const mouseMove = (camera) => {
   gsap.to(camera.position, {
-    x: c.mouse.x * 2,
+    x: -2 + c.mouse.x * 2,
     duration: 2,
     ease: 'power3.out'
   })
 
   gsap.to(camera.rotation, {
-    y: c.mouse.x / 6,
+    y: -7.9 + c.mouse.x / 6,
     duration: 1,
     ease: 'power3.out'
   })
 
   gsap.to(camera.position, {
-    y: c.mouse.y * 2,
+    y: 7 + c.mouse.y * 2,
     duration: 2,
     ease: 'power3.out'
   })
@@ -110,21 +131,7 @@ const launchStarship = () => {
   clock.start()
   c.allowMouseMove = false
   c.allowScroll = true
-  gsap.to(c.camera.position, {
-    y: 0,
-    duration: 1,
-  })
   updateThrusters = true
-}
-
-const showChapterHtml = () => {
-  const chapter1 = document.querySelector('.chapter_1')
-  chapter1.style.display = 'block'
-}
-
-const hideChapterHtml = () => {
-  const chapter1 = document.querySelector('.chapter_1')
-  chapter1.style.display = 'none'
 }
 
 export default c;
