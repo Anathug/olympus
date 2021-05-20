@@ -28,6 +28,9 @@ export default class ChapterHandler {
 
     this.chapters = []
 
+    this.nextChapter = this.nextChapter.bind(this)
+    this.showChapter = this.showChapter.bind(this)
+    this.hideChapter = this.hideChapter.bind(this)
     this.chapters = this.importAll()
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
@@ -72,7 +75,6 @@ export default class ChapterHandler {
     if (this.currentChapter != Math.floor(this.globProgress)) {
       this.chapters[this.currentChapter].end()
       this.currentChapter = Math.floor(this.globProgress)
-
       this.chapters[this.currentChapter].start()
     }
 
@@ -80,6 +82,24 @@ export default class ChapterHandler {
     this.globProgressLabel.textContent = 'glob progress: ' + Math.round(this.globProgress * 100) / 100
     this.chapProgressLabel.textContent = 'chap progress: ' + Math.round(this.chapProgress * 100) / 100
     this.chapLabel.textContent = 'chap : ' + this.currentChapter
+  }
+
+  nextChapter() {
+    setTimeout(() => {
+      this.realProgress += 1
+      this.globProgress += 1
+      this.timelineSlider.value += 1
+    }, 2000);
+  }
+
+  showChapter(chapter) {
+    const chapterHTML = document.querySelector(`.${chapter}`)
+    chapterHTML.classList.add('is-active')
+  }
+
+  hideChapter(chapter) {
+    const chapterHTML = document.querySelector(`.${chapter}`)
+    chapterHTML.classList.remove('is-active')
   }
 
   mouseWheel(event) {
@@ -99,6 +119,9 @@ export default class ChapterHandler {
         .then(chap => {
           chap.default.scene = this.scene
           chap.default.world = this.world
+          chap.default.nextChapter = this.nextChapter
+          chap.default.showChapter = this.showChapter
+          chap.default.hideChapter = this.hideChapter
           chap.default.init(this.options)
           a.push(chap.default)
           if (a.length == r.keys().length) {
@@ -108,8 +131,5 @@ export default class ChapterHandler {
         })
     });
   }
-
-
-
 }
 

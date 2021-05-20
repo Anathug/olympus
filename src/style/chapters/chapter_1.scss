@@ -15,4 +15,7 @@
     transform: translate(-50%, -50%);
     pointer-events: auto;
   }
+  &.is-active {
+    display: block;
+  }
 }

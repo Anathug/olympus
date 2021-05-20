@@ -84,7 +84,6 @@ export default class App {
       powerPreference: 'high-performance',
     })
     this.renderer.outputEncoding = sRGBEncoding
-    this.renderer.gammaFactor = 2.2
 
     this.renderer.setClearColor(0x212121, 1)
 

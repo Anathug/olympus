@@ -195,7 +195,7 @@ export default class Loader extends EventEmitter {
   }
   loadComplete(ressource, loaded) {
     this.done++
-    this.changeMaterial(loaded)
+    // this.changeMaterial(loaded)
     this.createNestedObject(this[`${ressource.type}s`], ressource.name.split('/'), loaded)
     this.trigger('ressourceLoad', [ressource, loaded])
     if (this.total === this.done) {
