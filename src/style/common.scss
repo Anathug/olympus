@@ -25,9 +25,10 @@ canvas {
   margin: 15px;
 }
 
-.infos {
+.tlinfos {
   z-index: 10;
   position: relative;
+  display: none;
 }
 
 .dg.ac {
@@ -51,6 +52,8 @@ p {
   font-size: 12px;
 }
 
+//movie layout
+
 .movie-layout {
   position: absolute;
   top: 0;
@@ -60,16 +63,25 @@ p {
   pointer-events: none;
   .bottom,
   .top {
-    height: 60px;
+    height: 8%;
     width: 100%;
     background-color: black;
     position: absolute;
     left: 0;
+    transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+    &.is-active {
+      transform: scaleY(7);
+    }
+    &.is-leaving {
+      transform: scaleY(0);
+    }
   }
   .bottom {
     bottom: 0;
+    transform-origin: bottom;
   }
   .top {
     top: 0;
+    transform-origin: top;
   }
 }

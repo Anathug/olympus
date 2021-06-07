@@ -16,7 +16,7 @@ export default class Background {
     }
   }
   createBackground() {
-    const geometry = new BoxGeometry(15, 15, 1)
+    const geometry = new BoxGeometry(17, 17, 1)
     const material = new MeshStandardMaterial({ color: this.params.color })
     this.mesh = new Mesh(geometry, material)
     this.mesh.position.z = -1

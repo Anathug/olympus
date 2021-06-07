@@ -21,10 +21,8 @@ c.init = (options) => {
   c.renderer = c.world.renderer
   c.mouse = c.world.mouse.mouse
   c.allowScroll = true
+  c.allowMouseMove = true
   c.currentImageIndex = null
-
-  const blackoverlaybutton = document.querySelector('.black-overlay button')
-  blackoverlaybutton.addEventListener('click', () => hideInfos(c.currentImageIndex))
 
   createImages(c.camera)
   createBackground(options)
@@ -37,7 +35,9 @@ c.init = (options) => {
 c.start = () => {
   c.starship.container.visible = false
   interaction = new Interaction(c.renderer, c.scene, c.camera);
-  setEvent()
+  setThreeEvents()
+  setEvents()
+  c.showChapter('chapter_0')
   defaultScaleValues = c.objects.map(object => object.scale)
   c.objects.forEach(object => {
     object.visible = true
@@ -45,17 +45,20 @@ c.start = () => {
 }
 
 c.update = () => {
-  if (!c.debug) {
+  if (!c.debug && c.allowMouseMove) {
     mouseMove(c.camera)
   }
 }
 
 c.end = () => {
   interaction.destroy()
+  c.hideChapter('chapter_0')
   c.objects.forEach(object => {
     object.visible = false
   })
 }
+
+// FUNCTIONS 
 
 const mouseMove = (camera) => {
   gsap.to(camera.position, {
@@ -83,12 +86,20 @@ const mouseMove = (camera) => {
   })
 }
 
-const setEvent = () => {
+const setThreeEvents = () => {
   for (let i = 0; i < imagesArray.length; i++) {
     imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
     imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
     imagesArray[i].on('click', (e) => showInfos(e.data.target.index))
   }
+}
+
+const setEvents = () => {
+  const blackoverlaybutton = document.querySelector('.black-overlay button')
+  blackoverlaybutton.addEventListener('click', () => hideInfos(c.currentImageIndex))
+
+  const startexperience = document.querySelector('.start-experience')
+  startexperience.addEventListener('click', () => chapterEnd())
 }
 
 const scaleUp = (mesh, i) => {
@@ -147,7 +158,23 @@ const hideInfos = (i) => {
   blackoverlay.classList.remove('is-active')
   container.classList.remove('is-active')
   interaction = new Interaction(c.renderer, c.scene, c.camera);
-  setEvent()
+  setThreeEvents()
+}
+
+const chapterEnd = () => {
+  c.allowMouseMove = false
+  const toplayout = document.querySelector('.movie-layout .top')
+  const bottomlayout = document.querySelector('.movie-layout .bottom')
+
+  toplayout.classList.add('is-active')
+  bottomlayout.classList.add('is-active')
+
+  setTimeout(() => {
+    toplayout.classList.add('is-leaving')
+    bottomlayout.classList.add('is-leaving')
+  }, 2000);
+
+  c.nextChapter()
 }
 
 const createInfos = () => {

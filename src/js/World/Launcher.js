@@ -29,7 +29,8 @@ export default class Launch {
     this.container.scale.set(this.params.scale, this.params.scale, this.params.scale);
   }
   setPosition() {
-    //this.container.rotation.z = -Math.PI / 2
+    this.container.scale.set(0.2, 0.2, 0.2)
+    this.launcher.position.y = -3.3
   }
 
   setDebug() {

@@ -195,7 +195,7 @@ export default class Loader extends EventEmitter {
   }
   loadComplete(ressource, loaded) {
     this.done++
-    this.changeMaterial(loaded)
+    // this.changeMaterial(loaded)
     this.createNestedObject(this[`${ressource.type}s`], ressource.name.split('/'), loaded)
     this.trigger('ressourceLoad', [ressource, loaded])
     if (this.total === this.done) {
@@ -212,14 +212,14 @@ export default class Loader extends EventEmitter {
   }
 
   changeMaterial(object) {
-    if (!object.scene) return
-    for (let i = 0; i < object.scene.children.length; i++) {
-      object.scene.children[i].traverse((child) => {
-        if (child.material) {
-          let c = child.material.color
-          child.material = new MeshToonMaterial({ color: c })
-        }
-      })
-    }
+    // if (!object.scene) return
+    // for (let i = 0; i < object.scene.children.length; i++) {
+    //   object.scene.children[i].traverse((child) => {
+    //     if (child.material) {
+    //       let c = child.material.color
+    //       child.material = new MeshToonMaterial({ color: c })
+    //     }
+    //   })
+    // }
   }
 }
