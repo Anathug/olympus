@@ -164,3 +164,8 @@ export default class {
     return newName
   }
 }
+
+
+function tick() {
+  requestAnimationFrame(tick)
+}

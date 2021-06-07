@@ -4,6 +4,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
+import lerp from '../Tools/Lerp'
+
 import { AudioLoader, FontLoader, TextureLoader, MeshToonMaterial } from 'three'
 
 export default class Loader extends EventEmitter {
@@ -21,8 +23,26 @@ export default class Loader extends EventEmitter {
     this.sounds = {}
     this.fonts = {}
 
+    this.timerHours = document.getElementById("timerHours");
+    this.timerMinutes = document.getElementById("timerMinutes");
+    this.timerSeconds = document.getElementById("timerSeconds");
+
+    this.durationTotal = 10000;
+    this.durationLeft = this.durationTotal;
+    let secondsTotal = this.durationLeft;
+    let minutesTotal = secondsTotal / 60;
+    let hoursTotal = minutesTotal / 24;
+
+    let seconds = Math.floor(secondsTotal) % 60;
+    let minutes = Math.floor(minutesTotal) % 60;
+    let hours = Math.floor(hoursTotal) % 24;
+
+    this.timerSeconds.textContent = ("0" + seconds).slice(-2);
+    this.timerMinutes.textContent = ("0" + minutes).slice(-2);
+    this.timerHours.textContent = ("0" + hours).slice(-2);
     this.setLoaders()
     this.setRessourcesList()
+    this.updateProgress()
   }
   setLoaders() {
     const dracoLoader = new DRACOLoader()
@@ -112,9 +132,26 @@ export default class Loader extends EventEmitter {
     ]
   }
 
+  updateProgress() {
+
+    let secondsTotal = this.durationLeft;
+    let minutesTotal = secondsTotal / 60;
+    let hoursTotal = minutesTotal / 24;
+
+    let seconds = Math.floor(secondsTotal) % 60;
+    let minutes = Math.floor(minutesTotal) % 60;
+    let hours = Math.floor(hoursTotal) % 24;
+
+    this.timerSeconds.textContent = ("0" + seconds).slice(-2);
+    this.timerMinutes.textContent = ("0" + minutes).slice(-2);
+    this.timerHours.textContent = ("0" + hours).slice(-2);
+
+  }
+
   progress(xhr) {
     if (xhr.lengthComputable) {
-      this.currentPercent = Math.floor((xhr.loaded / xhr.total) * 100)
+      this.durationLeft = lerp(this.durationTotal, 0, 1 - Math.pow(1 - xhr.loaded / xhr.total, 4));
+      this.updateProgress()
       if (this.currentPercent === 100) {
         this.currentPercent = 0
       }
