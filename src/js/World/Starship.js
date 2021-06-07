@@ -30,6 +30,8 @@ export default class Starship {
     this.debug = options.debug
 
     this.container = new Object3D()
+    this.container.visible = false
+
     this.container.name = 'Starship'
     this.params = {
       scale: 0.02

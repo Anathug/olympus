@@ -1,168 +1,114 @@
 import Chapter from '../Chapter'
-import Image from '../World/chapter_0/Image'
-import Background from '../World/chapter_0/Background'
 import gsap from 'gsap'
-import { Interaction } from '../../assets/lib/threeinteraction'
 import data from '../../../static/database/chap0'
+import clamp from '../Tools/Clamp'
 
 
-let c = new Chapter(0)
-let defaultScaleValues
-let interaction
-let imagesArray = []
+const c = new Chapter(0)
+const expositionImagesContainer = document.querySelector('.exposition-images-container')
+const images = document.querySelectorAll('.exposition-images img')
+const imagePosition = []
 
-c.init = (options) => {
-  c.camera = options.world.camera.camera
-  c.starship = options.starship
-  c.world = options.world
-  c.scene = options.scene
-  c.assets = options.assets.textures.chapter0
-  c.debug = options.debug
-  c.renderer = c.world.renderer
-  c.mouse = c.world.mouse.mouse
-  c.allowScroll = true
-  c.allowMouseMove = true
-  c.currentImageIndex = null
 
-  createImages(c.camera)
-  createBackground(options)
-  createInfos()
+c.init = () => {
+  c.unnormalizedMouse = c.mouse.unnormalizedMouse
+  c.mouse = c.mouse.mouse
+  c.currentImageIndex = 0
   c.objects.forEach(object => {
     object.visible = false
   })
+  createInfos()
+  createImagePosition()
+
 }
 
 c.start = () => {
-  c.starship.container.visible = false
-  interaction = new Interaction(c.renderer, c.scene, c.camera);
-  setThreeEvents()
   setEvents()
   c.showChapter('chapter_0')
-  defaultScaleValues = c.objects.map(object => object.scale)
+  c.time.stopTicker()
   c.objects.forEach(object => {
     object.visible = true
   })
 }
 
 c.update = () => {
-  if (!c.debug && c.allowMouseMove) {
-    mouseMove(c.camera)
-  }
 }
 
 c.end = () => {
-  interaction.destroy()
+  removeEvents()
   c.hideChapter('chapter_0')
   c.objects.forEach(object => {
     object.visible = false
   })
 }
 
-// FUNCTIONS 
 
-const mouseMove = (camera) => {
-  gsap.to(camera.position, {
-    x: c.mouse.x * 2,
-    duration: 2,
-    ease: 'power3.out'
-  })
+const mouseMove = () => {
 
-  gsap.to(camera.rotation, {
-    y: c.mouse.x / 6,
+  gsap.to(expositionImagesContainer, {
+    x: -c.mouse.x * 100,
+    y: c.mouse.y * 100,
     duration: 1,
     ease: 'power3.out'
   })
 
-  gsap.to(camera.position, {
-    y: c.mouse.y * 2,
-    duration: 2,
-    ease: 'power3.out'
+  images.forEach((image, i) => {
+    const distance = calculateDistance(images[i], c.unnormalizedMouse.x, c.unnormalizedMouse.y)
+    const normalizedDistance = clamp(1, (window.innerWidth - distance) / window.innerWidth + 0.2, 1.2)
+
+    gsap.to(image, {
+      scale: normalizedDistance,
+      duration: 1,
+      ease: 'power3.out'
+    })
   })
 
-  gsap.to(camera.rotation, {
-    x: -c.mouse.y / 6,
-    duration: 1,
-    ease: 'power3.out'
-  })
-}
 
-const setThreeEvents = () => {
-  for (let i = 0; i < imagesArray.length; i++) {
-    imagesArray[i].on('mouseover', () => scaleUp(imagesArray[i], i))
-    imagesArray[i].on('mouseout', () => scaleDown(imagesArray[i], i))
-    imagesArray[i].on('click', (e) => showInfos(e.data.target.index))
-  }
 }
 
 const setEvents = () => {
   const blackoverlaybutton = document.querySelector('.black-overlay button')
   blackoverlaybutton.addEventListener('click', () => hideInfos(c.currentImageIndex))
-
   const startexperience = document.querySelector('.start-experience')
   startexperience.addEventListener('click', () => chapterEnd())
-}
 
-const scaleUp = (mesh, i) => {
-  let scaleX = defaultScaleValues[i].x
-  let scaleY = defaultScaleValues[i].y
-  gsap.to(mesh.scale, {
-    x: scaleX * 1.1,
-    y: scaleY * 1.1,
-    duration: 0.3
+  window.addEventListener('mousemove', mouseMove)
+
+  images.forEach(image => {
+    image.addEventListener('click', () => showInfos(image.dataset.index))
   })
 }
 
-const scaleDown = (mesh, i) => {
-  let scaleX = defaultScaleValues[i].x
-  let scaleY = defaultScaleValues[i].y
-  gsap.to(mesh.scale, {
-    x: scaleX * 0.9,
-    y: scaleY * 0.9,
-    duration: 0.3
+const removeEvents = () => {
+  window.removeEventListener('mousemove', mouseMove)
+}
+
+
+const createImagePosition = () => {
+
+  images.forEach(image => {
+    const imageBCR = image.getBoundingClientRect()
+
+    let imageParam = {
+      imageH: imageBCR.height,
+      imageW: imageBCR.width,
+      imageTop: imageBCR.top,
+      imageLeft: imageBCR.left,
+    }
+    const imageCenter = { x: imageParam.imageLeft + imageParam.imageW / 2, y: imageParam.imageTop + imageParam.imageH / 2 }
+    const trueImageCenter = { x: 0, y: 0 }
+    imageParam.imageCenter = imageCenter
+    imageParam.trueImageCenter = trueImageCenter
+
+
+    imagePosition.push(imageParam)
   })
 }
 
-const createImages = (camera) => {
-  const images = document.querySelectorAll('.chapter_0 img')
-  images.forEach((image, i) => {
-    const imageName = `board-${i + 1}`
-    const threeimg = new Image(image, c.assets[imageName])
-    threeimg.createImage(camera)
-    threeimg.mesh.index = i
-    threeimg.setPosition()
-    c.objects.push(threeimg.mesh)
-    imagesArray.push(threeimg.mesh)
-    c.world.container.add(threeimg.container)
-  })
-}
 
-const createBackground = (options) => {
-  const background = new Background(options)
-  c.background = background
-  c.objects.push(background.mesh)
-  c.world.container.add(background.container)
-}
-
-const showInfos = (i) => {
-  interaction.destroy()
-  c.currentImageIndex = i
-  const blackoverlay = document.querySelector('.black-overlay')
-  const container = document.querySelector(`.container-${i}`)
-  blackoverlay.classList.add('is-active')
-  container.classList.add('is-active')
-}
-
-const hideInfos = (i) => {
-  const blackoverlay = document.querySelector('.black-overlay')
-  const container = document.querySelector(`.container-${i}`)
-  blackoverlay.classList.remove('is-active')
-  container.classList.remove('is-active')
-  interaction = new Interaction(c.renderer, c.scene, c.camera);
-  setThreeEvents()
-}
 
 const chapterEnd = () => {
-  c.allowMouseMove = false
+
   const toplayout = document.querySelector('.movie-layout .top')
   const bottomlayout = document.querySelector('.movie-layout .bottom')
 
@@ -172,9 +118,30 @@ const chapterEnd = () => {
   setTimeout(() => {
     toplayout.classList.add('is-leaving')
     bottomlayout.classList.add('is-leaving')
+    c.time.setTicker()
+
   }, 2000);
 
   c.nextChapter()
+}
+
+const showInfos = (i) => {
+  const blackoverlay = document.querySelector('.black-overlay')
+  const container = document.querySelector(`.container-${i}`)
+  c.currentImageIndex = i
+  blackoverlay.classList.add('is-active')
+  container.classList.add('is-active')
+}
+
+const hideInfos = (i) => {
+  const blackoverlay = document.querySelector('.black-overlay')
+  const container = document.querySelector(`.container-${i}`)
+  blackoverlay.classList.remove('is-active')
+  container.classList.remove('is-active')
+}
+
+const calculateDistance = (elem, mouseX, mouseY) => {
+  return Math.floor(Math.sqrt(Math.pow(mouseX - (elem.getBoundingClientRect().left + (elem.getBoundingClientRect().width / 2)), 2) + Math.pow(mouseY - (elem.getBoundingClientRect().top + (elem.getBoundingClientRect().height / 2)), 2)));
 }
 
 const createInfos = () => {
