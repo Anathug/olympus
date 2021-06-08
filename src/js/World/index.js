@@ -50,6 +50,7 @@ export default class World {
       world: this,
       debug: this.debugFolder,
       renderer: this.renderer,
+      mouse: this.mouse,
       scene: this.scene,
       mars: this.mars,
       earth: this.earth,
