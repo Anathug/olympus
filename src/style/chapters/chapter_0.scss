@@ -36,12 +36,8 @@
         position: absolute;
         top: 50%;
         background-color: #fff;
-      }
-      .bottom-line {
-        transform: rotate(45deg);
-      }
-      .top-line {
-        transform: rotate(-45deg);
+        transition: transform 1s 0.2s, opacity 0.5s 0.2s;
+        opacity: 0;
       }
     }
   }
@@ -145,7 +141,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 20;
+    z-index: 202;
     pointer-events: none;
 
     .container {
@@ -192,8 +188,8 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
+    transform: translate(-50%, -50%);
+    z-index: 200;
     display: none;
   }
 }
@@ -231,5 +227,15 @@
 
 .black-overlay.is-active {
   opacity: 0.9;
-  z-index: 15;
+  z-index: 201;
+  button {
+    .top-line {
+      transform: rotate(-45deg) scaleX(1);
+      opacity: 1;
+    }
+    .bottom-line {
+      transform: rotate(45deg) scaleX(1);
+      opacity: 1;
+    }
+  }
 }

@@ -44,12 +44,14 @@ export default class SoundButton {
       gsap.to(this.wave, {
         amplitude: 0,
         ease: 'power3.out',
+        duration: 1
       })
       this.soundOn = false
     } else {
       gsap.to(this.wave, {
         amplitude: 10,
         ease: 'power3.out',
+        duration: 1
       })
       this.soundOn = true
     }

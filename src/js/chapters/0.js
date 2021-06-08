@@ -32,7 +32,7 @@ c.start = () => {
   })
 }
 
-c.update = () => {}
+c.update = () => { }
 
 c.end = () => {
   removeEvents()
@@ -186,10 +186,10 @@ const calculateDistance = (elem, mouseX, mouseY) => {
         mouseX - (elem.getBoundingClientRect().left + elem.getBoundingClientRect().width / 2),
         2
       ) +
-        Math.pow(
-          mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
-          2
-        )
+      Math.pow(
+        mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
+        2
+      )
     )
   )
 }
