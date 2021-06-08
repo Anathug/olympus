@@ -23,11 +23,14 @@ export default class Loader extends EventEmitter {
     this.sounds = {}
     this.fonts = {}
 
-    this.timerHours = document.getElementById("timerHours");
-    this.timerMinutes = document.getElementById("timerMinutes");
-    this.timerSeconds = document.getElementById("timerSeconds");
+    this.timerHours1 = document.getElementById("timerHours1");
+    this.timerMinutes1 = document.getElementById("timerMinutes1");
+    this.timerSeconds1 = document.getElementById("timerSeconds1");
+    this.timerHours2 = document.getElementById("timerHours2");
+    this.timerMinutes2 = document.getElementById("timerMinutes2");
+    this.timerSeconds2 = document.getElementById("timerSeconds2");
 
-    this.durationTotal = 10000;
+    this.durationTotal = 100000;
     this.durationLeft = this.durationTotal;
     let secondsTotal = this.durationLeft;
     let minutesTotal = secondsTotal / 60;
@@ -37,9 +40,15 @@ export default class Loader extends EventEmitter {
     let minutes = Math.floor(minutesTotal) % 60;
     let hours = Math.floor(hoursTotal) % 24;
 
-    this.timerSeconds.textContent = ("0" + seconds).slice(-2);
-    this.timerMinutes.textContent = ("0" + minutes).slice(-2);
-    this.timerHours.textContent = ("0" + hours).slice(-2);
+    this.timerSeconds1.textContent = ("0" + seconds).slice(-2).charAt(0);
+    this.timerSeconds2.textContent = ("0" + seconds).slice(-2).charAt(1);
+
+    this.timerMinutes1.textContent = ("0" + minutes).slice(-2).charAt(0);
+    this.timerMinutes2.textContent = ("0" + minutes).slice(-2).charAt(1);
+
+    this.timerHours1.textContent = ("0" + hours).slice(-2).charAt(0);
+    this.timerHours2.textContent = ("0" + hours).slice(-2).charAt(1);
+
     this.setLoaders()
     this.setRessourcesList()
     this.updateProgress()
@@ -133,7 +142,6 @@ export default class Loader extends EventEmitter {
   }
 
   updateProgress() {
-
     let secondsTotal = this.durationLeft;
     let minutesTotal = secondsTotal / 60;
     let hoursTotal = minutesTotal / 24;
@@ -142,9 +150,17 @@ export default class Loader extends EventEmitter {
     let minutes = Math.floor(minutesTotal) % 60;
     let hours = Math.floor(hoursTotal) % 24;
 
-    this.timerSeconds.textContent = ("0" + seconds).slice(-2);
-    this.timerMinutes.textContent = ("0" + minutes).slice(-2);
-    this.timerHours.textContent = ("0" + hours).slice(-2);
+    
+    this.timerSeconds1.textContent = ("0" + seconds).slice(-2).charAt(0);
+    this.timerSeconds2.textContent = ("0" + seconds).slice(-2).charAt(1);
+
+    this.timerMinutes1.textContent = ("0" + minutes).slice(-2).charAt(0);
+    this.timerMinutes2.textContent = ("0" + minutes).slice(-2).charAt(1);
+
+    this.timerHours1.textContent = ("0" + hours).slice(-2).charAt(0);
+    this.timerHours2.textContent = ("0" + hours).slice(-2).charAt(1);
+
+
 
   }
 

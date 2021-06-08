@@ -11,7 +11,9 @@ const createApp = () => {
 
 const assets = new Assets()
 const setLoader = () => {
-  let loadDiv = document.querySelector('#timerContainer')
+  let loadDiv = document.querySelector('#loader')
+  let timerContainer = document.querySelector('#timerContainer')
+  let headphones = document.querySelector('#headphones')
 
   if (assets.total === 0) {
     createApp()
@@ -19,13 +21,15 @@ const setLoader = () => {
   }
 
   assets.on('ressourcesReady', () => {
-    setTimeout(() => {
-      createApp()
-      loadDiv.style.opacity = 0
+    createApp()
+    timerContainer.classList.add('fadeout')
+    headphones.classList.add('fadeout')
       setTimeout(() => {
-        loadDiv.remove()
-      }, 550)
-    }, 1000)
+        loadDiv.classList.add('openScene')
+        setTimeout(() => {
+          loadDiv.remove()
+        }, 1000)
+      }, 2000)
   })
 }
 
