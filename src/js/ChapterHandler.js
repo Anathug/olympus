@@ -20,7 +20,6 @@ export default class ChapterHandler {
     this.debug = options.debug
     this.starship = options.starship
     this.mars = options.mars
-
     this.globProgress = 0
     this.realProgress = 0
     this.chapProgress = 0
@@ -119,6 +118,9 @@ export default class ChapterHandler {
         .then(chap => {
           chap.default.scene = this.scene
           chap.default.world = this.world
+          chap.default.time = this.time
+          chap.default.mouse = this.mouse
+
           chap.default.nextChapter = this.nextChapter
           chap.default.showChapter = this.showChapter
           chap.default.hideChapter = this.hideChapter

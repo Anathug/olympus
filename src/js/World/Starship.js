@@ -30,6 +30,8 @@ export default class Starship {
     this.debug = options.debug
 
     this.container = new Object3D()
+    this.container.visible = false
+
     this.container.name = 'Starship'
     this.params = {
       scale: 0.02
@@ -110,6 +112,7 @@ export default class Starship {
   }
   setMaterial() {
     const starshipTexture = this.assets.textures.global.starship
+    console.log(starshipTexture)
     const colorTexture = starshipTexture.MetalPlates007_1K_Color
     const displacementTexture = starshipTexture.MetalPlates007_1K_Displacement
     const metalnessTexture = starshipTexture.MetalPlates007_1K_Metalness
@@ -130,7 +133,9 @@ export default class Starship {
     // })
     this.starship.traverse((child) => {
 
+
       if (child.type === 'Mesh') {
+        child.material.side = THREE.DoubleSide
         // child.material.displacementMap = displacementTexture
         // child.material.normalMap = normalTexture
         // child.material.metalnessMap = metalnessTexture
