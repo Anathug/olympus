@@ -7,6 +7,13 @@ const c = new Chapter(0)
 const expositionImagesContainer = document.querySelector('.exposition-images-container')
 const images = document.querySelectorAll('.exposition-images img')
 const imagePosition = []
+const layoutHorizontalLine = document.querySelector('.experience-layout .horizontal-line')
+const layoutVerticalLine = document.querySelector('.experience-layout .vertical-line')
+const layoutCoordinate = document.querySelector('.experience-layout .coordinate')
+const layoutCoordinateX = layoutCoordinate.querySelector('.x')
+const layoutCoordinateY = layoutCoordinate.querySelector('.y')
+
+console.log(layoutCoordinateX, layoutCoordinateY)
 
 c.init = () => {
   c.unnormalizedMouse = c.mouse.unnormalizedMouse
@@ -46,6 +53,14 @@ const mouseMove = () => {
     duration: 1,
     ease: 'power3.out',
   })
+
+  layoutVerticalLine.style.transform = `translateX(${c.unnormalizedMouse.x}px)`
+  layoutHorizontalLine.style.transform = `translateY(${c.unnormalizedMouse.y}px)`
+
+  layoutCoordinate.style.transform = `translate3d(${c.unnormalizedMouse.x}px, ${c.unnormalizedMouse.y}px, 0)`
+
+  layoutCoordinateX.innerHTML = `x: ${twoDecimals(c.mouse.x)}`
+  layoutCoordinateY.innerHTML = `y: ${twoDecimals(-c.mouse.y)}`
 
   if (!c.opened) {
     images.forEach((image, i) => {
@@ -192,6 +207,7 @@ const calculateDistance = (elem, mouseX, mouseY) => {
   )
 }
 
+const twoDecimals = num => (Math.round(num * 100) / 100).toFixed(3)
 const createInfos = () => {
   const container = document.querySelector('.zoomed-image-container')
 
