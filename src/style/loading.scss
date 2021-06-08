@@ -87,7 +87,7 @@
 }
 
 #loader.openScene{
-  transition-timing-function: cubic-bezier(0,0,0,1);
+  transition-timing-function: cubic-bezier( 0.51, 0, 0.2, 1 );
   clip-path: polygon( 
     0 0%, 100% 0%, 100% 100%, 0 100%,
     0 95%, 100% 95%, 100% 5%, 0 5%
