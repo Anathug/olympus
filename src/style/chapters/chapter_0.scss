@@ -13,7 +13,6 @@
     height: 100%;
     opacity: 0;
     background-color: #000;
-    z-index: 10;
     button {
       position: absolute;
       top: 5rem;
@@ -47,88 +46,96 @@
     }
   }
   .exposition-images-container {
+    opacity: 0;
+    z-index: 0;
+    width: 200vw;
+    height: 200vh;
     position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    img {
-      width: 30%;
-      margin: 3vw;
-      opacity: 0;
+    left: -50vw;
+    top: -50vh;
+    background-color: black;
+
+    .exposition-images {
       position: absolute;
-      transform: rotate(-5deg);
-      &:nth-child(1) {
-        left: 10%;
-        top: 30%;
-        height: 50%;
+      top: 40vh;
+      left: 40vw;
+      height: 100vh;
+      width: 100vw;
+      // .image-wrapper {
+        img {
+        width: 30%;
+        position: absolute;
+        transform: rotate(-5deg);
+        box-sizing: border-box;
         width: auto;
-      }
-      &:nth-child(2) {
-        left: 70%;
-        top: 60%;
-        height: 50%;
-        width: auto;
-      }
-      &:nth-child(3) {
-        left: 40%;
-        top: 50%;
-        height: 30%;
-        width: auto;
-      }
-      &:nth-child(4) {
-        left: 90%;
-        top: 5%;
-        height: 45%;
-        width: auto;
-      }
-      &:nth-child(5) {
-        left: 40%;
-        top: -10%;
-        height: 20%;
-        width: auto;
-      }
-      &:nth-child(6) {
-        left: 0%;
-        top: 70%;
-        height: 20%;
-        width: auto;
-      }
-      &:nth-child(7) {
-        left: 20%;
-        top: -15%;
-        height: 30%;
-        width: auto;
-      }
-      &:nth-child(8) {
-        left: 30%;
-        top: 60%;
-        height: 30%;
-        width: auto;
-      }
-      &:nth-child(9) {
-        left: -5%;
-        top: 15%;
-        height: 30%;
-        width: auto;
-      }
-      &:nth-child(10) {
-        left: 80%;
-        top: -5%;
-        height: 30%;
-        width: auto;
-      }
-      &:nth-child(11) {
-        left: 50%;
-        top: -30%;
-        height: 40%;
-        width: auto;
-      }
-      &:nth-child(12) {
-        left: 60%;
-        top: 50%;
-        height: 40%;
-        width: auto;
+        // img {
+        //   width: 100%;
+        //   height: 100%;
+        //   object-fit: cover;
+        //   position: absolute;
+        //   top: 0;
+        //   left: 0;
+        // }
+        &:nth-child(1) {
+          left: 10%;
+          top: 30%;
+          height: 50%;
+        }
+        &:nth-child(2) {
+          left: 70%;
+          top: 60%;
+          height: 50%;
+        }
+        &:nth-child(3) {
+          left: 40%;
+          top: 50%;
+          height: 30%;
+        }
+        &:nth-child(4) {
+          left: 90%;
+          top: 5%;
+          height: 45%;
+        }
+        &:nth-child(5) {
+          left: 40%;
+          top: -10%;
+          height: 20%;
+        }
+        &:nth-child(6) {
+          left: 0%;
+          top: 70%;
+          height: 20%;
+        }
+        &:nth-child(7) {
+          left: 20%;
+          top: -15%;
+          height: 30%;
+        }
+        &:nth-child(8) {
+          left: 30%;
+          top: 60%;
+          height: 30%;
+        }
+        &:nth-child(9) {
+          left: -5%;
+          top: 15%;
+          height: 30%;
+        }
+        &:nth-child(10) {
+          left: 80%;
+          top: -5%;
+          height: 30%;
+        }
+        &:nth-child(11) {
+          left: 50%;
+          top: -30%;
+          height: 40%;
+        }
+        &:nth-child(12) {
+          left: 60%;
+          top: 50%;
+          height: 40%;
+        }
       }
     }
   }
@@ -139,6 +146,8 @@
     height: 100%;
     width: 100%;
     z-index: 20;
+    pointer-events: none;
+
     .container {
       width: 100%;
       height: 100%;
@@ -153,9 +162,8 @@
           width: 100%;
           height: 100%;
           img {
+            position: absolute;
             width: 70%;
-            position: absolute;
-            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -204,9 +212,15 @@
 //interactions
 
 .chapter_0.is-active {
+  pointer-events: auto;
+
   .start-experience-wrapper {
-    pointer-events: auto;
+    // pointer-events: auto;
     display: block;
+  }
+  .exposition-images-container {
+    z-index: 10;
+    opacity: 1;
   }
 }
 
@@ -216,4 +230,5 @@
 
 .black-overlay.is-active {
   opacity: 0.9;
+  z-index: 15;
 }
