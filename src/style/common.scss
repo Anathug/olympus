@@ -11,7 +11,7 @@ body {
   text-transform: uppercase;
 }
 
-canvas {
+#_canvas {
   width: 100%;
   height: 100%;
   outline: none;
@@ -130,13 +130,15 @@ p {
     position: absolute;
     top: 0;
     right: 0;
-    width: 20%;
+    width: 17%;
     height: 15%;
     padding: 1rem;
     box-sizing: border-box;
+    max-width: 20rem;
     .top {
       display: flex;
       justify-content: space-between;
+      pointer-events: auto;
       button {
         color: white;
         font-size: 10px;
@@ -154,12 +156,45 @@ p {
     font-size: 10px;
     line-height: 1.3;
     letter-spacing: 3px;
+    padding: 1rem;
     .infos {
       display: flex;
       flex-direction: column;
+      margin: 0.5rem 0;
       &-details {
         font-size: 6px;
       }
+    }
+  }
+}
+
+// global cta
+
+.global-cta {
+  padding: 1rem 4rem;
+  border: 1px white solid;
+  color: white;
+  letter-spacing: 3px;
+  font-size: 14px;
+  transition: color 0.5s;
+  &:after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: white;
+    transform: scaleY(0);
+    transition: transform 0.5s;
+    transform-origin: top;
+  }
+  &:hover {
+    color: black;
+    &:after {
+      transform: scaleY(1);
+      z-index: -1;
+      transform-origin: bottom;
     }
   }
 }

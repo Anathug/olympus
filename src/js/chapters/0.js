@@ -2,18 +2,13 @@ import Chapter from '../Chapter'
 import gsap from 'gsap'
 import data from '../../../static/database/chap0'
 import clamp from '../Tools/Clamp'
+import SoundButton from '../SoundButton'
 
 const c = new Chapter(0)
 const expositionImagesContainer = document.querySelector('.exposition-images-container')
 const images = document.querySelectorAll('.exposition-images img')
 const imagePosition = []
-const layoutHorizontalLine = document.querySelector('.experience-layout .horizontal-line')
-const layoutVerticalLine = document.querySelector('.experience-layout .vertical-line')
-const layoutCoordinate = document.querySelector('.experience-layout .coordinate')
-const layoutCoordinateX = layoutCoordinate.querySelector('.x')
-const layoutCoordinateY = layoutCoordinate.querySelector('.y')
-
-console.log(layoutCoordinateX, layoutCoordinateY)
+const soundButton = new SoundButton()
 
 c.init = () => {
   c.unnormalizedMouse = c.mouse.unnormalizedMouse
@@ -29,6 +24,7 @@ c.init = () => {
 
 c.start = () => {
   setEvents()
+  gsap.ticker.add(soundButton.draw)
   c.showChapter('chapter_0')
   c.time.stopTicker()
   c.objects.forEach(object => {
@@ -54,14 +50,6 @@ const mouseMove = () => {
     ease: 'power3.out',
   })
 
-  layoutVerticalLine.style.transform = `translateX(${c.unnormalizedMouse.x}px)`
-  layoutHorizontalLine.style.transform = `translateY(${c.unnormalizedMouse.y}px)`
-
-  layoutCoordinate.style.transform = `translate3d(${c.unnormalizedMouse.x}px, ${c.unnormalizedMouse.y}px, 0)`
-
-  layoutCoordinateX.innerHTML = `x: ${twoDecimals(c.mouse.x)}`
-  layoutCoordinateY.innerHTML = `y: ${twoDecimals(-c.mouse.y)}`
-
   if (!c.opened) {
     images.forEach((image, i) => {
       const distance = calculateDistance(images[i], c.unnormalizedMouse.x, c.unnormalizedMouse.y)
@@ -70,7 +58,6 @@ const mouseMove = () => {
         (window.innerWidth - distance) / window.innerWidth + 0.2,
         1.2
       )
-
       gsap.to(image, {
         scale: normalizedDistance,
         duration: 1,
@@ -207,7 +194,6 @@ const calculateDistance = (elem, mouseX, mouseY) => {
   )
 }
 
-const twoDecimals = num => (Math.round(num * 100) / 100).toFixed(3)
 const createInfos = () => {
   const container = document.querySelector('.zoomed-image-container')
 
