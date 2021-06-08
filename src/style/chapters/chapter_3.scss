@@ -1,0 +1,26 @@
+
+
+.chapter_3{
+    #crosshair{
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    margin-left: -240px;
+    top: 50%;
+    margin-top: -240px;
+    visibility: hidden;
+}
+#circle{
+    width: 480px;
+    height: 480px;
+    position: absolute;
+    z-index: 1;
+    border: solid 1px;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    margin-top: -240px;
+    margin-left: -240px;
+    visibility: hidden;
+}
+}

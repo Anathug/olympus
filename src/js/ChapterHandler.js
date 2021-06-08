@@ -20,10 +20,10 @@ export default class ChapterHandler {
     this.debug = options.debug
     this.starship = options.starship
     this.mars = options.mars
-    this.globProgress = 0
-    this.realProgress = 0
+    this.globProgress = 3
+    this.realProgress = 3
     this.chapProgress = 0
-    this.currentChapter = 0
+    this.currentChapter = 3
 
     this.chapters = []
 
@@ -85,9 +85,7 @@ export default class ChapterHandler {
 
   nextChapter() {
     setTimeout(() => {
-      this.realProgress += 1
-      this.globProgress += 1
-      this.timelineSlider.value += 1
+      this.realProgress = Math.round(this.realProgress) + 1
     }, 2000);
   }
 

@@ -158,6 +158,7 @@ export default class App {
     })
     this.scene.add(this.starship.container)
   }
+
   setMars() {
     this.mars = new Mars({
       time: this.time,
@@ -185,7 +186,9 @@ export default class App {
       assets: this.assets,
       scene: this.scene
     })
-
+    this.time.on('tick', () => {
+      this.camera.orbitControls.update()
+    })
     this.scene.add(this.camera.container)
   }
 
