@@ -126,6 +126,40 @@ p {
     top: -2rem;
     left: 1rem;
   }
+  .crosses {
+    width: 60%;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 62rem;
+    opacity: 0.5;
+    mix-blend-mode: difference;
+    .cross {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      .bottom,
+      .top {
+        height: 1px;
+        width: 50px;
+        background-color: white;
+      }
+      .top {
+        transform: rotate(90deg);
+      }
+      &:nth-child(1) {
+        left: 0%;
+      }
+      &:nth-child(2) {
+        left: 50%;
+      }
+      &:nth-child(3) {
+        left: 100%;
+      }
+    }
+  }
   .top-right-wrapper {
     position: absolute;
     top: 0;
