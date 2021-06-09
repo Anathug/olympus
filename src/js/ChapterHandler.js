@@ -20,10 +20,13 @@ export default class ChapterHandler {
     this.debug = options.debug
     this.starship = options.starship
     this.mars = options.mars
-    this.globProgress = 3
-    this.realProgress = 3
+
+    this.workingChapter = 0
+
     this.chapProgress = 0
-    this.currentChapter = 3
+    this.globProgress = this.workingChapter
+    this.realProgress = this.workingChapter
+    this.currentChapter = this.workingChapter
 
     this.chapters = []
 
