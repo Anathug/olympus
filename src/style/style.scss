@@ -1,7 +1,7 @@
 @import './reset.scss';
-@import './common.scss';
-@import './loading.scss';
 @import './fonts.scss';
+@import './loading.scss';
+@import './common.scss';
 
 //chapters
 
@@ -9,3 +9,7 @@
 @import './chapters/chapter_1.scss';
 @import './chapters/chapter_2.scss';
 @import './chapters/chapter_3.scss';
+
+//timeline
+
+@import './timeline.scss';

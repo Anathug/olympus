@@ -1,0 +1,93 @@
+#timelineDiv {
+    position: absolute;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 25%;
+    margin: 0;
+    overflow-y: clip;
+    text-transform: uppercase;
+    
+    transition-duration: 0.2s;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    transform: translate(-45%,0);
+  }
+  
+  
+  #timelineDiv:hover {
+    transform: translate(0,0);
+  }
+  
+  #timelineDevider {
+    background: white;
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+  }
+  
+  #timelineChapters {
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    top: 15%;
+  }
+  
+  .timelineChap {
+    width: 50%;
+    height: 0;
+    right: 0;
+    margin: 0;
+    display: flex;
+    flex-flow: row-reverse;
+  }
+  
+  .current {
+    visibility: hidden;
+  }
+  
+  .timelineTriangle {
+    width: 0;
+    height: 0;
+    display: inline-block;
+    border-top: 10px solid transparent;
+    border-right: 10px solid #fff;
+    border-bottom: 10px solid transparent;
+    margin: 0 0 0 20px;
+  }
+  .timelineSubtitle {
+    display: none;
+  }
+  
+  #timelineChapterDisplay {
+    position: absolute;
+    margin-left: 50%;
+    width: 100%;
+    top: 15%;
+  }
+  
+  #timelineChapterDisplay .timelineTriangle {
+    border-top: 10px solid transparent;
+    border-left: 10px solid #fff;
+    border-right: 0px solid #fff;
+    border-bottom: 10px solid transparent;
+    margin: 0 20px 0 0;
+  }
+  
+  #timelineChapterDisplay .timelineTitle {
+    display: inline-block;
+    background: #f1c40f;
+    color: black;
+  }
+  
+  #timelineChapterDisplay .timelineSubtitle {
+    display: block;
+    margin-left: 30px;
+  }
+  
