@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import data from '../../../static/database/chap0'
 import clamp from '../Tools/Clamp'
 import SoundButton from '../SoundButton'
+import EncryptedText from '../EncryptedText'
 
 const c = new Chapter(0)
 const expositionImagesContainer = document.querySelector('.exposition-images-container')
@@ -32,7 +33,7 @@ c.start = () => {
   })
 }
 
-c.update = () => { }
+c.update = () => {}
 
 c.end = () => {
   removeEvents()
@@ -167,6 +168,8 @@ const showInfos = (i, image) => {
     ease: 'power3.out',
   })
 
+  new EncryptedText(`.container-${i} .infos h2`)
+
   blackoverlay.classList.add('is-active')
   container.classList.add('is-active')
 }
@@ -186,10 +189,10 @@ const calculateDistance = (elem, mouseX, mouseY) => {
         mouseX - (elem.getBoundingClientRect().left + elem.getBoundingClientRect().width / 2),
         2
       ) +
-      Math.pow(
-        mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
-        2
-      )
+        Math.pow(
+          mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
+          2
+        )
     )
   )
 }
