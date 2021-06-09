@@ -98,9 +98,9 @@ export default class ChapterHandler {
       )
       c.style.transform = `translateY(${value}px`
     }
-    this.chapters[this.currentChapter].progress = this.chapProgress
     this.globProgress = lerp(this.globProgress, this.realProgress, 0.03)
     this.chapProgress = this.globProgress % 1
+    this.chapters[this.currentChapter].progress = this.chapProgress
 
     if (this.currentChapter != Math.floor(this.globProgress)) {
       this.chapters[this.currentChapter].end()
@@ -150,6 +150,7 @@ export default class ChapterHandler {
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
+        chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
         if (a.length == r.keys().length) {
