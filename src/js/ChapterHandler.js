@@ -21,7 +21,7 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.mars = options.mars
 
-    this.workingChapter = 0
+    this.workingChapter = 2
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
