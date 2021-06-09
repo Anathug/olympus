@@ -4,6 +4,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
+import lerp from '../Tools/Lerp'
+
 import { AudioLoader, FontLoader, TextureLoader, MeshToonMaterial } from 'three'
 
 export default class Loader extends EventEmitter {
@@ -21,8 +23,35 @@ export default class Loader extends EventEmitter {
     this.sounds = {}
     this.fonts = {}
 
+    this.timerHours1 = document.getElementById("timerHours1");
+    this.timerMinutes1 = document.getElementById("timerMinutes1");
+    this.timerSeconds1 = document.getElementById("timerSeconds1");
+    this.timerHours2 = document.getElementById("timerHours2");
+    this.timerMinutes2 = document.getElementById("timerMinutes2");
+    this.timerSeconds2 = document.getElementById("timerSeconds2");
+
+    this.durationTotal = 100000;
+    this.durationLeft = this.durationTotal;
+    let secondsTotal = this.durationLeft;
+    let minutesTotal = secondsTotal / 60;
+    let hoursTotal = minutesTotal / 24;
+
+    let seconds = Math.floor(secondsTotal) % 60;
+    let minutes = Math.floor(minutesTotal) % 60;
+    let hours = Math.floor(hoursTotal) % 24;
+
+    this.timerSeconds1.textContent = ("0" + seconds).slice(-2).charAt(0);
+    this.timerSeconds2.textContent = ("0" + seconds).slice(-2).charAt(1);
+
+    this.timerMinutes1.textContent = ("0" + minutes).slice(-2).charAt(0);
+    this.timerMinutes2.textContent = ("0" + minutes).slice(-2).charAt(1);
+
+    this.timerHours1.textContent = ("0" + hours).slice(-2).charAt(0);
+    this.timerHours2.textContent = ("0" + hours).slice(-2).charAt(1);
+
     this.setLoaders()
     this.setRessourcesList()
+    this.updateProgress()
   }
   setLoaders() {
     const dracoLoader = new DRACOLoader()
@@ -112,9 +141,33 @@ export default class Loader extends EventEmitter {
     ]
   }
 
+  updateProgress() {
+    let secondsTotal = this.durationLeft;
+    let minutesTotal = secondsTotal / 60;
+    let hoursTotal = minutesTotal / 24;
+
+    let seconds = Math.floor(secondsTotal) % 60;
+    let minutes = Math.floor(minutesTotal) % 60;
+    let hours = Math.floor(hoursTotal) % 24;
+
+    
+    this.timerSeconds1.textContent = ("0" + seconds).slice(-2).charAt(0);
+    this.timerSeconds2.textContent = ("0" + seconds).slice(-2).charAt(1);
+
+    this.timerMinutes1.textContent = ("0" + minutes).slice(-2).charAt(0);
+    this.timerMinutes2.textContent = ("0" + minutes).slice(-2).charAt(1);
+
+    this.timerHours1.textContent = ("0" + hours).slice(-2).charAt(0);
+    this.timerHours2.textContent = ("0" + hours).slice(-2).charAt(1);
+
+
+
+  }
+
   progress(xhr) {
     if (xhr.lengthComputable) {
-      this.currentPercent = Math.floor((xhr.loaded / xhr.total) * 100)
+      this.durationLeft = lerp(this.durationTotal, 0, 1 - Math.pow(1 - xhr.loaded / xhr.total, 4));
+      this.updateProgress()
       if (this.currentPercent === 100) {
         this.currentPercent = 0
       }

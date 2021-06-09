@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-    <title>THREE.js Template</title>
-  </head>
 
-  <body>
-    <div class="loadScreen">
-      <h1 class="load">0%</h1>
-      <div class="progressBar">
-        <div class="progress"></div>
-      </div>
-    </div>
-    <canvas id="_canvas"></canvas>
-    <div class="tlinfos">
-      <div id="info"></div>
-      <input type="range" id="timelineSlider" min="0" max="1" value="0" step="0.01" />
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+  <title>THREE.js Template</title>
+</head>
+
+<body>
+  <div id='loader'>
+  <div id='timerContainer'>
+    <span class='timerBlock'><span class='timerSurtext'>T</span></span>
+    <span class='timerBlock'><span class='timerSurtext'>-</span></span>
+    <span class='timerBlock'><span class='timerSurtext' id='timerHours1'>0</span><span
+        class='timerSubtext'>H</span></span>
+        <span class='timerBlock'><span class='timerSurtext' id='timerHours2'>0</span><span
+            class='timerSubtext'>H</span></span>
+    <span class='timerBlock'><span class='timerSurtext'>:</span></span>
+    <span class='timerBlock'><span class='timerSurtext' id='timerMinutes1'>0</span><span
+        class='timerSubtext'>M</span></span>
+        <span class='timerBlock'><span class='timerSurtext' id='timerMinutes2'>0</span><span
+            class='timerSubtext'>M</span></span>
+    <span class='timerBlock'><span class='timerSurtext'>:</span></span>
+    <span class='timerBlock'><span class='timerSurtext' id='timerSeconds1'>0</span><span
+        class='timerSubtext'>S</span></span>
+        <span class='timerBlock'><span class='timerSurtext' id='timerSeconds2'>0</span><span
+            class='timerSubtext'>S</span></span>
+  </div>
+  <div id='headphones'>
+    <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.0151 11.7533C22.9802 8.68875 22.2169 6.13494 20.7429 4.20798C20.5798 3.99323 20.405 3.79008 20.2243 3.59274C20.2859 3.42743 20.3175 3.25251 20.3176 3.07618C20.3368 2.74793 20.2251 2.4254 20.0069 2.17869C19.7887 1.93198 19.4816 1.78103 19.1523 1.75864C19.104 1.75258 19.055 1.75258 19.0067 1.75864C18.4018 1.82735 17.7906 1.70556 17.2588 1.4104C15.6556 0.513768 13.8535 0.0290453 12.0151 0C10.1768 0.0342034 8.37546 0.520709 6.77151 1.4162C6.23712 1.69812 5.63129 1.81721 5.02946 1.75864H4.94789C4.61803 1.77954 4.30999 1.93005 4.09149 2.17711C3.87298 2.42417 3.76189 2.74755 3.78264 3.07618C3.78112 3.21949 3.80075 3.36225 3.8409 3.49988C3.63116 3.72043 3.42724 3.9584 3.25828 4.20798C1.74927 6.13494 0.991859 8.72358 0.956901 11.7765C0.228618 12.5717 -0.155915 14.5277 0.0596569 16.7971C0.333491 19.6353 1.46961 21.8293 2.59408 21.69H2.66982C2.78593 21.7973 2.9228 21.88 3.07206 21.9329C3.22132 21.9858 3.37984 22.0078 3.53794 21.9976C4.75562 21.8467 4.54588 19.4554 4.24291 16.3734C3.93995 13.2914 3.66029 10.6796 2.46008 10.8247C2.1799 10.8729 1.92709 11.0215 1.74927 11.2426C1.8658 8.59589 2.56495 6.36711 3.8176 4.72454C3.96908 4.53301 4.13221 4.34147 4.29535 4.14413C4.48274 4.29711 4.71728 4.38114 4.95954 4.3821C5.11326 4.38095 5.26496 4.34723 5.40459 4.28318C5.54422 4.21914 5.66857 4.12623 5.76939 4.01064C5.76939 4.01064 11.8462 -0.812575 18.3541 4.01064C18.4549 4.12623 18.5793 4.21914 18.7189 4.28318C18.8585 4.34723 19.0103 4.38095 19.164 4.3821C19.3723 4.3789 19.5751 4.31427 19.7466 4.19637C19.8923 4.36469 20.0379 4.53301 20.1719 4.70713C21.4537 6.37291 22.1528 8.65393 22.2519 11.3644C22.1604 11.216 22.0392 11.0878 21.8958 10.988C21.7525 10.8882 21.5901 10.8187 21.4187 10.784C20.1952 10.6389 19.9272 13.245 19.6301 16.3328C19.3329 19.4205 19.1232 21.806 20.3409 21.9569C20.5068 21.9683 20.6732 21.9441 20.829 21.886C20.9848 21.828 21.1263 21.7374 21.2439 21.6203C21.2984 21.6406 21.3551 21.6543 21.4129 21.6609C22.5374 21.8002 23.6677 19.6063 23.9415 16.7681C24.1571 14.5277 23.7609 12.5311 23.0151 11.7533Z" fill="white"/>
+      </svg>
+    <h3>Radio check. Have you got your headphones on ?</h3>
+  </div>
+</div>
+  <canvas id="_canvas"></canvas>
+    <span id='timelineDiv'>
+      <span id='timelineChapters'></span>
+      <span id='timelineDevider'></span>
+      <span id='timelineChapterDisplay'></span>
+    </span>
     <div class="movie-layout">
       <div class="top"></div>
       <div class="bottom"></div>
@@ -31,13 +53,48 @@
         <div class="x">x: 0</div>
         <div class="y">y: 0</div>
       </div>
-      <div class="top-right-wrapper">
-        <div class="top">
-          <button>auto scroll on/off</button>
-          <button>sound</button>
+      <div class="crosses">
+        <div class="cross">
+          <div class="top"></div>
+          <div class="bottom"></div>
+        </div>
+        <div class="cross">
+          <div class="top"></div>
+          <div class="bottom"></div>
+        </div>
+        <div class="cross">
+          <div class="top"></div>
+          <div class="bottom"></div>
         </div>
       </div>
-      <div class="middle-right-wrapper"></div>
+      <div class="top-right-wrapper">
+        <div class="top">
+          <button>
+            auto scroll <span class="on is-active">on</span>/<span class="off">off</span>
+          </button>
+          <canvas id="sound" height="30px" width="70px"></canvas>
+        </div>
+      </div>
+      <div class="middle-right-wrapper">
+        <div class="camera-wrapper is-active">
+          <div class="overflow-hidden relative">
+            <span>cam 01</span>
+          </div>
+          <div class="circle">
+            <div class="red-circle"></div>
+            <div class="white-circle"></div>
+          </div>
+        </div>
+        <div class="camera-wrapper">
+          <div class="overflow-hidden relative">
+            <span>cam 02</span>
+          </div>
+          <div class="circle">
+            <div class="red-circle"></div>
+            <div class="white-circle"></div>
+          </div>
+        </div>
+      </div>
       <div class="bottom-right-wrapper">
         <div class="infos">
           <span>+ 00:24:31</span>
@@ -62,54 +119,34 @@
       </div>
       <div class="exposition-images-container">
         <div class="exposition-images">
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-1.jpg" alt="" data-index="0" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-2.jpg" alt="" data-index="1" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-3.jpg" alt="" data-index="2" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-4.jpg" alt="" data-index="3" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-5.jpg" alt="" data-index="4" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-6.jpg" alt="" data-index="5" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-7.jpg" alt="" data-index="6" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-8.jpg" alt="" data-index="7" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-9.jpg" alt="" data-index="8" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-10.jpg" alt="" data-index="9" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-11.jpg" alt="" data-index="10" />
-          <!-- </div> -->
-          <!-- <div class="image-wrapper"> -->
-            <img src="./textures/images/chapter0/board-12.jpg" alt="" data-index="11" />
-          <!-- </div> -->
+          <img src="./textures/images/chapter0/board-1.jpg" alt="" data-index="0" />
+          <img src="./textures/images/chapter0/board-2.jpg" alt="" data-index="1" />
+          <img src="./textures/images/chapter0/board-3.jpg" alt="" data-index="2" />
+          <img src="./textures/images/chapter0/board-4.jpg" alt="" data-index="3" />
+          <img src="./textures/images/chapter0/board-5.jpg" alt="" data-index="4" />
+          <img src="./textures/images/chapter0/board-6.jpg" alt="" data-index="5" />
+          <img src="./textures/images/chapter0/board-7.jpg" alt="" data-index="6" />
+          <img src="./textures/images/chapter0/board-8.jpg" alt="" data-index="7" />
+          <img src="./textures/images/chapter0/board-9.jpg" alt="" data-index="8" />
+          <img src="./textures/images/chapter0/board-10.jpg" alt="" data-index="9" />
+          <img src="./textures/images/chapter0/board-11.jpg" alt="" data-index="10" />
+          <img src="./textures/images/chapter0/board-12.jpg" alt="" data-index="11" />
         </div>
       </div>
       <div class="zoomed-image-container"></div>
       <div class="start-experience-wrapper">
-        <button class="start-experience">start experience</button>
+        <button class="global-cta start-experience">start experience</button>
       </div>
     </section>
     <section class="chapter_1">
-      <button>start lucas le bg la hmm</button>
+      <button class="global-cta">start lucas le bg la hmm</button>
     </section>
     <section class="chapter_2">
       <button>start starship</button>
+    </section>
+    <section class="chapter_3">
+      <img src='./svg/dockingCrosshair.svg' alt='' id='crosshair'>
+      <span id='circle'></span>
     </section>
   </body>
 </html>
