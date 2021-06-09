@@ -16,5 +16,5 @@ export default class Satellite {
     this.satellite = this.assets.models.satellite.scene
     this.container.add(this.satellite)
   }
-  
+
 }

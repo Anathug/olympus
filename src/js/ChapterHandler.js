@@ -85,7 +85,7 @@ export default class ChapterHandler {
 
   nextChapter() {
     setTimeout(() => {
-      this.realProgress = Math.round(this.realProgress) + 1
+      this.realProgress = Math.trunc(this.realProgress) + 1
     }, 2000);
   }
 
