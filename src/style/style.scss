@@ -1,8 +1,13 @@
-@import './common.scss';
-@import './loading.scss';
+@import './reset.scss';
 @import './fonts.scss';
+@import './loading.scss';
+@import './common.scss';
 
 //chapters
 
 @import './chapters/chapter_0.scss';
 @import './chapters/chapter_1.scss';
+
+//timeline
+
+@import './timeline.scss'
