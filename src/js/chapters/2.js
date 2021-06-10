@@ -43,6 +43,8 @@ c.start = () => {
     object.visible = true
   })
   chapterBegin()
+  c.handler.allowScroll = true
+  c.handler.autoScroll = true
 }
 
 c.update = () => {
