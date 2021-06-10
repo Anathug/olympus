@@ -46,6 +46,7 @@ c.start = () => {
   c.showChapter('chapter_3')
   c.controls.enabled = true
   c.controls.autoRotate = true
+  c.controls.autoRotateSpeed = 0.2
   c.camera.position.set(-30, 0, 0)
   c.starship.container.position.set(0, -0, -30)
   c.satellite.container.scale.set(1, 1, 1)
