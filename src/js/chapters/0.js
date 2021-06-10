@@ -6,12 +6,14 @@ import SoundButton from '../SoundButton'
 import EncryptedText from '../EncryptedText'
 
 const c = new Chapter(0)
+c.title = 'Introduction'
 const expositionImagesContainer = document.querySelector('.exposition-images-container')
 const images = document.querySelectorAll('.exposition-images img')
 const imagePosition = []
 const soundButton = new SoundButton()
 
 c.init = () => {
+
   c.unnormalizedMouse = c.mouse.unnormalizedMouse
   c.mouse = c.mouse.mouse
   c.currentImageIndex = 0
@@ -27,13 +29,16 @@ c.start = () => {
   setEvents()
   gsap.ticker.add(soundButton.draw)
   c.showChapter('chapter_0')
-  c.time.stopTicker()
+  //c.time.stopTicker()
   c.objects.forEach(object => {
     object.visible = true
   })
+  c.handler.allowScroll = false
+  c.handler.autoScroll = false
+
 }
 
-c.update = () => {}
+c.update = () => { }
 
 c.end = () => {
   removeEvents()
@@ -117,7 +122,7 @@ const chapterEnd = () => {
   setTimeout(() => {
     toplayout.classList.add('is-leaving')
     bottomlayout.classList.add('is-leaving')
-    c.time.setTicker()
+    //c.time.setTicker()
   }, 2000)
 
   c.nextChapter()
@@ -189,10 +194,10 @@ const calculateDistance = (elem, mouseX, mouseY) => {
         mouseX - (elem.getBoundingClientRect().left + elem.getBoundingClientRect().width / 2),
         2
       ) +
-        Math.pow(
-          mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
-          2
-        )
+      Math.pow(
+        mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
+        2
+      )
     )
   )
 }

@@ -23,7 +23,8 @@ export default class ChapterHandler {
 
     this.allowScroll = false;
     this.autoScroll = false;
-    this.workingChapter = 3
+
+    this.workingChapter = 0
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -79,6 +80,7 @@ export default class ChapterHandler {
     this.time.on('tick', () => {
       this.updateProgress()
       this.updateCurrentChapter()
+      console.log(this.realProgress)
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
@@ -124,9 +126,7 @@ export default class ChapterHandler {
   }
 
   nextChapter() {
-    setTimeout(() => {
-      this.realProgress = Math.trunc(this.realProgress) + 1.001
-    }, 0)
+    this.realProgress = Math.trunc(this.realProgress) + 1.01
   }
 
   showChapter(chapter) {
@@ -141,7 +141,6 @@ export default class ChapterHandler {
 
   mouseWheel(event) {
     if (!this.allowScroll) return;
-
     this.realProgress = clamp(
       (this.realProgress += event.deltaY * 0.0001),
       0,
