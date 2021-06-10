@@ -143,7 +143,7 @@ export default class ChapterHandler {
     if (!this.allowScroll) return;
 
     this.realProgress = clamp(
-      (this.realProgress += event.deltaY * 0.002),
+      (this.realProgress += event.deltaY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
