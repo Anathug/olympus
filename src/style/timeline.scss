@@ -88,6 +88,10 @@
     text-transform: uppercase;
   }
   
+  .timelineTitle:hover{
+    cursor: pointer;
+  }
+
   #timelineChapterDisplay .timelineTitle {
     display: inline-block;
     background: #f1c40f;

@@ -56,6 +56,7 @@ export default class ChapterHandler {
       let title = document.createElement('span')
       title.classList.add('timelineTitle')
       title.textContent = `Chapter ${chap.index + 1}`
+      title.onclick = () => { this.realProgress = chap.index + 0.01 }
 
       let subtitle = document.createElement('span')
       subtitle.classList.add('timelineSubtitle')
