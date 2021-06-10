@@ -23,10 +23,10 @@ c.init = () => {
   })
   createInfos()
   createImagePosition()
+  setEvents()
 }
 
 c.start = () => {
-  setEvents()
   gsap.ticker.add(soundButton.draw)
   c.showChapter('chapter_0')
   //c.time.stopTicker()
@@ -41,7 +41,7 @@ c.start = () => {
 c.update = () => { }
 
 c.end = () => {
-  removeEvents()
+  //removeEvents()
   c.hideChapter('chapter_0')
   c.objects.forEach(object => {
     object.visible = false
