@@ -8,27 +8,22 @@ import { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader.js';
 
 import * as dat from 'dat.gui'
 
-import Sizes from './Tools/Sizes'
-import Time from './Tools/Time'
-
 import Camera from './Camera'
 import World from './World/index'
-import Mouse from './Mouse'
 
 import Starship from './World/Starship.js'
 import Mars from './World/Mars.js'
-import Earth from './World/Earth.js'
 
 import postVertexShader from '../shaders/post/vertexShader.glsl'
 import postFragmentShader from '../shaders/post/fragmentShader.glsl'
-
-
-// import gsap from 'gsap'
 
 export default class App {
   constructor(options) {
     this.canvas = options.canvas
     this.assets = options.assets
+    this.time = options.time
+    this.sizes = options.sizes
+    this.mouse = options.mouse
     this.params = {
       fog: {
         color: 0xFFFFFF,
@@ -36,10 +31,6 @@ export default class App {
         far: 2000
       }
     }
-
-    this.time = new Time()
-    this.sizes = new Sizes()
-    this.mouse = new Mouse()
 
     this.counter = 0.0
     this.starship = null
@@ -51,7 +42,6 @@ export default class App {
     this.setConfig()
     this.setStarship()
     this.setMars()
-    this.setEarth()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()
@@ -104,7 +94,6 @@ export default class App {
         this.activeCam = this.camera.camera
       else
         this.activeCam = cam
-      console.log(this.composer)
       this.composer.passes[0].camera = this.activeCam
       this.renderPass.camera = this.activeCam
     }
@@ -138,7 +127,7 @@ export default class App {
 
       this.counter += 0.01
       if (!this.lut) {
-        composer.removePass(lutPass)
+        this.composer.removePass(lutPass)
       }
       customPass.uniforms["amount"].value = this.counter
       this.composer.render()
@@ -151,10 +140,10 @@ export default class App {
       this.lut = { activated: true }
       folder.add(this.lut, 'activated').name('lut').listen().onChange(() => {
         if (this.lut) {
-          composer.addPass(lutPass)
+          this.composer.addPass(lutPass)
           this.lut = false
         } else {
-          composer.removePass(lutPass)
+          this.composer.removePass(lutPass)
           this.lut = true
         }
       })
@@ -180,15 +169,6 @@ export default class App {
       debug: this.debug
     })
     this.scene.add(this.mars.container)
-  }
-  setEarth() {
-    // this.earth = new Earth({
-    //   time: this.time,
-    //   assets: this.assets,
-    //   world: this.world,
-    //   debug: this.debug
-    // })
-    // this.scene.add(this.earth.container)
   }
   setCamera() {
     this.camera = new Camera({
