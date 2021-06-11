@@ -9,28 +9,18 @@ c.init = (options) => {
   c.camera = options.world.camera.camera
   c.world = options.world
   c.mouse = c.world.mouse.mouse
-  c.starship = options.starship
-  c.mars = options.mars
   c.debug = options.debug
   c.allowMouseMove = false
-
-  c.cockpit = new Cockpit(options)
-  c.objects.push(c.cockpit.container)
-  c.world.container.add(c.cockpit.container)
-
-  c.objects.forEach(object => {
-    object.visible = false
-  })
+  createCockpit(options)
+  c.hideObjects(c.objects)
 }
 
 c.start = () => {
+  c.showChapter('chapter_1')
+  c.showObjects(c.objects)
+  c.allowMouseMove = true
   setCameraPosition()
   setEvents()
-  c.allowMouseMove = true
-  c.showChapter('chapter_1')
-  c.objects.forEach(object => {
-    object.visible = true
-  })
 }
 
 c.update = () => {
@@ -40,11 +30,9 @@ c.update = () => {
 }
 
 c.end = () => {
-  removeEvents()
   c.hideChapter('chapter_1')
-  c.objects.forEach(object => {
-    object.visible = false
-  });
+  c.hideObjects(c.objects)
+  removeEvents()
 }
 
 const setCameraPosition = () => {
@@ -52,6 +40,11 @@ const setCameraPosition = () => {
   c.camera.rotation.x = -0.1
 }
 
+const createCockpit = (options) => {
+  c.cockpit = new Cockpit(options)
+  c.objects.push(c.cockpit.container)
+  c.world.container.add(c.cockpit.container)
+}
 const mouseMove = (camera) => {
   gsap.to(camera.position, {
     x: c.mouse.x / 5,
@@ -61,7 +54,9 @@ const mouseMove = (camera) => {
 }
 
 const setEvents = () => {
-  startButton.addEventListener('click', chapterEnd)
+  startButton.addEventListener('click', chapterEnd, {
+    once: true
+  })
 }
 
 const removeEvents = () => {

@@ -1,11 +1,8 @@
-// import Time from '@tools/Time'
 import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
-// import Chapter from './Chapter'
+// eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
-
-//import * as chapters from './chapters'
 
 export default class ChapterHandler {
   constructor(options) {
@@ -23,7 +20,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false;
     this.autoScroll = false;
-    this.workingChapter = 2
+    this.workingChapter = 0
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -150,7 +147,6 @@ export default class ChapterHandler {
   showObjects(objects) {
     objects.forEach(object => {
       object.visible = true
-      console.log(object)
     })
   }
 

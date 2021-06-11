@@ -2,50 +2,37 @@ import Chapter from '../Chapter'
 import gsap from 'gsap'
 import data from '../../../static/database/chap0'
 import clamp from '../Tools/Clamp'
-import SoundButton from '../SoundButton'
 import EncryptedText from '../EncryptedText'
 
 const c = new Chapter(0)
-c.title = 'Introduction'
 const expositionImagesContainer = document.querySelector('.exposition-images-container')
 const images = document.querySelectorAll('.exposition-images img')
 const imagePosition = []
-const soundButton = new SoundButton()
+const blackoverlaybutton = document.querySelector('.black-overlay button')
+const startexperience = document.querySelector('.start-experience')
 
 c.init = () => {
-
   c.unnormalizedMouse = c.mouse.unnormalizedMouse
   c.mouse = c.mouse.mouse
   c.currentImageIndex = 0
   c.opened = false
-  c.objects.forEach(object => {
-    object.visible = false
-  })
   createInfos()
   createImagePosition()
-  setEvents()
 }
 
 c.start = () => {
-  gsap.ticker.add(soundButton.draw)
+  // c.time.stopTicker()
   c.showChapter('chapter_0')
-  //c.time.stopTicker()
-  c.objects.forEach(object => {
-    object.visible = true
-  })
   c.handler.allowScroll = false
   c.handler.autoScroll = false
-
+  setEvents()
 }
 
 c.update = () => { }
 
 c.end = () => {
-  //removeEvents()
+  removeEvents()
   c.hideChapter('chapter_0')
-  c.objects.forEach(object => {
-    object.visible = false
-  })
 }
 
 const mouseMove = () => {
@@ -74,19 +61,19 @@ const mouseMove = () => {
 }
 
 const setEvents = () => {
-  const blackoverlaybutton = document.querySelector('.black-overlay button')
-  blackoverlaybutton.addEventListener('click', () => hideInfos(c.currentImageIndex))
-  const startexperience = document.querySelector('.start-experience')
-  startexperience.addEventListener('click', () => chapterEnd())
-
-  window.addEventListener('mousemove', mouseMove)
-
   images.forEach(image => {
     image.addEventListener('click', () => showInfos(image.dataset.index, image))
   })
+  blackoverlaybutton.addEventListener('click', hideInfos)
+  startexperience.addEventListener('click', chapterEnd, {
+    once: true
+  })
+  window.addEventListener('mousemove', mouseMove)
 }
 
 const removeEvents = () => {
+  blackoverlaybutton.removeEventListener('click', hideInfos)
+  startexperience.removeEventListener('click', chapterEnd)
   window.removeEventListener('mousemove', mouseMove)
 }
 
@@ -119,20 +106,24 @@ const chapterEnd = () => {
   toplayout.classList.add('is-active')
   bottomlayout.classList.add('is-active')
 
+  // setTimeout(() => {
+  //   c.time.setTicker()
+  // }, 1000)
+
   setTimeout(() => {
     toplayout.classList.add('is-leaving')
     bottomlayout.classList.add('is-leaving')
-    //c.time.setTicker()
-  }, 2000)
+  }, 3000)
 
   c.nextChapter()
 }
 
 const showInfos = (i, image) => {
   c.opened = true
+  c.currentImageIndex = i
+
   const blackoverlay = document.querySelector('.black-overlay')
   const container = document.querySelector(`.container-${i}`)
-  c.currentImageIndex = i
 
   const toImageDom = container.querySelector('img')
   const toImageBCR = toImageDom.getBoundingClientRect()
@@ -179,10 +170,10 @@ const showInfos = (i, image) => {
   container.classList.add('is-active')
 }
 
-const hideInfos = i => {
+const hideInfos = () => {
   c.opened = false
   const blackoverlay = document.querySelector('.black-overlay')
-  const container = document.querySelector(`.container-${i}`)
+  const container = document.querySelector(`.container-${c.currentImageIndex}`)
   blackoverlay.classList.remove('is-active')
   container.classList.remove('is-active')
 }
