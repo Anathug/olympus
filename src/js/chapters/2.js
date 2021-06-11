@@ -19,18 +19,6 @@ c.init = options => {
   c.allowMouseMove = false
   c.gltf = c.assets.models.animations.chap02
   c.cams = []
-  // c.gltf.cameras.forEach(cam => {
-  // c.gltf.scene.traverse((node) => {
-  // if (node.isCamera && cam.name.includes(node.name)) {
-  // console.log('CAMERAAAAAAA', node, cam)
-
-  // c.cams.push(node)
-  //node.add(cam)
-  // this.activeCamera = node;
-  // }
-  // });
-  // let realCam = 
-  // });
 
   c.gltf.scene.traverse((object) => {
     if (object.isCamera) c.cams.push(object);
@@ -53,6 +41,9 @@ c.start = () => {
     object.visible = true
   })
   chapterBegin()
+  
+  c.handler.allowScroll = true
+  c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[1])
 }
 
@@ -88,55 +79,6 @@ const chapterBegin = () => {
     clip.duration = c.animationDuration
   });
 }
-
-////////////////
-
-const setContent = (object, clips) => {
-
-  // this.clear();
-
-  const box = new Box3().setFromObject(object);
-  const size = box.getSize(new Vector3()).length();
-  const center = box.getCenter(new Vector3());
-
-
-  object.position.x += (object.position.x - center.x);
-  object.position.y += (object.position.y - center.y);
-  object.position.z += (object.position.z - center.z);
-
-
-  this.scene.add(object);
-  this.content = object;
-
-  this.state.addLights = true;
-
-  this.content.traverse((node) => {
-    if (node.isLight) {
-      this.state.addLights = false;
-    } else if (node.isMesh) {
-      // TODO(https://github.com/mrdoob/three.js/pull/18235): Clean up.
-      node.material.depthWrite = !node.material.transparent;
-    }
-  });
-
-  this.setClips(clips);
-
-  this.updateLights();
-  this.updateGUI();
-  this.updateEnvironment();
-  this.updateTextureEncoding();
-  this.updateDisplay();
-
-  window.content = this.content;
-  console.info('[glTF Viewer] THREE.Scene exported as `window.content`.');
-  this.printGraph(this.content);
-
-}
-
-
-
-
-////////////////
 
 
 export default c

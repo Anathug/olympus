@@ -55,6 +55,7 @@ export default class ChapterHandler {
       let title = document.createElement('span')
       title.classList.add('timelineTitle')
       title.textContent = `Chapter ${chap.index + 1}`
+      title.onclick = () => { this.realProgress = chap.index + 0.01 }
 
       let subtitle = document.createElement('span')
       subtitle.classList.add('timelineSubtitle')
@@ -79,6 +80,7 @@ export default class ChapterHandler {
     this.time.on('tick', () => {
       this.updateProgress()
       this.updateCurrentChapter()
+      console.log(this.realProgress)
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
@@ -124,9 +126,7 @@ export default class ChapterHandler {
   }
 
   nextChapter() {
-    setTimeout(() => {
-      this.realProgress = Math.trunc(this.realProgress) + 1.001
-    }, 0)
+    this.realProgress = Math.trunc(this.realProgress) + 1.01
   }
 
   showChapter(chapter) {
@@ -141,7 +141,6 @@ export default class ChapterHandler {
 
   mouseWheel(event) {
     if (!this.allowScroll) return;
-
     this.realProgress = clamp(
       (this.realProgress += event.deltaY * 0.0001),
       0,
