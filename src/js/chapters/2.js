@@ -1,32 +1,35 @@
 import Chapter from '../Chapter'
 import Launcher from '../World/Launcher'
-import { Clock } from 'three'
+import { Clock, AnimationMixer, LoopOnce, Box3 } from 'three'
 import gsap from 'gsap'
 
 let c = new Chapter(2)
 let updateThrusters = false
 let clock = new Clock()
 const startButton = document.querySelector('.chapter_2 button')
+//startButton.addEventListener('click', launchStarship)
 
-c.init = (options) => {
-  c.camera = options.world.camera.camera
+c.init = options => {
   c.mouse = c.world.mouse.mouse
+  c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
-  c.starship = options.starship
-  c.mars = options.mars
-  c.allowScroll = false
+  c.allowScroll = true
+  c.autoScroll = true
   c.allowMouseMove = false
+  c.gltf = c.assets.models.animations.chap02
+  c.cams = []
 
-  c.launcher = new Launcher({
-    time: options.time,
-    assets: options.assets,
-    world: options.world,
-    debug: options.debug
-  })
-  c.objects.push(c.launcher.container)
-  c.world.container.add(c.launcher.container)
+  c.gltf.scene.traverse((object) => {
+    if (object.isCamera) c.cams.push(object);
+  });
 
+  c.world.renderer.switchCam(c.cams[1])
+
+  c.mixer = new AnimationMixer(c.gltf.scene)
+  c.world.container.add(c.gltf.scene)
+  c.objects.push(c.gltf.scene)
+  console.log(c.gltf)
   c.objects.forEach(object => {
     object.visible = false
   })
@@ -34,106 +37,50 @@ c.init = (options) => {
 
 c.start = () => {
   c.showChapter('chapter_2')
-  setEvents()
-  c.starship.container.visible = true
-  c.starship.createStarship()
-  c.starship.createThrusters()
-  c.starship.container.position.set(0, 0, 0)
   c.objects.forEach(object => {
     object.visible = true
   })
   chapterBegin()
+  
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  
+  c.world.renderer.switchCam(c.cams[1])
 }
 
 c.update = () => {
-  if (!c.debug && c.allowMouseMove) {
-    // mouseMove(c.camera)
-  }
-  if (updateThrusters) {
-    c.starship.container.position.y = clock.getElapsedTime()
-    c.camera.position.y = clock.getElapsedTime()
-    c.starship.thrusters.update()
-  }
+  c.mixer.setTime(c.progress * c.animationDuration)
 }
 
 c.end = () => {
-  removeEvents()
   c.hideChapter('chapter_2')
-  removeStarship()
   c.allowScroll = false
   c.objects.forEach(object => {
     object.visible = false
-  });
+  })
+  c.world.renderer.switchCam('default')
 }
 
 const chapterBegin = () => {
-  const beginnintl = gsap.timeline({ ease: "power2.inOut" })
-  c.camera.rotation.set(0, -7.9, 0)
-  c.camera.position.set(-2, 7, 0)
+  const clips = c.assets.models.animations.chap02.animations
+  console.log(clips)
+  c.animationDuration = 0
 
-  beginnintl
-    .to(c.camera.position, {
-      y: 1,
-      delay: 0.5,
-      duration: 5,
-    })
-    .to(c.camera.position, {
-      x: -13,
-      duration: 4,
-    }, 4)
 
-  setTimeout(() => {
-    c.allowMouseMove = true
-  }, 9000);
+  clips.forEach(clip => {
+    // c.mixer.clipAction(clip).play();
+    c.mixer.clipAction(clip).setLoop(LoopOnce)
+    c.mixer.clipAction(clip).reset().play();
+
+    if (clip.duration > c.animationDuration)
+      c.animationDuration = clip.duration
+  });
+
+  clips.forEach(clip => {
+    clip.duration = c.animationDuration
+  });
 }
 
-const setEvents = () => {
-  startButton.addEventListener('click', launchStarship)
-}
 
-const removeEvents = () => {
-  startButton.removeEventListener('click', launchStarship)
-}
 
-const mouseMove = (camera) => {
-  gsap.to(camera.position, {
-    x: -2 + c.mouse.x * 2,
-    duration: 2,
-    ease: 'power3.out'
-  })
-
-  gsap.to(camera.rotation, {
-    y: -7.9 + c.mouse.x / 6,
-    duration: 1,
-    ease: 'power3.out'
-  })
-
-  gsap.to(camera.position, {
-    y: 7 + c.mouse.y * 2,
-    duration: 2,
-    ease: 'power3.out'
-  })
-
-  gsap.to(camera.rotation, {
-    x: -c.mouse.y / 6,
-    duration: 1,
-    ease: 'power3.out'
-  })
-}
-
-const removeStarship = () => {
-  c.starship.thrusters.renderers[0].container.clear()
-  c.starship.thrusters.destroy()
-  updateThrusters = false
-}
-
-const launchStarship = () => {
-  clock.start()
-  c.allowMouseMove = false
-  c.allowScroll = true
-  updateThrusters = true
-}
-
-export default c;
+export default c

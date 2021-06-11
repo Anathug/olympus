@@ -33,7 +33,7 @@ export default class App {
       fog: {
         color: 0xFFFFFF,
         near: 10,
-        far: 100
+        far: 2000
       }
     }
 
@@ -45,6 +45,7 @@ export default class App {
     this.starship = null
     this.myEffect = null
     this.lut = true
+    this.composer = null
 
     this.setScene()
     this.setConfig()
@@ -95,8 +96,19 @@ export default class App {
   }
 
   setRenderer() {
-    const composer = new EffectComposer(this.renderer)
-    composer.addPass(new RenderPass(this.scene, this.camera.camera))
+    this.composer = new EffectComposer(this.renderer)
+    this.activeCam = this.camera.camera
+    this.renderPass = new RenderPass(this.scene, this.activeCam)
+    this.renderer.switchCam = (cam) => {
+      if (cam == 'default')
+        this.activeCam = this.camera.camera
+      else
+        this.activeCam = cam
+      console.log(this.composer)
+      this.composer.passes[0].camera = this.activeCam
+      this.renderPass.camera = this.activeCam
+    }
+    this.composer.addPass(this.renderPass)
 
     this.myEffect = {
       uniforms: {
@@ -109,7 +121,7 @@ export default class App {
 
     const customPass = new ShaderPass(this.myEffect);
     customPass.renderToScreen = true
-    composer.addPass(customPass)
+    this.composer.addPass(customPass)
 
     let lutMap
     let lutPass = new LUTPass();
@@ -119,16 +131,17 @@ export default class App {
       .load('lut/kodak_5218_kodak_2395.cube', (result) => {
         lutMap = result
         lutPass.lut = lutMap.texture
-        composer.addPass(lutPass)
+        this.composer.addPass(lutPass)
       })
 
     this.time.on('tick', () => {
+
       this.counter += 0.01
       if (!this.lut) {
         composer.removePass(lutPass)
       }
       customPass.uniforms["amount"].value = this.counter
-      composer.render()
+      this.composer.render()
     })
 
     if (this.debug) {
