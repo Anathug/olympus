@@ -44,7 +44,6 @@ c.start = () => {
   
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  
   c.world.renderer.switchCam(c.cams[1])
 }
 
@@ -80,7 +79,6 @@ const chapterBegin = () => {
     clip.duration = c.animationDuration
   });
 }
-
 
 
 export default c
