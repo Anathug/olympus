@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { MeshStandardMaterial } from 'three';
+import { MeshStandardMaterial } from 'three'
 import { Object3D, SphereGeometry, MeshBasicMaterial, Mesh } from 'three'
 import ParticleSystem, {
   Body,
@@ -21,7 +21,7 @@ import ParticleSystem, {
   Scale,
   Span,
   Vector3D,
-} from 'three-nebula';
+} from 'three-nebula'
 
 export default class Starship {
   constructor(options) {
@@ -34,7 +34,7 @@ export default class Starship {
 
     this.container.name = 'Starship'
     this.params = {
-      scale: 0.02
+      scale: 0.02,
     }
 
     this.createStarship = this.createStarship.bind(this)
@@ -53,7 +53,7 @@ export default class Starship {
   }
   createThrusters() {
     const createEmitter = ({ position, size, body }) => {
-      const emitter = new Emitter();
+      const emitter = new Emitter()
 
       return emitter
         .setRate(new Rate(1, 0.1))
@@ -61,7 +61,7 @@ export default class Starship {
           new Mass(1),
           new Life(5),
           new Body(body),
-          new VectorVelocity(new Vector3D(0, -50, 0), 10)
+          new VectorVelocity(new Vector3D(0, -50, 0), 10),
         ])
         .addBehaviours([
           new Rotate('random', 'random'),
@@ -71,38 +71,44 @@ export default class Starship {
           new RandomDrift(0.2, 0, 0.5),
           //new Force(0, -0.2, 0),
 
-          new Alpha(1, 0)
+          new Alpha(1, 0),
         ])
         .setPosition(position)
-        .emit();
-    };
+        .emit()
+    }
 
-    const mesh = this.assets.models.cloud.scene.children[0]//new Mesh(new SphereGeometry(10, 8, 8), new MeshToonMaterial({ color: '#ffd436', emissive: '#300500', transparent: true }))
+    const mesh = this.assets.models.cloud.scene.children[0] //new Mesh(new SphereGeometry(10, 8, 8), new MeshToonMaterial({ color: '#ffd436', emissive: '#300500', transparent: true }))
     mesh.material.transparent = true
-    const system = new ParticleSystem();
+    const system = new ParticleSystem()
     const thrustersEmitter1 = createEmitter({
       position: {
-        x: 0, y: 5, z: 0,
+        x: 0,
+        y: 5,
+        z: 0,
       },
       size: 0.8,
       body: mesh,
-    });
+    })
 
     const thrustersEmitter2 = createEmitter({
       position: {
-        x: 0, y: 5, z: 16.8
+        x: 0,
+        y: 5,
+        z: 16.8,
       },
       size: 0.5,
       body: mesh,
-    });
+    })
 
     const thrustersEmitter3 = createEmitter({
       position: {
-        x: 0, y: 5, z: -16.8,
+        x: 0,
+        y: 5,
+        z: -16.8,
       },
       size: 0.5,
       body: mesh,
-    });
+    })
 
     this.thrusters = system
       .addEmitter(thrustersEmitter1)
@@ -112,7 +118,6 @@ export default class Starship {
   }
   setMaterial() {
     const starshipTexture = this.assets.textures.global.starship
-    console.log(starshipTexture)
     const colorTexture = starshipTexture.MetalPlates007_1K_Color
     const displacementTexture = starshipTexture.MetalPlates007_1K_Displacement
     const metalnessTexture = starshipTexture.MetalPlates007_1K_Metalness
@@ -125,15 +130,12 @@ export default class Starship {
     truc.material.metalnessMap = metalnessTexture
     truc.material.roughnessMap = roughnessTexture
 
-
     // this.starship.children[13].traverse((child) => {
     //   console.log(child.material)
     //   child.material = new MeshBasicMaterial({ map: colorTexture })
     //   // child.material.map = colorTexture
     // })
-    this.starship.traverse((child) => {
-
-
+    this.starship.traverse(child => {
       if (child.type === 'Mesh') {
         child.material.side = THREE.DoubleSide
         // child.material.displacementMap = displacementTexture
@@ -144,29 +146,14 @@ export default class Starship {
     })
   }
   setScale() {
-    this.container.scale.set(this.params.scale, this.params.scale, this.params.scale);
+    this.container.scale.set(this.params.scale, this.params.scale, this.params.scale)
   }
   setDebug() {
     this.debugFolder = this.debug.addFolder('Starship')
     this.debugFolder.open()
-    this.debugFolder
-      .add(this.starship.position, 'x')
-      .step(0.1)
-      .min(-5)
-      .max(5)
-      .name('Position X')
-    this.debugFolder
-      .add(this.starship.position, 'y')
-      .step(0.1)
-      .min(-5)
-      .max(5)
-      .name('Position Y')
-    this.debugFolder
-      .add(this.starship.position, 'z')
-      .step(0.1)
-      .min(-5)
-      .max(5)
-      .name('Position Z')
+    this.debugFolder.add(this.starship.position, 'x').step(0.1).min(-5).max(5).name('Position X')
+    this.debugFolder.add(this.starship.position, 'y').step(0.1).min(-5).max(5).name('Position Y')
+    this.debugFolder.add(this.starship.position, 'z').step(0.1).min(-5).max(5).name('Position Z')
     this.debugFolder
       .add(this.params, 'scale')
       .step(0.001)
