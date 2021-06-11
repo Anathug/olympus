@@ -21,7 +21,9 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.mars = options.mars
 
-    this.workingChapter = 2
+    this.allowScroll = false;
+    this.autoScroll = false;
+    this.workingChapter = 0
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -79,6 +81,14 @@ export default class ChapterHandler {
       this.updateCurrentChapter()
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
+    this.time.on('tick', () => {
+      if (!this.autoScroll) return;
+      this.realProgress = clamp(
+        (this.realProgress += 0.0001),
+        0,
+        this.chapters.length - 0.001
+      )
+    })
   }
 
   updateCurrentChapter() {
@@ -115,8 +125,8 @@ export default class ChapterHandler {
 
   nextChapter() {
     setTimeout(() => {
-      this.realProgress = Math.trunc(this.realProgress) + 1
-    }, 2000)
+      this.realProgress = Math.trunc(this.realProgress) + 1.001
+    }, 0)
   }
 
   showChapter(chapter) {
@@ -130,8 +140,10 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
+    if (!this.allowScroll) return;
+
     this.realProgress = clamp(
-      (this.realProgress += event.deltaY * 0.002),
+      (this.realProgress += event.deltaY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
@@ -142,6 +154,8 @@ export default class ChapterHandler {
     let a = []
     r.keys().forEach(k => {
       import(`./chapters${k.substring(1)}`).then(chap => {
+        chap.default.handler = this
+
         chap.default.scene = this.scene
         chap.default.world = this.world
         chap.default.time = this.time
