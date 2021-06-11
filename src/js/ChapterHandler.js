@@ -23,7 +23,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false;
     this.autoScroll = false;
-    this.workingChapter = 0
+    this.workingChapter = 2
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -31,14 +31,17 @@ export default class ChapterHandler {
     this.currentChapter = this.workingChapter
 
     this.chapters = []
+    this.chapters = this.importAll()
 
     this.nextChapter = this.nextChapter.bind(this)
     this.showChapter = this.showChapter.bind(this)
     this.hideChapter = this.hideChapter.bind(this)
-    this.chapters = this.importAll()
+    this.showObjects = this.showObjects.bind(this)
+    this.hideObjects = this.hideObjects.bind(this)
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
+
   }
 
   setUI() {
@@ -80,7 +83,6 @@ export default class ChapterHandler {
     this.time.on('tick', () => {
       this.updateProgress()
       this.updateCurrentChapter()
-      console.log(this.realProgress)
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
@@ -139,6 +141,19 @@ export default class ChapterHandler {
     chapterHTML.classList.remove('is-active')
   }
 
+  hideObjects(objects) {
+    objects.forEach(object => {
+      object.visible = false
+    })
+  }
+
+  showObjects(objects) {
+    objects.forEach(object => {
+      object.visible = true
+      console.log(object)
+    })
+  }
+
   mouseWheel(event) {
     if (!this.allowScroll) return;
     this.realProgress = clamp(
@@ -163,6 +178,8 @@ export default class ChapterHandler {
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
+        chap.default.showObjects = this.showObjects
+        chap.default.hideObjects = this.hideObjects
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
