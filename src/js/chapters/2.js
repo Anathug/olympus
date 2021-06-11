@@ -1,36 +1,47 @@
 import Chapter from '../Chapter'
 import Launcher from '../World/Launcher'
-import { Clock, AnimationMixer, LoopOnce } from 'three'
+import { Clock, AnimationMixer, LoopOnce, Box3 } from 'three'
 import gsap from 'gsap'
 
 let c = new Chapter(2)
 let updateThrusters = false
 let clock = new Clock()
 const startButton = document.querySelector('.chapter_2 button')
-const mixer = null
+//startButton.addEventListener('click', launchStarship)
 
 c.init = options => {
-  c.camera = options.world.camera.camera
   c.mouse = c.world.mouse.mouse
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
-  c.starship = options.starship
-  c.mars = options.mars
-  c.allowScroll = false
+  c.allowScroll = true
+  c.autoScroll = true
   c.allowMouseMove = false
-  c.mixer = new AnimationMixer(c.camera)
+  c.gltf = c.assets.models.animations.chap02
+  c.cams = []
+  // c.gltf.cameras.forEach(cam => {
+  // c.gltf.scene.traverse((node) => {
+  // if (node.isCamera && cam.name.includes(node.name)) {
+  // console.log('CAMERAAAAAAA', node, cam)
 
-  c.launcher = new Launcher({
-    time: options.time,
-    assets: options.assets,
-    world: options.world,
-    debug: options.debug,
-  })
+  // c.cams.push(node)
+  //node.add(cam)
+  // this.activeCamera = node;
+  // }
+  // });
+  // let realCam = 
+  // });
 
-  c.objects.push(c.launcher.container)
-  c.world.container.add(c.launcher.container)
+  c.gltf.scene.traverse((object) => {
+    if (object.isCamera) c.cams.push(object);
+  });
 
+  c.world.renderer.switchCam(c.cams[1])
+
+  c.mixer = new AnimationMixer(c.gltf.scene)
+  c.world.container.add(c.gltf.scene)
+  c.objects.push(c.gltf.scene)
+  console.log(c.gltf)
   c.objects.forEach(object => {
     object.visible = false
   })
@@ -38,92 +49,94 @@ c.init = options => {
 
 c.start = () => {
   c.showChapter('chapter_2')
-  setEvents()
-  c.starship.container.visible = true
-  c.starship.createStarship()
-  c.starship.createThrusters()
-  c.starship.container.position.set(0, 0, 0)
   c.objects.forEach(object => {
     object.visible = true
   })
   chapterBegin()
+  c.world.renderer.switchCam(c.cams[1])
 }
 
 c.update = () => {
-  if (!c.debug && c.allowMouseMove) {
-    // mouseMove(c.camera)
-  }
-  if (updateThrusters) {
-    c.starship.container.position.y = clock.getElapsedTime()
-    c.camera.position.y = clock.getElapsedTime()
-    c.starship.thrusters.update()
-  }
-  c.mixer.setTime(c.progress * c.action._clip.duration)
+  c.mixer.setTime(c.progress * c.animationDuration)
 }
 
 c.end = () => {
-  removeEvents()
   c.hideChapter('chapter_2')
-  removeStarship()
   c.allowScroll = false
   c.objects.forEach(object => {
     object.visible = false
   })
+  c.world.renderer.switchCam('default')
 }
 
 const chapterBegin = () => {
-  const animation = c.assets.models.animations.camlauncher.animations[0]
-  c.action = c.mixer.clipAction(animation)
-  c.action.clampWhenFinished = true
-  c.action.setLoop(LoopOnce)
-  c.action.play()
+  const clips = c.assets.models.animations.chap02.animations
+  console.log(clips)
+  c.animationDuration = 0
+
+
+  clips.forEach(clip => {
+    // c.mixer.clipAction(clip).play();
+    c.mixer.clipAction(clip).setLoop(LoopOnce)
+    c.mixer.clipAction(clip).reset().play();
+
+    if (clip.duration > c.animationDuration)
+      c.animationDuration = clip.duration
+  });
+
+  clips.forEach(clip => {
+    clip.duration = c.animationDuration
+  });
 }
 
-const setEvents = () => {
-  startButton.addEventListener('click', launchStarship)
+////////////////
+
+const setContent = (object, clips) => {
+
+  // this.clear();
+
+  const box = new Box3().setFromObject(object);
+  const size = box.getSize(new Vector3()).length();
+  const center = box.getCenter(new Vector3());
+
+
+  object.position.x += (object.position.x - center.x);
+  object.position.y += (object.position.y - center.y);
+  object.position.z += (object.position.z - center.z);
+
+
+  this.scene.add(object);
+  this.content = object;
+
+  this.state.addLights = true;
+
+  this.content.traverse((node) => {
+    if (node.isLight) {
+      this.state.addLights = false;
+    } else if (node.isMesh) {
+      // TODO(https://github.com/mrdoob/three.js/pull/18235): Clean up.
+      node.material.depthWrite = !node.material.transparent;
+    }
+  });
+
+  this.setClips(clips);
+
+  this.updateLights();
+  this.updateGUI();
+  this.updateEnvironment();
+  this.updateTextureEncoding();
+  this.updateDisplay();
+
+  window.content = this.content;
+  console.info('[glTF Viewer] THREE.Scene exported as `window.content`.');
+  this.printGraph(this.content);
+
 }
 
-const removeEvents = () => {
-  startButton.removeEventListener('click', launchStarship)
-}
 
-const mouseMove = camera => {
-  gsap.to(camera.position, {
-    x: -2 + c.mouse.x * 2,
-    duration: 2,
-    ease: 'power3.out',
-  })
 
-  gsap.to(camera.rotation, {
-    y: -7.9 + c.mouse.x / 6,
-    duration: 1,
-    ease: 'power3.out',
-  })
 
-  gsap.to(camera.position, {
-    y: 7 + c.mouse.y * 2,
-    duration: 2,
-    ease: 'power3.out',
-  })
+////////////////
 
-  gsap.to(camera.rotation, {
-    x: -c.mouse.y / 6,
-    duration: 1,
-    ease: 'power3.out',
-  })
-}
-
-const removeStarship = () => {
-  c.starship.thrusters.renderers[0].container.clear()
-  c.starship.thrusters.destroy()
-  updateThrusters = false
-}
-
-const launchStarship = () => {
-  clock.start()
-  c.allowMouseMove = false
-  c.allowScroll = true
-  updateThrusters = true
-}
 
 export default c

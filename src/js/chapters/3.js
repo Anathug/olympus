@@ -115,6 +115,7 @@ c.end = () => {
   c.objects.forEach(object => {
     object.visible = false
   });
+  c.starship.visible = false
   c.controls.enabled = false
 }
 
