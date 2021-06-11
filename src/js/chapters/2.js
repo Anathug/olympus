@@ -10,9 +10,10 @@ c.init = options => {
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
+  c.firstIndexCamera = 1
   c.cams = []
   createGltf()
-  createCams()
+  createGltfCams()
   createAnimation()
   c.hideObjects(c.objects)
 }
@@ -22,7 +23,9 @@ c.start = () => {
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  c.world.renderer.switchCam(c.cams[1])
+  c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.createCams(c.cams)
+  initActiveClassCamera(c.firstIndexCamera)
 }
 
 c.update = () => {
@@ -32,11 +35,12 @@ c.update = () => {
 c.end = () => {
   c.hideChapter('chapter_2')
   c.hideObjects(c.objects)
+  c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
 }
 
-const createCams = () => {
+const createGltfCams = () => {
   c.gltf.scene.traverse((object) => {
     if (object.isCamera) c.cams.push(object);
   });
@@ -61,6 +65,11 @@ const createAnimation = () => {
   clips.forEach(clip => {
     clip.duration = c.animationDuration
   });
+}
+
+const initActiveClassCamera = (i) => {
+  const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+  cameraButtons[i].classList.add('is-active')
 }
 
 export default c
