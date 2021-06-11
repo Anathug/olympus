@@ -23,7 +23,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false;
     this.autoScroll = false;
-    this.workingChapter = 3
+    this.workingChapter = 0
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
