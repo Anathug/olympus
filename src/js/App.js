@@ -123,6 +123,8 @@ export default class App {
         this.composer.addPass(lutPass)
       })
 
+    lutPass.uniforms.intensity.value = 0.5
+
     this.time.on('tick', () => {
 
       this.counter += 0.01
@@ -138,6 +140,8 @@ export default class App {
       const folder = this.debug.addFolder('Renderer')
       folder.open()
       this.lut = { activated: true }
+
+      lutPass.uniforms.intensity.value = 0.5
       folder.add(this.lut, 'activated').name('lut').listen().onChange(() => {
         if (this.lut) {
           this.composer.addPass(lutPass)

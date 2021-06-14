@@ -22,6 +22,7 @@ c.start = () => {
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.world.renderer.switchCam(c.cams[1])
 }
 
