@@ -64,7 +64,7 @@ export default class App {
 
     this.scene.fog = new Fog(this.params.fog.color, this.params.fog.near, this.params.fog.far);
 
-    this.scene.background = cubeMap
+    // this.scene.background = cubeMap
   }
 
   createRenderer() {

@@ -35,6 +35,8 @@ export default class ChapterHandler {
     this.hideChapter = this.hideChapter.bind(this)
     this.showObjects = this.showObjects.bind(this)
     this.hideObjects = this.hideObjects.bind(this)
+    this.createCams = this.createCams.bind(this)
+    this.deleteCams = this.deleteCams.bind(this)
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
@@ -150,6 +152,60 @@ export default class ChapterHandler {
     })
   }
 
+  createCams(cams) {
+    cams.forEach((cam, i) => this.createCamHtml(i))
+  }
+
+  deleteCams() {
+    this.deleteCamHtml()
+  }
+
+  createCamHtml(i) {
+    const middleRightWrapper = document.querySelector('.middle-right-wrapper')
+    const cameraWrapper = document.createElement("div")
+    const overflowHiddenRelative = document.createElement("div")
+    const span = document.createElement("span")
+    const circle = document.createElement("div")
+    const redCircle = document.createElement("div")
+    const whiteCircle = document.createElement("div")
+
+    cameraWrapper.classList.add('camera-wrapper')
+    cameraWrapper.dataset.cameraIndex = i;
+    overflowHiddenRelative.classList.add('overflow-hidden')
+    overflowHiddenRelative.classList.add('relative')
+    circle.classList.add('circle')
+    redCircle.classList.add('red-circle')
+    whiteCircle.classList.add('white-circle')
+
+    span.innerHTML = `cam-0${i}`
+
+    overflowHiddenRelative.appendChild(span)
+    circle.appendChild(redCircle)
+    circle.appendChild(whiteCircle)
+
+    cameraWrapper.appendChild(overflowHiddenRelative)
+    cameraWrapper.appendChild(circle)
+
+    middleRightWrapper.appendChild(cameraWrapper)
+
+    cameraWrapper.addEventListener('click', () => {
+      this.toggleCamera(cameraWrapper)
+    })
+  }
+
+  deleteCamHtml() {
+    const middleRightWrapper = document.querySelector('.middle-right-wrapper')
+    const cameraWrappers = document.querySelectorAll('.camera-wrapper')
+    cameraWrappers.forEach(cameraWrapper => middleRightWrapper.removeChild(cameraWrapper))
+  }
+
+  toggleCamera(camera) {
+    const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+    cameraButtons.forEach((cameraButton) => cameraButton.classList.remove('is-active'))
+    camera.classList.toggle('is-active')
+    this.renderer.switchCam(this.chapters[this.currentChapter].cams[camera.dataset.cameraIndex])
+  }
+
   mouseWheel(event) {
     if (!this.allowScroll) return;
     this.realProgress = clamp(
@@ -176,6 +232,8 @@ export default class ChapterHandler {
         chap.default.hideChapter = this.hideChapter
         chap.default.showObjects = this.showObjects
         chap.default.hideObjects = this.hideObjects
+        chap.default.createCams = this.createCams
+        chap.default.deleteCams = this.deleteCams
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
