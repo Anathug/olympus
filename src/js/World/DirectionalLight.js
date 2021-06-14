@@ -4,17 +4,12 @@ export default class DirectionalLightSource {
   constructor(options) {
     // Set options
     this.debug = options.debug
-
     // Set up
+    this.position = options.position
+    this.color = options.color
+
     this.container = new Object3D()
-    this.container.name = 'Directional Light'
-    this.params = {
-      color: 0xffffff, intensity: 1, position: {
-        x: -1,
-        y: 0,
-        z: 1,
-      }
-    }
+    this.container.name = options.name
 
     this.createDirectionalLight()
 
@@ -23,18 +18,21 @@ export default class DirectionalLightSource {
     }
   }
   createDirectionalLight() {
-    this.light = new DirectionalLight(this.params.color, this.params.intensity)
-    this.light.position.set(this.params.position.x, this.params.position.y, this.params.position.z).normalize()
+    this.light = new DirectionalLight(this.color, 1)
+    this.light.position.set(this.position.x, this.position.y, this.position.z)
     this.container.add(this.light)
   }
   setDebug() {
-    this.debugFolder = this.debug.addFolder('Directional Light')
+    this.debugFolder = this.debug.addFolder(`${this.container.name} Light`)
     this.debugFolder.open()
-    this.debugFolder
-      .addColor(this.params, 'color')
-      .name('Color')
-      .onChange(() => {
-        this.light.color = new Color(this.params.color)
-      })
+    // this.debugFolder
+    //   .addColor(this.color, 'color')
+    //   .name('Color')
+    //   .onChange(() => {
+    //     this.light.color = new Color(this.color)
+    //   })
+    this.debugFolder.add(this.light.position, 'x').min(-50).max(50).name('Position X')
+    this.debugFolder.add(this.light.position, 'y').min(-50).max(50).name('Position Y')
+    this.debugFolder.add(this.light.position, 'z').min(-50).max(50).name('Position Z')
   }
 }
