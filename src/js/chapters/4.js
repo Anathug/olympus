@@ -10,7 +10,7 @@ c.init = options => {
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
-  c.firstIndexCamera = 1
+  c.firstIndexCamera = 0
   c.cams = []
   createGltf()
   createGltfCams()
@@ -19,25 +19,25 @@ c.init = options => {
 }
 
 c.start = () => {
-  c.showChapter('chapter_6')
+  c.showChapter('chapter_4')
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  //   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
-  //   c.createCams(c.cams)
-  //   initActiveClassCamera(c.firstIndexCamera)
+  c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.createCams(c.cams)
+  initActiveClassCamera(c.firstIndexCamera)
 }
 
 c.update = () => {
-  //   c.mixer.setTime(c.progress * c.animationDuration)
+  c.mixer.setTime(c.progress * c.animationDuration)
 }
 
 c.end = () => {
-  c.hideChapter('chapter_6')
+  c.hideChapter('chapter_4')
   c.hideObjects(c.objects)
-  //   c.deleteCams()
+  c.deleteCams()
   c.allowScroll = false
-  //   c.world.renderer.switchCam('default')
+  c.world.renderer.switchCam('default')
 }
 
 const createGltfCams = () => {
