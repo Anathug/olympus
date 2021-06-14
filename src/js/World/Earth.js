@@ -1,4 +1,4 @@
-import { Object3D } from 'three'
+import { Object3D, SphereGeometry, MeshBasicMaterial, Mesh } from 'three'
 
 export default class Earth {
   constructor(options) {
@@ -8,20 +8,20 @@ export default class Earth {
     this.container = new Object3D()
     this.container.name = 'Earth'
 
+    this.counter = 0
+
     this.createEarth()
     this.setScale()
-    this.setPosition()
   }
   createEarth() {
-    this.earth = this.assets.models.earth.scene
-    this.container.add(this.earth)
+    const texture = this.assets.textures.global.earth.earth
+    const geometry = new SphereGeometry(5, 32, 32)
+    const material = new MeshBasicMaterial({ map: texture })
+    const sphere = new Mesh(geometry, material)
+    this.container.add(sphere)
   }
 
   setScale() {
-    this.container.scale.set(0.3, 0.3, 0.3);
+    this.container.scale.set(0.8, 0.8, 0.8)
   }
-  setPosition() {
-    //this.container.rotation.z = -Math.PI / 2
-  }
-
 }

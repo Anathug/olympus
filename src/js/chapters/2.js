@@ -7,6 +7,7 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
+  c.earth = options.earth
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
@@ -55,6 +56,7 @@ c.start = () => {
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.earth.container.visible = false
   c.createCams(c.cams)
   c.switchHDRI()
   initActiveClassCamera(c.firstIndexCamera)
@@ -71,6 +73,7 @@ c.end = () => {
   c.allowScroll = false
   c.world.renderer.switchCam('default')
   c.switchHDRI('space')
+  c.earth.container.visible = true
 }
 
 const createGltfCams = () => {
@@ -81,7 +84,6 @@ const createGltfCams = () => {
 
 const createGltf = () => {
   c.gltf = c.assets.models.animations.chap02
-  console.log(c.gltf)
   c.world.container.add(c.gltf.scene)
   c.objects.push(c.gltf.scene)
 }
