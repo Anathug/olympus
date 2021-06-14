@@ -23,8 +23,8 @@ export default class Mouse {
     this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1
     this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
 
-    this.layoutVerticalLine.style.transform = `translateX(${this.unnormalizedMouse.x}px)`
-    this.layoutHorizontalLine.style.transform = `translateY(${this.unnormalizedMouse.y}px)`
+    this.layoutVerticalLine.style.transform = `translate3d(${this.unnormalizedMouse.x}px, 0, 0)`
+    this.layoutHorizontalLine.style.transform = `translate3d(0, ${this.unnormalizedMouse.y}px, 0)`
 
     this.layoutCoordinate.style.transform = `translate3d(${this.unnormalizedMouse.x}px, ${this.unnormalizedMouse.y}px, 0)`
 

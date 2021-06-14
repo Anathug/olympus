@@ -30,6 +30,7 @@ export default class ChapterHandler {
     this.chapters = []
     this.chapters = this.importAll()
 
+    this.switchHDRI = options.switchHDRI
     this.nextChapter = this.nextChapter.bind(this)
     this.showChapter = this.showChapter.bind(this)
     this.hideChapter = this.hideChapter.bind(this)
@@ -225,6 +226,7 @@ export default class ChapterHandler {
         chap.default.time = this.time
         chap.default.mouse = this.mouse
 
+        chap.default.switchHDRI = this.switchHDRI
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
