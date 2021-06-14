@@ -1,11 +1,8 @@
-// import Time from '@tools/Time'
 import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
-// import Chapter from './Chapter'
+// eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
-
-//import * as chapters from './chapters'
 
 export default class ChapterHandler {
   constructor(options) {
@@ -21,6 +18,8 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.mars = options.mars
 
+    this.allowScroll = false
+    this.autoScroll = false
     this.workingChapter = 0
 
     this.chapProgress = 0
@@ -29,11 +28,16 @@ export default class ChapterHandler {
     this.currentChapter = this.workingChapter
 
     this.chapters = []
+    this.chapters = this.importAll()
 
+    this.switchHDRI = options.switchHDRI
     this.nextChapter = this.nextChapter.bind(this)
     this.showChapter = this.showChapter.bind(this)
     this.hideChapter = this.hideChapter.bind(this)
-    this.chapters = this.importAll()
+    this.showObjects = this.showObjects.bind(this)
+    this.hideObjects = this.hideObjects.bind(this)
+    this.createCams = this.createCams.bind(this)
+    this.deleteCams = this.deleteCams.bind(this)
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
@@ -53,6 +57,9 @@ export default class ChapterHandler {
       let title = document.createElement('span')
       title.classList.add('timelineTitle')
       title.textContent = `Chapter ${chap.index + 1}`
+      title.onclick = () => {
+        this.realProgress = chap.index + 0.01
+      }
 
       let subtitle = document.createElement('span')
       subtitle.classList.add('timelineSubtitle')
@@ -79,6 +86,10 @@ export default class ChapterHandler {
       this.updateCurrentChapter()
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
+    this.time.on('tick', () => {
+      if (!this.autoScroll) return
+      this.realProgress = clamp((this.realProgress += 0.0001), 0, this.chapters.length - 0.001)
+    })
   }
 
   updateCurrentChapter() {
@@ -98,9 +109,9 @@ export default class ChapterHandler {
       )
       c.style.transform = `translateY(${value}px`
     }
-    this.chapters[this.currentChapter].progress = this.chapProgress
     this.globProgress = lerp(this.globProgress, this.realProgress, 0.03)
     this.chapProgress = this.globProgress % 1
+    this.chapters[this.currentChapter].progress = this.chapProgress
 
     if (this.currentChapter != Math.floor(this.globProgress)) {
       this.chapters[this.currentChapter].end()
@@ -114,9 +125,7 @@ export default class ChapterHandler {
   }
 
   nextChapter() {
-    setTimeout(() => {
-      this.realProgress = Math.trunc(this.realProgress) + 1
-    }, 2000)
+    this.realProgress = Math.trunc(this.realProgress) + 1.01
   }
 
   showChapter(chapter) {
@@ -129,9 +138,76 @@ export default class ChapterHandler {
     chapterHTML.classList.remove('is-active')
   }
 
+  hideObjects(objects) {
+    objects.forEach(object => {
+      object.visible = false
+    })
+  }
+
+  showObjects(objects) {
+    objects.forEach(object => {
+      object.visible = true
+    })
+  }
+
+  createCams(cams) {
+    cams.forEach((cam, i) => this.createCamHtml(i))
+  }
+
+  deleteCams() {
+    this.deleteCamHtml()
+  }
+
+  createCamHtml(i) {
+    const middleRightWrapper = document.querySelector('.middle-right-wrapper')
+    const cameraWrapper = document.createElement('div')
+    const overflowHiddenRelative = document.createElement('div')
+    const span = document.createElement('span')
+    const circle = document.createElement('div')
+    const redCircle = document.createElement('div')
+    const whiteCircle = document.createElement('div')
+
+    cameraWrapper.classList.add('camera-wrapper')
+    cameraWrapper.dataset.cameraIndex = i
+    overflowHiddenRelative.classList.add('overflow-hidden')
+    overflowHiddenRelative.classList.add('relative')
+    circle.classList.add('circle')
+    redCircle.classList.add('red-circle')
+    whiteCircle.classList.add('white-circle')
+
+    span.innerHTML = `cam-0${i}`
+
+    overflowHiddenRelative.appendChild(span)
+    circle.appendChild(redCircle)
+    circle.appendChild(whiteCircle)
+
+    cameraWrapper.appendChild(overflowHiddenRelative)
+    cameraWrapper.appendChild(circle)
+
+    middleRightWrapper.appendChild(cameraWrapper)
+
+    cameraWrapper.addEventListener('click', () => {
+      this.toggleCamera(cameraWrapper)
+    })
+  }
+
+  deleteCamHtml() {
+    const middleRightWrapper = document.querySelector('.middle-right-wrapper')
+    const cameraWrappers = document.querySelectorAll('.camera-wrapper')
+    cameraWrappers.forEach(cameraWrapper => middleRightWrapper.removeChild(cameraWrapper))
+  }
+
+  toggleCamera(camera) {
+    const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+    cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
+    camera.classList.toggle('is-active')
+    this.renderer.switchCam(this.chapters[this.currentChapter].cams[camera.dataset.cameraIndex])
+  }
+
   mouseWheel(event) {
+    if (!this.allowScroll) return
     this.realProgress = clamp(
-      (this.realProgress += event.deltaY * 0.002),
+      (this.realProgress += event.deltaY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
@@ -142,14 +218,22 @@ export default class ChapterHandler {
     let a = []
     r.keys().forEach(k => {
       import(`./chapters${k.substring(1)}`).then(chap => {
+        chap.default.handler = this
+
         chap.default.scene = this.scene
         chap.default.world = this.world
         chap.default.time = this.time
         chap.default.mouse = this.mouse
 
+        chap.default.switchHDRI = this.switchHDRI
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
+        chap.default.showObjects = this.showObjects
+        chap.default.hideObjects = this.hideObjects
+        chap.default.createCams = this.createCams
+        chap.default.deleteCams = this.deleteCams
+        chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
         if (a.length == r.keys().length) {

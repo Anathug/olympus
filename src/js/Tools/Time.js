@@ -4,10 +4,8 @@ import gsap from 'gsap'
 
 export default class Time extends EventEmitter {
   constructor() {
-    // Get parent methods
     super()
 
-    // Set up
     this.start = Date.now()
     this.current = this.start
     this.elapsed = 0
@@ -22,31 +20,25 @@ export default class Time extends EventEmitter {
 
   setTicker() {
     gsap.ticker.add(this.startTicker)
+    gsap.ticker.fps(60)
   }
   startTicker() {
     this.tick()
     this.trigger('tick')
   }
-  // on('tick')
   tick() {
-    // Get current time
     const current = Date.now()
-    // delta
     this.delta = current - this.current
-    // elapsed = time between start and now
     this.elapsed = current - this.start
-    // current = current time
     this.current = current
 
 
     if (this.delta > 60) {
       this.delta = 60
     }
-    // Add trigger event
     this.trigger('tick')
   }
 
-  // Cancel animation frame
   stopTicker() {
     gsap.ticker.remove(this.startTicker)
   }

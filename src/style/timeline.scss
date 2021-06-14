@@ -59,7 +59,7 @@
     border-top: 10px solid transparent;
     border-right: 10px solid #fff;
     border-bottom: 10px solid transparent;
-    margin: 0 0 0 20px;
+    margin: -5px 0 0 20px;
   }
   .timelineSubtitle {
     display: none;
@@ -79,15 +79,35 @@
     border-bottom: 10px solid transparent;
     margin: 0 20px 0 0;
   }
+
+  .timelineTitle{
+    font-size: 10px;
+    line-height: 130%;    
+    text-align: right;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
   
+  .timelineTitle:hover{
+    cursor: pointer;
+  }
+
   #timelineChapterDisplay .timelineTitle {
     display: inline-block;
     background: #f1c40f;
     color: black;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
   }
   
   #timelineChapterDisplay .timelineSubtitle {
     display: block;
-    margin-left: 30px;
+    margin: 10px 30px;
+    font-size: 18px;
+  line-height: 130%;  
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   }
   
