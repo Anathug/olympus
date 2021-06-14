@@ -18,9 +18,9 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.mars = options.mars
 
-    this.allowScroll = false;
-    this.autoScroll = false;
-    this.workingChapter = 0
+    this.allowScroll = false
+    this.autoScroll = false
+    this.workingChapter = 6
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -40,7 +40,6 @@ export default class ChapterHandler {
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
-
   }
 
   setUI() {
@@ -57,7 +56,9 @@ export default class ChapterHandler {
       let title = document.createElement('span')
       title.classList.add('timelineTitle')
       title.textContent = `Chapter ${chap.index + 1}`
-      title.onclick = () => { this.realProgress = chap.index + 0.01 }
+      title.onclick = () => {
+        this.realProgress = chap.index + 0.01
+      }
 
       let subtitle = document.createElement('span')
       subtitle.classList.add('timelineSubtitle')
@@ -85,12 +86,8 @@ export default class ChapterHandler {
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
-      if (!this.autoScroll) return;
-      this.realProgress = clamp(
-        (this.realProgress += 0.0001),
-        0,
-        this.chapters.length - 0.001
-      )
+      if (!this.autoScroll) return
+      this.realProgress = clamp((this.realProgress += 0.0001), 0, this.chapters.length - 0.001)
     })
   }
 
@@ -162,15 +159,15 @@ export default class ChapterHandler {
 
   createCamHtml(i) {
     const middleRightWrapper = document.querySelector('.middle-right-wrapper')
-    const cameraWrapper = document.createElement("div")
-    const overflowHiddenRelative = document.createElement("div")
-    const span = document.createElement("span")
-    const circle = document.createElement("div")
-    const redCircle = document.createElement("div")
-    const whiteCircle = document.createElement("div")
+    const cameraWrapper = document.createElement('div')
+    const overflowHiddenRelative = document.createElement('div')
+    const span = document.createElement('span')
+    const circle = document.createElement('div')
+    const redCircle = document.createElement('div')
+    const whiteCircle = document.createElement('div')
 
     cameraWrapper.classList.add('camera-wrapper')
-    cameraWrapper.dataset.cameraIndex = i;
+    cameraWrapper.dataset.cameraIndex = i
     overflowHiddenRelative.classList.add('overflow-hidden')
     overflowHiddenRelative.classList.add('relative')
     circle.classList.add('circle')
@@ -201,13 +198,13 @@ export default class ChapterHandler {
 
   toggleCamera(camera) {
     const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
-    cameraButtons.forEach((cameraButton) => cameraButton.classList.remove('is-active'))
+    cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
     camera.classList.toggle('is-active')
     this.renderer.switchCam(this.chapters[this.currentChapter].cams[camera.dataset.cameraIndex])
   }
 
   mouseWheel(event) {
-    if (!this.allowScroll) return;
+    if (!this.allowScroll) return
     this.realProgress = clamp(
       (this.realProgress += event.deltaY * 0.0001),
       0,
