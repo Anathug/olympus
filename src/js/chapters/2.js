@@ -1,5 +1,5 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopOnce } from 'three'
+import { AnimationMixer, LoopOnce, AudioListener, Audio } from 'three'
 
 let c = new Chapter(2)
 
@@ -15,6 +15,17 @@ c.init = options => {
   createCams()
   createAnimation()
   c.hideObjects(c.objects)
+
+  c.listener = new AudioListener();
+  // c.objects.push(c.listener);
+  c.world.container.add(c.listener)
+
+  // create a global audio source
+  c.sounds = [new Audio(c.listener), new Audio(c.listener)];
+
+  // load a sound and set it as the Audio object's buffer
+  c.sounds[0].setBuffer(c.assets.sounds.chap02);
+  c.sounds[1].setBuffer(c.assets.sounds.chap02_r);
 }
 
 c.start = () => {
@@ -23,10 +34,14 @@ c.start = () => {
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[1])
+  c.sounds[0].play()
 }
 
 c.update = () => {
   c.mixer.setTime(c.progress * c.animationDuration)
+  console.log(c.sounds[0].context.currentTime, c.sounds[0].buffer.duration)
+  c.sounds[0].playbackRate = 0.2
+
 }
 
 c.end = () => {
@@ -34,6 +49,10 @@ c.end = () => {
   c.hideObjects(c.objects)
   c.allowScroll = false
   c.world.renderer.switchCam('default')
+
+
+  c.sounds[0].stop()
+  c.sounds[1].stop()
 }
 
 const createCams = () => {
