@@ -57,6 +57,7 @@ c.start = () => {
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
   c.createCams(c.cams)
   c.switchHDRI()
+  c.changeFog(150, 10, 0x010218)
   initActiveClassCamera(c.firstIndexCamera)
 }
 
@@ -70,7 +71,6 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-  c.switchHDRI('space')
 }
 
 const createGltfCams = () => {

@@ -72,6 +72,7 @@ c.start = () => {
   c.starship.container.rotation.y = -Math.PI / 2
   c.starship.container.children[0].children[13].visible = true
   c.world.scene.fog.far = 2000
+  c.switchHDRI('space')
 
   c.handler.allowScroll = true
   c.handler.autoScroll = true

@@ -31,6 +31,7 @@ export default class ChapterHandler {
     this.chapters = this.importAll()
 
     this.switchHDRI = options.switchHDRI
+    this.changeFog = options.changeFog
     this.nextChapter = this.nextChapter.bind(this)
     this.showChapter = this.showChapter.bind(this)
     this.hideChapter = this.hideChapter.bind(this)
@@ -227,6 +228,8 @@ export default class ChapterHandler {
         chap.default.mouse = this.mouse
 
         chap.default.switchHDRI = this.switchHDRI
+        console.log(this.changeFog)
+        chap.default.changeFog = this.changeFog
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
