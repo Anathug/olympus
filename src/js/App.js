@@ -86,7 +86,6 @@ export default class App {
   }
 
   changeFog(far, near, color) {
-    console.log(this.scene)
     this.scene.fog.color = new Color(color)
     this.scene.fog.near = near
     this.scene.fog.far = far
@@ -115,7 +114,6 @@ export default class App {
     if (this.postprocessing) {
       this.composer = new EffectComposer(this.renderer)
       this.renderPass = new RenderPass(this.scene, this.activeCam)
-      console.log('post pro')
     }
 
     this.renderer.switchCam = cam => {

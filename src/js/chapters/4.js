@@ -89,9 +89,7 @@ const initActiveClassCamera = i => {
 
 const createLights = () => {
   c.directionalLights.forEach(directionalLight => {
-    console.log(directionalLight)
     const light = new AmbientLight(directionalLight.color, directionalLight.intensity)
-    console.log(light)
     light.position.set(
       directionalLight.position.x,
       directionalLight.position.z,

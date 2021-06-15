@@ -81,7 +81,6 @@ const createGltfCams = () => {
 
 const createGltf = () => {
   c.gltf = c.assets.models.animations.chap02
-  console.log(c.gltf)
   c.world.container.add(c.gltf.scene)
   c.objects.push(c.gltf.scene)
 }
