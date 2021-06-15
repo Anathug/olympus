@@ -1,5 +1,5 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopOnce } from 'three'
+import { AnimationMixer, LoopOnce, AmbientLight } from 'three'
 
 let c = new Chapter(6)
 
@@ -12,9 +12,23 @@ c.init = options => {
   c.allowMouseMove = false
   c.firstIndexCamera = 0
   c.cams = []
+  c.marscColor = 0xffd38a
+  c.directionalLights = [
+    {
+      name: 'firstAmbientLight',
+      position: {
+        x: 0,
+        y: 5,
+        z: 0,
+      },
+      intensity: 12,
+      color: 0x222222,
+    },
+  ]
   createGltf()
   createGltfCams()
   createAnimation()
+  createLights()
   c.hideObjects(c.objects)
 }
 
@@ -24,6 +38,8 @@ c.start = () => {
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.switchHDRI('landing-zone')
+  c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
   initActiveClassCamera(c.firstIndexCamera)
 }
@@ -69,6 +85,19 @@ const createAnimation = () => {
 const initActiveClassCamera = i => {
   const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
   cameraButtons[i].classList.add('is-active')
+}
+
+const createLights = () => {
+  c.directionalLights.forEach(directionalLight => {
+    const light = new AmbientLight(directionalLight.color, directionalLight.intensity)
+    light.position.set(
+      directionalLight.position.x,
+      directionalLight.position.z,
+      directionalLight.position.z
+    )
+    c.world.container.add(light)
+    c.objects.push(light)
+  })
 }
 
 export default c

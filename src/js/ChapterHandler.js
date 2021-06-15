@@ -20,7 +20,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 4
+    this.workingChapter = 0
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -31,6 +31,7 @@ export default class ChapterHandler {
     this.chapters = this.importAll()
 
     this.switchHDRI = options.switchHDRI
+    this.changeFog = options.changeFog
     this.nextChapter = this.nextChapter.bind(this)
     this.showChapter = this.showChapter.bind(this)
     this.hideChapter = this.hideChapter.bind(this)
@@ -46,7 +47,6 @@ export default class ChapterHandler {
   setUI() {
     this.timelineChapters = document.getElementById('timelineChapters')
     this.timelineChapElems = document.getElementsByClassName('timelineChap')
-    console.log(this.currentChapter)
     this.timelineChapDisplay = document.getElementById('timelineChapterDisplay')
     this.chapters.forEach(chap => {
       let container = document.createElement('span')
@@ -227,6 +227,7 @@ export default class ChapterHandler {
         chap.default.mouse = this.mouse
 
         chap.default.switchHDRI = this.switchHDRI
+        chap.default.changeFog = this.changeFog
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
