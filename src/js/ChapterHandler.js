@@ -20,7 +20,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 2
+    this.workingChapter = 4
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -46,6 +46,7 @@ export default class ChapterHandler {
   setUI() {
     this.timelineChapters = document.getElementById('timelineChapters')
     this.timelineChapElems = document.getElementsByClassName('timelineChap')
+    console.log(this.currentChapter)
     this.timelineChapDisplay = document.getElementById('timelineChapterDisplay')
     this.chapters.forEach(chap => {
       let container = document.createElement('span')
