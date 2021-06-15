@@ -7,7 +7,6 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
-  c.earth = options.earth
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
@@ -59,6 +58,7 @@ c.start = () => {
   c.earth.container.visible = false
   c.createCams(c.cams)
   c.switchHDRI()
+  c.changeFog(150, 10, 0x010218)
   initActiveClassCamera(c.firstIndexCamera)
 }
 
@@ -72,8 +72,6 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-  c.switchHDRI('space')
-  c.earth.container.visible = true
 }
 
 const createGltfCams = () => {

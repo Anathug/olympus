@@ -15,6 +15,7 @@ c.init = options => {
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
   c.world = options.world
+  c.earth = options.earth
   c.starship = new Starship(options)
   c.satellite = new Satellite(options)
   c.world.container.add(c.starship.container)
@@ -72,6 +73,8 @@ c.start = () => {
   c.starship.container.rotation.y = -Math.PI / 2
   c.starship.container.children[0].children[13].visible = true
   c.world.scene.fog.far = 2000
+  c.earth.container.visible = true
+  c.switchHDRI('space')
 
   c.handler.allowScroll = true
   c.handler.autoScroll = true
@@ -158,6 +161,7 @@ c.end = () => {
   c.controls.enabled = false
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
+  c.earth.container.visible = false
 }
 
 const createLights = () => {
