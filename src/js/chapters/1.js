@@ -3,6 +3,9 @@ import Cockpit from '../World/chapter_1/Cockpit'
 import gsap from 'gsap'
 
 let c = new Chapter(1)
+c.title = 'Step A01'
+c.subtitle = 'Pre-launch countdown'
+c.timelineColor = '#2ecc71'
 const startButton = document.querySelector('.chapter_1 button')
 
 c.init = (options) => {

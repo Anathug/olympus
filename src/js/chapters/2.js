@@ -2,6 +2,9 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopOnce } from 'three'
 
 let c = new Chapter(2)
+c.title = 'Step A02'
+c.subtitle = 'Pre-launch countdown'
+c.timelineColor = '#2ecc71'
 
 c.init = options => {
   c.assets = options.assets
