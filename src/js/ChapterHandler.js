@@ -130,6 +130,11 @@ export default class ChapterHandler {
     }
   }
 
+  updateTimelineDisplay(title, subtitle) {
+    this.timelineChapDisplay.childNodes[1].textContent = title
+    this.timelineChapDisplay.childNodes[2].textContent = subtitle
+  }
+
   nextChapter() {
     this.realProgress = Math.trunc(this.realProgress) + 1.01
   }

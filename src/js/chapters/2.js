@@ -29,6 +29,15 @@ c.start = () => {
 }
 
 c.update = () => {
+  if (c.progress < 0.47)
+    c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
+  else if (c.progress < 0.65)
+    c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
+  else if (c.progress < 0.85)
+    c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
+  else
+    c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
+
   c.mixer.setTime(c.progress * c.animationDuration)
 }
 
