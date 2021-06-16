@@ -50,8 +50,8 @@ c.start = () => {
 }
 
 c.update = () => {
-  c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration))
-  let playbackRate = 1 + c.progress * c.duration - (c.reversed ? c.duration - c.soundR.seek() : c.soundN.seek())
+  c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration - 0.01))
+  let playbackRate = 1 + (c.progress * c.duration - (c.reversed ? c.duration - c.soundR.seek() : c.soundN.seek())) * 2
 
 
   if (playbackRate === 0) {
