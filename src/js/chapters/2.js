@@ -45,6 +45,9 @@ c.start = () => {
   c.handler.setAutoScrollSpeed(c.duration)
   c.world.renderer.switchCam(c.cams[1])
   c.reversed = false
+
+  c.soundN.seek(c.progress * c.duration);
+  c.soundR.seek(c.duration - c.soundN.seek())
   c.soundN.play();
   c.soundR.stop();
 }
