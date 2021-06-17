@@ -28,7 +28,7 @@ c.start = () => {
   setEvents()
 }
 
-c.update = () => { }
+c.update = () => {}
 
 c.end = () => {
   removeEvents()
@@ -51,11 +51,14 @@ const mouseMove = () => {
         (window.innerWidth - distance) / window.innerWidth + 0.2,
         1.2
       )
-      gsap.to(image, {
-        scale: normalizedDistance,
-        duration: 1,
-        ease: 'power3.out',
-      })
+
+      if (normalizedDistance > 1) {
+        gsap.to(image, {
+          scale: normalizedDistance,
+          duration: 1,
+          ease: 'power3.out',
+        })
+      }
     })
   }
 }
@@ -66,7 +69,7 @@ const setEvents = () => {
   })
   blackoverlaybutton.addEventListener('click', hideInfos)
   startexperience.addEventListener('click', chapterEnd, {
-    once: true
+    once: true,
   })
   window.addEventListener('mousemove', mouseMove)
 }
@@ -185,10 +188,10 @@ const calculateDistance = (elem, mouseX, mouseY) => {
         mouseX - (elem.getBoundingClientRect().left + elem.getBoundingClientRect().width / 2),
         2
       ) +
-      Math.pow(
-        mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
-        2
-      )
+        Math.pow(
+          mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
+          2
+        )
     )
   )
 }

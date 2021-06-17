@@ -18,8 +18,8 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.mars = options.mars
 
-    this.allowScroll = false;
-    this.autoScroll = false;
+    this.allowScroll = false
+    this.autoScroll = false
     this.autoScrollSpeed = 0.0001
     this.workingChapter = 0
 
@@ -31,15 +31,18 @@ export default class ChapterHandler {
     this.chapters = []
     this.chapters = this.importAll()
 
+    this.switchHDRI = options.switchHDRI
+    this.changeFog = options.changeFog
     this.nextChapter = this.nextChapter.bind(this)
     this.showChapter = this.showChapter.bind(this)
     this.hideChapter = this.hideChapter.bind(this)
     this.showObjects = this.showObjects.bind(this)
     this.hideObjects = this.hideObjects.bind(this)
+    this.createCams = this.createCams.bind(this)
+    this.deleteCams = this.deleteCams.bind(this)
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
-
   }
 
   setUI() {
@@ -56,7 +59,9 @@ export default class ChapterHandler {
       let title = document.createElement('span')
       title.classList.add('timelineTitle')
       title.textContent = `Chapter ${chap.index + 1}`
-      title.onclick = () => { this.realProgress = chap.index + 0.01 }
+      title.onclick = () => {
+        this.realProgress = chap.index + 0.01
+      }
 
       let subtitle = document.createElement('span')
       subtitle.classList.add('timelineSubtitle')
@@ -84,7 +89,7 @@ export default class ChapterHandler {
     })
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
-      if (!this.autoScroll) return;
+      if (!this.autoScroll) return
       this.realProgress = clamp(
         (this.realProgress += this.autoScrollSpeed),
         0,
@@ -151,8 +156,62 @@ export default class ChapterHandler {
     })
   }
 
+  createCams(cams) {
+    cams.forEach((cam, i) => this.createCamHtml(i))
+  }
+
+  deleteCams() {
+    this.deleteCamHtml()
+  }
+
+  createCamHtml(i) {
+    const middleRightWrapper = document.querySelector('.middle-right-wrapper')
+    const cameraWrapper = document.createElement('div')
+    const overflowHiddenRelative = document.createElement('div')
+    const span = document.createElement('span')
+    const circle = document.createElement('div')
+    const redCircle = document.createElement('div')
+    const whiteCircle = document.createElement('div')
+
+    cameraWrapper.classList.add('camera-wrapper')
+    cameraWrapper.dataset.cameraIndex = i
+    overflowHiddenRelative.classList.add('overflow-hidden')
+    overflowHiddenRelative.classList.add('relative')
+    circle.classList.add('circle')
+    redCircle.classList.add('red-circle')
+    whiteCircle.classList.add('white-circle')
+
+    span.innerHTML = `cam-0${i}`
+
+    overflowHiddenRelative.appendChild(span)
+    circle.appendChild(redCircle)
+    circle.appendChild(whiteCircle)
+
+    cameraWrapper.appendChild(overflowHiddenRelative)
+    cameraWrapper.appendChild(circle)
+
+    middleRightWrapper.appendChild(cameraWrapper)
+
+    cameraWrapper.addEventListener('click', () => {
+      this.toggleCamera(cameraWrapper)
+    })
+  }
+
+  deleteCamHtml() {
+    const middleRightWrapper = document.querySelector('.middle-right-wrapper')
+    const cameraWrappers = document.querySelectorAll('.camera-wrapper')
+    cameraWrappers.forEach(cameraWrapper => middleRightWrapper.removeChild(cameraWrapper))
+  }
+
+  toggleCamera(camera) {
+    const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+    cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
+    camera.classList.toggle('is-active')
+    this.renderer.switchCam(this.chapters[this.currentChapter].cams[camera.dataset.cameraIndex])
+  }
+
   mouseWheel(event) {
-    if (!this.allowScroll) return;
+    if (!this.allowScroll) return
     this.realProgress = clamp(
       (this.realProgress += event.deltaY * 0.0001),
       0,
@@ -176,11 +235,15 @@ export default class ChapterHandler {
         chap.default.time = this.time
         chap.default.mouse = this.mouse
 
+        chap.default.switchHDRI = this.switchHDRI
+        chap.default.changeFog = this.changeFog
         chap.default.nextChapter = this.nextChapter
         chap.default.showChapter = this.showChapter
         chap.default.hideChapter = this.hideChapter
         chap.default.showObjects = this.showObjects
         chap.default.hideObjects = this.hideObjects
+        chap.default.createCams = this.createCams
+        chap.default.deleteCams = this.deleteCams
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
