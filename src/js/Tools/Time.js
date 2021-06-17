@@ -24,7 +24,7 @@ export default class Time extends EventEmitter {
   }
   startTicker() {
     this.tick()
-    this.trigger('tick')
+    // this.trigger('tick')
   }
   tick() {
     const current = Date.now()

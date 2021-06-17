@@ -20,6 +20,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false
     this.autoScroll = false
+    this.autoScrollSpeed = 0.0001
     this.workingChapter = 0
 
     this.chapProgress = 0
@@ -89,7 +90,11 @@ export default class ChapterHandler {
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
       if (!this.autoScroll) return
-      this.realProgress = clamp((this.realProgress += 0.0001), 0, this.chapters.length - 0.001)
+      this.realProgress = clamp(
+        (this.realProgress += this.autoScrollSpeed),
+        0,
+        this.chapters.length - 0.001
+      )
     })
   }
 
@@ -212,6 +217,10 @@ export default class ChapterHandler {
       0,
       this.chapters.length - 0.001
     )
+  }
+
+  setAutoScrollSpeed(duration) {
+    this.autoScrollSpeed = 1 / 60 / duration
   }
 
   async importAll() {
