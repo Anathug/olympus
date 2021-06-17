@@ -1,7 +1,7 @@
 import Chapter from '../Chapter'
 import { AnimationMixer, LoopOnce, AmbientLight } from 'three'
 
-let c = new Chapter(6)
+let c = new Chapter(4)
 
 c.init = options => {
   c.assets = options.assets

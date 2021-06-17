@@ -20,7 +20,7 @@ export default class ChapterHandler {
 
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 3
+    this.workingChapter = 1
     this.autoScrollSpeed = 0.0001
 
     this.chapProgress = 0
@@ -40,6 +40,8 @@ export default class ChapterHandler {
     this.hideObjects = this.hideObjects.bind(this)
     this.createCams = this.createCams.bind(this)
     this.deleteCams = this.deleteCams.bind(this)
+    this.disableCam = this.disableCam.bind(this)
+    this.enableCam = this.enableCam.bind(this)
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
@@ -221,6 +223,17 @@ export default class ChapterHandler {
     cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
     camera.classList.toggle('is-active')
     this.renderer.switchCam(this.chapters[this.currentChapter].cams[camera.dataset.cameraIndex])
+    this.chapters[this.currentChapter].activeCam = Number(camera.dataset.cameraIndex)
+  }
+
+  disableCam(i) {
+    const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+    cameraButtons[i].classList.add('is-disabled')
+  }
+
+  enableCam(i) {
+    const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+    cameraButtons[i].classList.remove('is-disabled')
   }
 
   mouseWheel(event) {
@@ -257,6 +270,8 @@ export default class ChapterHandler {
         chap.default.hideObjects = this.hideObjects
         chap.default.createCams = this.createCams
         chap.default.deleteCams = this.deleteCams
+        chap.default.enableCam = this.enableCam
+        chap.default.disableCam = this.disableCam
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)

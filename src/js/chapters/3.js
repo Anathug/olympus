@@ -74,7 +74,6 @@ c.start = () => {
   c.starship.container.rotation.y = -Math.PI / 2
   c.starship.container.children[0].children[13].visible = true
   c.world.scene.fog.far = 2000
-  c.earth.container.visible = true
   c.switchHDRI('space')
 
   c.handler.allowScroll = true
@@ -84,10 +83,8 @@ c.start = () => {
 }
 
 c.update = () => {
-  if (c.progress < 0.75)
-    c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
-  else
-    c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
+  if (c.progress < 0.75) c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
+  else c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
 
   if (c.progress < c.freeViewTime) {
     c.controls.enabled = true
@@ -167,7 +164,6 @@ c.end = () => {
   c.controls.enabled = false
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
-  c.earth.container.visible = false
 }
 
 const createLights = () => {
