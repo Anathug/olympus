@@ -13,6 +13,7 @@ import World from './World/index'
 
 import Starship from './World/Starship.js'
 import Mars from './World/Mars.js'
+import Earth from './World/Earth.js'
 
 import postVertexShader from '../shaders/post/vertexShader.glsl'
 import postFragmentShader from '../shaders/post/fragmentShader.glsl'
@@ -50,6 +51,7 @@ export default class App {
     this.setConfig()
     this.setStarship()
     this.setMars()
+    this.setEarth()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()
@@ -208,6 +210,15 @@ export default class App {
       debug: this.debug,
     })
     this.scene.add(this.mars.container)
+  }
+
+  setEarth() {
+    this.earth = new Earth({
+      time: this.time,
+      assets: this.assets,
+      debug: this.debug,
+    })
+    this.scene.add(this.earth.container)
   }
   setCamera() {
     this.camera = new Camera({

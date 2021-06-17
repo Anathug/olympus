@@ -13,6 +13,7 @@ export default class World {
     this.renderer = options.renderer
     this.scene = options.scene
     this.mars = options.mars
+    this.earth = options.earth
     this.starship = options.starship
     this.switchHDRI = options.switchHDRI
     this.changeFog = options.changeFog
