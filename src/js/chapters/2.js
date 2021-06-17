@@ -7,6 +7,7 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
+  c.earth = options.earth
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
