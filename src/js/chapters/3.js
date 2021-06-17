@@ -1,6 +1,6 @@
 import Chapter from '../Chapter'
 import Launcher from '../World/Launcher'
-import { Clock, Vector3 } from 'three'
+import { Clock, Vector3, DirectionalLight } from 'three'
 import gsap from 'gsap'
 import lerp from '../Tools/Lerp'
 import Starship from '../World/Starship'
@@ -10,7 +10,7 @@ let c = new Chapter(3)
 c.title = 'Step B01'
 c.timelineColor = '#e74c3c'
 
-c.init = (options) => {
+c.init = options => {
   c.camera = options.world.camera.camera
   c.controls = options.world.camera.orbitControls
   c.mouse = c.world.mouse.mouse
@@ -20,11 +20,22 @@ c.init = (options) => {
   c.satellite = new Satellite(options)
   c.world.container.add(c.starship.container)
 
-
   c.starship.container.visible = true
   c.starship.container.children[0].children.forEach(e => {
     e.visible = false
-  });
+  })
+
+  c.directionalLights = [
+    {
+      name: 'firstDirectionalLightSource',
+      position: {
+        x: -30,
+        y: 10,
+        z: 0,
+        intensity: 2,
+      },
+    },
+  ]
   c.world.container.add(c.satellite.container)
   c.freeViewTime = 0.3
   c.transTime = 0.05
@@ -40,7 +51,7 @@ c.init = (options) => {
   c.circle = document.getElementById('circle')
   c.lastCamPos = new Vector3(0, 0, 0)
   c.circlePos = new Vector3(0, 0, 0)
-
+  createLights()
 }
 
 c.start = () => {
@@ -59,9 +70,10 @@ c.start = () => {
     object.visible = true
   })
   c.starship.container.rotation.x = Math.PI / 2
-  c.starship.container.rotation.y = -Math.PI / 2;
+  c.starship.container.rotation.y = -Math.PI / 2
   c.starship.container.children[0].children[13].visible = true
   c.world.scene.fog.far = 2000
+  c.switchHDRI('space')
 
   c.handler.allowScroll = true
   c.handler.autoScroll = true
@@ -119,7 +131,8 @@ c.update = () => {
     c.satellite.container.position.lerpVectors(
       new Vector3(-0, -0, -0 + 4),
       new Vector3(-0, -0, -0),
-      Math.sin((progress * Math.PI) / 2))
+      Math.sin((progress * Math.PI) / 2)
+    )
     return
   }
   if (c.progress < c.freeViewTime + c.transTime + c.travelTime + c.transTime) {
@@ -147,11 +160,24 @@ c.end = () => {
   c.allowScroll = false
   c.objects.forEach(object => {
     object.visible = false
-  });
+  })
   c.starship.visible = false
   c.controls.enabled = false
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
 }
 
-export default c;
+const createLights = () => {
+  c.directionalLights.forEach(directionalLight => {
+    const light = new DirectionalLight(directionalLight.color, directionalLight.intensity)
+    light.position.set(
+      directionalLight.position.x,
+      directionalLight.position.z,
+      directionalLight.position.z
+    )
+    c.world.container.add(light)
+    c.objects.push(light)
+  })
+}
+
+export default c

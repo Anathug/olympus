@@ -1,12 +1,10 @@
-import { AxesHelper, Object3D } from 'three'
+import { AxesHelper, Object3D, DirectionalLight } from 'three'
 
-import DirectionalLightSource from './DirectionalLight'
 import PointLightSource from './PointLight'
 import ChapterHandler from '../ChapterHandler'
 
 export default class World {
   constructor(options) {
-
     this.time = options.time
     this.debug = options.debug
     this.assets = options.assets
@@ -16,8 +14,11 @@ export default class World {
     this.scene = options.scene
     this.mars = options.mars
     this.starship = options.starship
+    this.switchHDRI = options.switchHDRI
+    this.changeFog = options.changeFog
     this.container = new Object3D()
     this.container.name = 'World'
+
     if (this.debug) {
       this.container.add(new AxesHelper(5))
       this.debugFolder = this.debug.addFolder('World')
@@ -28,14 +29,8 @@ export default class World {
   init() {
     this.setChapterHandler()
     this.setPointLight()
-    this.setDirectionalLight()
   }
-  setDirectionalLight() {
-    this.directionalLight = new DirectionalLightSource({
-      debug: this.debugFolder,
-    })
-    this.container.add(this.directionalLight.container)
-  }
+
   setPointLight() {
     this.light = new PointLightSource({
       debug: this.debugFolder,
@@ -54,7 +49,9 @@ export default class World {
       scene: this.scene,
       mars: this.mars,
       earth: this.earth,
-      starship: this.starship
+      starship: this.starship,
+      switchHDRI: this.switchHDRI,
+      changeFog: this.changeFog,
     })
   }
 }
