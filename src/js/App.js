@@ -37,11 +37,16 @@ export default class App {
     this.myEffect = null
     this.lut = true
     this.composer = null
-    this.cubeMap = null
+    this.spaceCubeMap = null
+    this.landingZoneCubeMap = null
+
+    this.postprocessing = true
 
     this.switchHDRI = this.switchHDRI.bind(this)
+    this.changeFog = this.changeFog.bind(this)
 
     this.setScene()
+    this.setSpaceHdri()
     this.setConfig()
     this.setStarship()
     this.setMars()
@@ -53,30 +58,37 @@ export default class App {
 
   setScene() {
     this.scene = new Scene()
-    this.cubeMap = new CubeTexture()
-    const t = this.assets.textures.hdri
-
-    this.cubeMap.images[0] = t.px.image
-    this.cubeMap.images[1] = t.nx.image
-    this.cubeMap.images[2] = t.py.image
-    this.cubeMap.images[3] = t.ny.image
-    this.cubeMap.images[4] = t.pz.image
-    this.cubeMap.images[5] = t.nz.image
-    this.cubeMap.needsUpdate = true
-
     this.scene.fog = new Fog(this.params.fog.color, this.params.fog.near, this.params.fog.far)
     this.scene.background = new Color(0x010218)
   }
 
+  setSpaceHdri() {
+    this.spaceCubeMap = new CubeTexture()
+    const t = this.assets.textures.hdri.space
+
+    this.spaceCubeMap.images[0] = t.px.image
+    this.spaceCubeMap.images[1] = t.nx.image
+    this.spaceCubeMap.images[2] = t.py.image
+    this.spaceCubeMap.images[3] = t.ny.image
+    this.spaceCubeMap.images[4] = t.pz.image
+    this.spaceCubeMap.images[5] = t.nz.image
+    this.spaceCubeMap.needsUpdate = true
+  }
+
   switchHDRI(string) {
     if (string === 'space') {
-      this.scene.background = this.cubeMap
-      console.log(this)
-      this.space = false
+      this.scene.background = this.spaceCubeMap
+    } else if (string === 'landing-zone') {
+      this.scene.background = new Color(0xffd38a)
     } else {
       this.scene.background = new Color(0x010218)
-      this.space = true
     }
+  }
+
+  changeFog(far, near, color) {
+    this.scene.fog.color = new Color(color)
+    this.scene.fog.near = near
+    this.scene.fog.far = far
   }
 
   createRenderer() {
@@ -98,16 +110,23 @@ export default class App {
   }
 
   setRenderer() {
-    this.composer = new EffectComposer(this.renderer)
     this.activeCam = this.camera.camera
-    this.renderPass = new RenderPass(this.scene, this.activeCam)
+    if (this.postprocessing) {
+      this.composer = new EffectComposer(this.renderer)
+      this.renderPass = new RenderPass(this.scene, this.activeCam)
+    }
+
     this.renderer.switchCam = cam => {
       if (cam == 'default') this.activeCam = this.camera.camera
       else this.activeCam = cam
-      this.composer.passes[0].camera = this.activeCam
-      this.renderPass.camera = this.activeCam
+      if (this.postprocessing) {
+        this.composer.passes[0].camera = this.activeCam
+        this.renderPass.camera = this.activeCam
+      }
     }
-    this.composer.addPass(this.renderPass)
+    if (this.postprocessing) {
+      this.composer.addPass(this.renderPass)
+    }
 
     this.myEffect = {
       uniforms: {
@@ -118,27 +137,35 @@ export default class App {
       fragmentShader: postFragmentShader,
     }
 
-    const customPass = new ShaderPass(this.myEffect)
-    customPass.renderToScreen = true
-    this.composer.addPass(customPass)
+    let customPass = null
 
-    let lutMap
-    let lutPass = new LUTPass()
+    if (this.postprocessing) {
+      customPass = new ShaderPass(this.myEffect)
+      customPass.renderToScreen = true
+      this.composer.addPass(customPass)
 
-    new LUTCubeLoader().load('lut/WGFX_Luts_23.cube', result => {
-      lutMap = result
-      lutPass.lut = lutMap.texture
-      lutPass.intensity = 0.2
-      this.composer.addPass(lutPass)
-    })
+      let lutMap
+      let lutPass = new LUTPass()
+
+      new LUTCubeLoader().load('lut/WGFX_Luts_23.cube', result => {
+        lutMap = result
+        lutPass.lut = lutMap.texture
+        lutPass.intensity = 0.2
+        this.composer.addPass(lutPass)
+      })
+    }
 
     this.time.on('tick', () => {
       this.counter += 0.001
       if (!this.lut) {
-        this.composer.removePass(lutPass)
+        // this.composer.removePass(lutPass)
       }
-      customPass.uniforms['amount'].value = this.counter
-      this.composer.render()
+      if (this.postprocessing) {
+        customPass.uniforms['amount'].value = this.counter
+        this.composer.render()
+      } else {
+        this.renderer.render(this.scene, this.activeCam)
+      }
     })
 
     if (this.debug) {
@@ -210,6 +237,7 @@ export default class App {
       earth: this.earth,
       renderer: this.renderer,
       switchHDRI: this.switchHDRI,
+      changeFog: this.changeFog,
     })
     this.scene.add(this.world.container)
   }

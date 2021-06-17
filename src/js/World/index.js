@@ -2,7 +2,6 @@ import { AxesHelper, Object3D, DirectionalLight } from 'three'
 
 import PointLightSource from './PointLight'
 import ChapterHandler from '../ChapterHandler'
-import DirectionalLightSource from './DirectionalLight'
 
 export default class World {
   constructor(options) {
@@ -16,6 +15,7 @@ export default class World {
     this.mars = options.mars
     this.starship = options.starship
     this.switchHDRI = options.switchHDRI
+    this.changeFog = options.changeFog
     this.container = new Object3D()
     this.container.name = 'World'
 
@@ -51,6 +51,7 @@ export default class World {
       earth: this.earth,
       starship: this.starship,
       switchHDRI: this.switchHDRI,
+      changeFog: this.changeFog,
     })
   }
 }

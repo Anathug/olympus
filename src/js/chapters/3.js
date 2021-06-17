@@ -7,7 +7,8 @@ import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
 
 let c = new Chapter(3)
-c.title = 'Docking Sequence'
+c.title = 'Step B01'
+c.timelineColor = '#e74c3c'
 
 c.init = options => {
   c.camera = options.world.camera.camera
@@ -72,6 +73,7 @@ c.start = () => {
   c.starship.container.rotation.y = -Math.PI / 2
   c.starship.container.children[0].children[13].visible = true
   c.world.scene.fog.far = 2000
+  c.switchHDRI('space')
 
   c.handler.allowScroll = true
   c.handler.autoScroll = true
@@ -80,6 +82,11 @@ c.start = () => {
 }
 
 c.update = () => {
+  if (c.progress < 0.75)
+    c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
+  else
+    c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
+
   if (c.progress < c.freeViewTime) {
     c.controls.enabled = true
     c.controls.autoRotate = true
