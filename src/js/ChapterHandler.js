@@ -21,6 +21,7 @@ export default class ChapterHandler {
     this.allowScroll = false
     this.autoScroll = false
     this.workingChapter = 3
+    this.autoScrollSpeed = 0.0001
 
     this.chapProgress = 0
     this.globProgress = this.workingChapter
@@ -57,14 +58,14 @@ export default class ChapterHandler {
 
       let title = document.createElement('span')
       title.classList.add('timelineTitle')
-      title.textContent = `Chapter ${chap.index + 1}`
+      title.textContent = chap.title
       title.onclick = () => {
         this.realProgress = chap.index + 0.01
       }
 
       let subtitle = document.createElement('span')
       subtitle.classList.add('timelineSubtitle')
-      subtitle.textContent = chap.title
+      subtitle.textContent = chap.subtitle
 
       container.append(tri, title, subtitle)
       this.timelineChapters.append(container)
@@ -82,6 +83,11 @@ export default class ChapterHandler {
   setup() {
     this.setUI()
     this.chapters[this.currentChapter].start()
+
+    this.timelineChapDisplay.innerHTML = this.timelineChapElems[this.currentChapter].innerHTML
+    this.timelineChapDisplay.childNodes[1].style.background =
+      this.chapters[this.currentChapter].timelineColor
+
     this.time.on('tick', () => {
       this.updateProgress()
       this.updateCurrentChapter()
@@ -89,7 +95,11 @@ export default class ChapterHandler {
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
       if (!this.autoScroll) return
-      this.realProgress = clamp((this.realProgress += 0.0001), 0, this.chapters.length - 0.001)
+      this.realProgress = clamp(
+        (this.realProgress += this.autoScrollSpeed),
+        0,
+        this.chapters.length - 0.001
+      )
     })
   }
 
@@ -121,8 +131,16 @@ export default class ChapterHandler {
       this.currentChapter = Math.floor(this.globProgress)
       this.chapters[this.currentChapter].start()
       this.timelineChapElems[this.currentChapter].classList.add('current')
+
       this.timelineChapDisplay.innerHTML = this.timelineChapElems[this.currentChapter].innerHTML
+      this.timelineChapDisplay.childNodes[1].style.background =
+        this.chapters[this.currentChapter].timelineColor
     }
+  }
+
+  updateTimelineDisplay(title, subtitle) {
+    this.timelineChapDisplay.childNodes[1].textContent = title
+    this.timelineChapDisplay.childNodes[2].textContent = subtitle
   }
 
   nextChapter() {
@@ -212,6 +230,10 @@ export default class ChapterHandler {
       0,
       this.chapters.length - 0.001
     )
+  }
+
+  setAutoScrollSpeed(duration) {
+    this.autoScrollSpeed = 1 / 60 / duration
   }
 
   async importAll() {

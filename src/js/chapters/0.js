@@ -5,6 +5,10 @@ import clamp from '../Tools/Clamp'
 import EncryptedText from '../EncryptedText'
 
 const c = new Chapter(0)
+c.title = 'Introduction'
+c.subtitle = 'Briefing of the olympus mission'
+c.timelineColor = 'rgb(255,255,255)'
+
 const expositionImagesContainer = document.querySelector('.exposition-images-container')
 const images = document.querySelectorAll('.exposition-images img')
 const imagePosition = []

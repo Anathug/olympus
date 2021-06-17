@@ -7,7 +7,8 @@ import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
 
 let c = new Chapter(3)
-c.title = 'Docking Sequence'
+c.title = 'Step B01'
+c.timelineColor = '#e74c3c'
 
 c.init = options => {
   c.camera = options.world.camera.camera
@@ -83,6 +84,11 @@ c.start = () => {
 }
 
 c.update = () => {
+  if (c.progress < 0.75)
+    c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
+  else
+    c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
+
   if (c.progress < c.freeViewTime) {
     c.controls.enabled = true
     c.controls.autoRotate = true
