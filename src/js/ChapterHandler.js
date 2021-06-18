@@ -121,8 +121,6 @@ export default class ChapterHandler {
       c.style.transform = `translateY(${value}px`
     }
     this.globProgress = lerp(this.globProgress, this.realProgress, 0.03)
-    this.chapProgress = this.globProgress % 1
-    this.chapters[this.currentChapter].progress = this.chapProgress
 
     if (this.currentChapter != Math.floor(this.globProgress)) {
       this.chapters[this.currentChapter].end()
@@ -136,6 +134,8 @@ export default class ChapterHandler {
       this.timelineChapDisplay.childNodes[1].style.background =
         this.chapters[this.currentChapter].timelineColor
     }
+    this.chapProgress = this.globProgress % 1
+    this.chapters[this.currentChapter].progress = this.chapProgress
   }
 
   updateTimelineDisplay(title, subtitle) {

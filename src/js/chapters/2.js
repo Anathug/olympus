@@ -1,6 +1,7 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopRepeat, DirectionalLight } from 'three'
+import { AnimationMixer, LoopRepeat, DirectionalLight, Vector3, Object3D } from 'three'
 import { Howl } from 'howler'
+import ParticleSystem from '../World/Thruster'
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -65,6 +66,30 @@ c.init = options => {
     src: ['./sounds/chap02_r.mp3'],
   })
   c.currentSound = c.soundN
+
+  c.particleSystem1Container = new Object3D()
+  c.gltf.scene.children[9].add(c.particleSystem1Container)
+  c.particleSystem1Container.position.y -= 0
+
+  c.particleSystem1 = new ParticleSystem({
+    parent: c.particleSystem1Container,
+    camera: c.cams[0],
+    assets: c.assets,
+    offset: new Vector3(0, 10, 0)
+  });
+
+  c.particleSystem2Container = new Object3D()
+  c.gltf.scene.children[20].add(c.particleSystem2Container)
+  c.particleSystem2Container.position.y += 1
+  console.log(c.particleSystem2Container)
+
+  c.particleSystem2 = new ParticleSystem({
+    parent: c.particleSystem2Container,
+    camera: c.cams[0],
+    assets: c.assets,
+    offset: new Vector3(0, 0, 0)
+  });
+  c.oldProg = 0
 }
 
 c.start = () => {
@@ -86,15 +111,30 @@ c.start = () => {
   c.switchHDRI()
   c.changeFog(150, 10, 0x010218)
   initActiveClassCamera(c.firstIndexCamera)
+  c.oldProg = c.progress
+  console.log(c.oldProg, c.progress)
+
 }
 
 c.update = () => {
-  if (c.progress < 0.47)
+
+  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.0), 0.4) - Math.min(Math.max(c.oldProg, 0.0), 0.4)) * 40)
+  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.47), 1.0) - Math.min(Math.max(c.oldProg, 0.47), 1.0)) * 40)
+  console.log(c.progress)
+  if (c.progress < 0.47) {
     c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
-  else if (c.progress < 0.65) c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
-  else if (c.progress < 0.85)
+  }
+  else if (c.progress < 0.65) {
+    c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
+  }
+  else if (c.progress < 0.85) {
     c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
-  else c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
+  }
+  else {
+    c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
+  }
+  c.oldProg = c.progress
+
 
   c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration - 0.01))
   let playbackRate =
