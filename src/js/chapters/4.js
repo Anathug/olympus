@@ -2,6 +2,9 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopOnce, AmbientLight } from 'three'
 
 let c = new Chapter(6)
+c.title = 'Step c01'
+c.subtitle = 'the journey to mars'
+c.timelineColor = '#e74c3c'
 
 c.init = options => {
   c.assets = options.assets
@@ -37,6 +40,7 @@ c.start = () => {
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
   c.switchHDRI('landing-zone')
   c.changeFog(10, 0, c.marscColor)
@@ -46,6 +50,14 @@ c.start = () => {
 
 c.update = () => {
   c.mixer.setTime(c.progress * c.animationDuration)
+  console.log(c.progress)
+
+  if (c.progress < 0.2)
+    c.handler.updateTimelineDisplay('Step C01', 'the journey to mars')
+  else if (c.progress < 0.95)
+    c.handler.updateTimelineDisplay('Step C02', 'landing of olympus on the martian surface')
+  else
+    c.handler.updateTimelineDisplay('Step C03', 'olympus III touchdown')
 }
 
 c.end = () => {
