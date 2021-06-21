@@ -83,6 +83,8 @@ export default class ParticleSystem {
         this._camera = params.camera;
         this._particles = [];
 
+        this.offset = params.offset
+
         this._geometry = new THREE.BufferGeometry();
         this._geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3));
         this._geometry.setAttribute('size', new THREE.Float32BufferAttribute([], 1));
@@ -97,7 +99,7 @@ export default class ParticleSystem {
             return a + t * (b - a);
         });
         this._alphaSpline.AddPoint(0.0, 0.0);
-        this._alphaSpline.AddPoint(0.02, 1.0);
+        this._alphaSpline.AddPoint(0.01, 1.0);
         this._alphaSpline.AddPoint(0.6, 1.0);
         this._alphaSpline.AddPoint(1.0, 0.0);
 
@@ -111,22 +113,13 @@ export default class ParticleSystem {
         this._sizeSpline = new LinearSpline((t, a, b) => {
             return a + t * (b - a);
         });
-        this._sizeSpline.AddPoint(0.0, 1.0);
-        this._sizeSpline.AddPoint(0.5, 5.0);
-        this._sizeSpline.AddPoint(1.0, 1.0);
-
-        // document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
+        this._sizeSpline.AddPoint(0.0, 0.0);
+        this._sizeSpline.AddPoint(0.01, 1.5);
+        this._sizeSpline.AddPoint(0.5, 6.0);
+        this._sizeSpline.AddPoint(1.0, 4);
 
         this._UpdateGeometry();
     }
-
-    // _onKeyUp(event) {
-    //     switch (event.keyCode) {
-    //         case 32: // SPACE
-    //             this._AddParticles();
-    //             break;
-    //     }
-    // }
 
     _AddParticles(timeElapsed) {
         if (!this.gdfsghk) {
@@ -137,19 +130,19 @@ export default class ParticleSystem {
         this.gdfsghk -= n / 75.0;
 
         for (let i = 0; i < n; i++) {
-            const life = (Math.random() * 0.75 + 0.25) * 10.0;
+            const life = (Math.random() * 0.75 + 0.25) * 3.0;
             this._particles.push({
                 position: new THREE.Vector3(
-                    (Math.random() * 2 - 1) * 1.0,
-                    0,//(Math.random() * 2 - 1) * 1.0,
-                    (Math.random() * 2 - 1) * 1.0),
+                    this.offset.x + (Math.random() * 2 - 1) * 0.25,
+                    this.offset.y + 0,
+                    this.offset.z + (Math.random() * 2 - 1) * 0.25),
                 size: (Math.random() * 0.5 + 0.5) * 15.0,
                 colour: new THREE.Color(),
                 alpha: 1.0,
                 life: life,
                 maxLife: life,
                 rotation: Math.random() * 2.0 * Math.PI,
-                velocity: new THREE.Vector3(0, -0.5, 0),
+                velocity: new THREE.Vector3(0, -2, 0),
             });
         }
     }
@@ -225,9 +218,10 @@ export default class ParticleSystem {
         });
     }
 
-    Step(timeElapsed) {
+    Step(timeElapsed, addCondition = true) {
         let tE = Math.floor(timeElapsed * 1000) / 1000
-        this._AddParticles(tE);
+        if (addCondition)
+            this._AddParticles(tE);
         this._UpdateParticles(tE);
         this._UpdateGeometry();
     }

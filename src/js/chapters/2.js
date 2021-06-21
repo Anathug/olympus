@@ -75,19 +75,18 @@ c.init = options => {
     parent: c.particleSystem1Container,
     camera: c.cams[0],
     assets: c.assets,
-    offset: new Vector3(0, 10, 0)
+    offset: new Vector3(0, 0.02, 0)
   });
 
   c.particleSystem2Container = new Object3D()
   c.gltf.scene.children[20].add(c.particleSystem2Container)
   c.particleSystem2Container.position.y += 1
-  console.log(c.particleSystem2Container)
 
   c.particleSystem2 = new ParticleSystem({
     parent: c.particleSystem2Container,
     camera: c.cams[0],
     assets: c.assets,
-    offset: new Vector3(0, 0, 0)
+    offset: new Vector3(0, 0.02, 0)
   });
   c.oldProg = 0
 }
@@ -112,15 +111,12 @@ c.start = () => {
   c.changeFog(150, 10, 0x010218)
   initActiveClassCamera(c.firstIndexCamera)
   c.oldProg = c.progress
-  console.log(c.oldProg, c.progress)
-
 }
 
 c.update = () => {
 
-  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.0), 0.4) - Math.min(Math.max(c.oldProg, 0.0), 0.4)) * 40)
-  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.47), 1.0) - Math.min(Math.max(c.oldProg, 0.47), 1.0)) * 40)
-  console.log(c.progress)
+  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
+  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
   if (c.progress < 0.47) {
     c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
   }
@@ -168,6 +164,7 @@ c.update = () => {
   }
 
   c.currentSound.rate(Math.abs(playbackRate))
+  c.currentSound.volume(Math.min(1 / Math.abs(playbackRate), 1.0))
 }
 
 // c.wheel = () => {
