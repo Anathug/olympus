@@ -66,9 +66,8 @@ c.init = options => {
     src: ['./sounds/chap02_r.mp3'],
   })
   c.currentSound = c.soundN
-
   c.particleSystem1Container = new Object3D()
-  c.gltf.scene.children[9].add(c.particleSystem1Container)
+  c.gltf.scene.children[7].add(c.particleSystem1Container)
   c.particleSystem1Container.position.y -= 0
 
   c.particleSystem1 = new ParticleSystem({
@@ -79,7 +78,7 @@ c.init = options => {
   });
 
   c.particleSystem2Container = new Object3D()
-  c.gltf.scene.children[20].add(c.particleSystem2Container)
+  c.gltf.scene.children[18].add(c.particleSystem2Container)
   c.particleSystem2Container.position.y += 1
 
   c.particleSystem2 = new ParticleSystem({

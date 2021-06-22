@@ -84,6 +84,8 @@ export default class ParticleSystem {
         this._particles = [];
 
         this.offset = params.offset
+        this.scale = params.scale || 1
+        console.log(this.scale)
 
         this._geometry = new THREE.BufferGeometry();
         this._geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3));
@@ -100,7 +102,7 @@ export default class ParticleSystem {
         });
         this._alphaSpline.AddPoint(0.0, 0.0);
         this._alphaSpline.AddPoint(0.01, 1.0);
-        this._alphaSpline.AddPoint(0.6, 1.0);
+        this._alphaSpline.AddPoint(0.4, 1.0);
         this._alphaSpline.AddPoint(1.0, 0.0);
 
         this._colourSpline = new LinearSpline((t, a, b) => {
@@ -115,8 +117,8 @@ export default class ParticleSystem {
         });
         this._sizeSpline.AddPoint(0.0, 0.0);
         this._sizeSpline.AddPoint(0.01, 1.5);
-        this._sizeSpline.AddPoint(0.5, 6.0);
-        this._sizeSpline.AddPoint(1.0, 4);
+        this._sizeSpline.AddPoint(0.5, 4);
+        this._sizeSpline.AddPoint(1.0, 3);
 
         this._UpdateGeometry();
     }
@@ -136,7 +138,7 @@ export default class ParticleSystem {
                     this.offset.x + (Math.random() * 2 - 1) * 0.25,
                     this.offset.y + 0,
                     this.offset.z + (Math.random() * 2 - 1) * 0.25),
-                size: (Math.random() * 0.5 + 0.5) * 15.0,
+                size: (Math.random() * 0.5 + 0.5) * 15.0 * this.scale,
                 colour: new THREE.Color(),
                 alpha: 1.0,
                 life: life,

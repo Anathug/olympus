@@ -1,7 +1,9 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopOnce, AmbientLight } from 'three'
+import { AnimationMixer, LoopOnce, AmbientLight, Object3D, Vector3 } from 'three'
+import ParticleSystem from '../World/Thruster'
+import lerp from '../Tools/Lerp'
 
-let c = new Chapter(6)
+let c = new Chapter(4)
 
 c.init = options => {
   c.assets = options.assets
@@ -30,6 +32,19 @@ c.init = options => {
   createAnimation()
   createLights()
   c.hideObjects(c.objects)
+
+  c.particleSystemContainer = new Object3D()
+  console.log(c.gltf)
+  c.gltf.scene.children[3].add(c.particleSystemContainer)
+  c.particleSystemContainer.position.y -= 0
+
+  c.particleSystem = new ParticleSystem({
+    parent: c.particleSystemContainer,
+    camera: c.cams[0],
+    assets: c.assets,
+    offset: new Vector3(0, 0.02, 0),
+    scale: 0.03
+  });
 }
 
 c.start = () => {
@@ -38,14 +53,19 @@ c.start = () => {
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.switchHDRI('landing-zone')
   c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
   initActiveClassCamera(c.firstIndexCamera)
+  c.oldProg = c.progress
 }
 
 c.update = () => {
   c.mixer.setTime(c.progress * c.animationDuration)
+  c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
+  console.log(c.progress)
+  c.oldProg = c.progress
 }
 
 c.end = () => {
