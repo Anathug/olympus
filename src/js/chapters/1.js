@@ -1,29 +1,34 @@
 import Chapter from '../Chapter'
-import Cockpit from '../World/chapter_1/Cockpit'
-import gsap from 'gsap'
+import { AnimationMixer, LoopRepeat } from 'three'
 
 let c = new Chapter(1)
 c.title = 'Step A01'
 c.subtitle = 'Pre-launch countdown'
 c.timelineColor = '#2ecc71'
-const startButton = document.querySelector('.chapter_1 button')
 
-c.init = (options) => {
-  c.camera = options.world.camera.camera
-  c.world = options.world
-  c.mouse = c.world.mouse.mouse
+c.init = options => {
+  c.assets = options.assets
   c.debug = options.debug
+  c.world = options.world
+  c.camera = options.world.camera.camera
+  c.mouse = c.world.mouse.mouse
+  c.activecam = 0
+  c.firstIndexCamera = 0
+  c.cams = []
   c.allowMouseMove = false
-  createCockpit(options)
+  createGltf()
+  createGltfCams()
+  createAnimation()
   c.hideObjects(c.objects)
 }
 
 c.start = () => {
   c.showChapter('chapter_1')
   c.showObjects(c.objects)
-  c.allowMouseMove = true
+  c.createCams(c.cams)
+  initActiveCamera(c.firstIndexCamera)
   setCameraPosition()
-  setEvents()
+  c.allowMouseMove = true
 }
 
 c.update = () => {
@@ -35,7 +40,7 @@ c.update = () => {
 c.end = () => {
   c.hideChapter('chapter_1')
   c.hideObjects(c.objects)
-  removeEvents()
+  c.deleteCams()
 }
 
 const setCameraPosition = () => {
@@ -43,32 +48,48 @@ const setCameraPosition = () => {
   c.camera.rotation.x = -0.1
 }
 
-const createCockpit = (options) => {
-  c.cockpit = new Cockpit(options)
-  c.objects.push(c.cockpit.container)
-  c.world.container.add(c.cockpit.container)
+const createGltf = () => {
+  c.gltf = c.assets.models.animations.chap01
+  c.world.container.add(c.gltf.scene)
+  c.objects.push(c.gltf.scene)
 }
-const mouseMove = (camera) => {
-  gsap.to(camera.position, {
-    x: c.mouse.x / 5,
-    duration: 2,
-    ease: 'power3.out'
+
+const createAnimation = () => {
+  const clips = c.assets.models.animations.chap01.animations
+  c.mixer = new AnimationMixer(c.gltf.scene)
+  c.animationDuration = 0
+  clips.forEach(clip => {
+    c.mixer.clipAction(clip).setLoop(LoopRepeat)
+    c.mixer.clipAction(clip).reset().play()
+    if (clip.duration > c.animationDuration) c.animationDuration = clip.duration
+  })
+  clips.forEach(clip => {
+    clip.duration = c.animationDuration
   })
 }
 
-const setEvents = () => {
-  startButton.addEventListener('click', chapterEnd, {
-    once: true
+const createGltfCams = () => {
+  c.gltf.scene.traverse(object => {
+    if (object.isCamera) {
+      console.log(object);
+      c.cams.push(object)
+    }
   })
 }
 
-const removeEvents = () => {
-  startButton.removeEventListener('click', chapterEnd)
+
+// const mouseMove = (camera) => {
+//   gsap.to(camera.position, {
+//     x: c.mouse.x / 5,
+//     duration: 2,
+//     ease: 'power3.out'
+//   })
+// }
+
+const initActiveCamera = i => {
+  c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+  c.cameraButtons[i].classList.add('is-active')
+  c.world.renderer.switchCam(c.cams[i])
 }
 
-const chapterEnd = () => {
-  c.nextChapter()
-}
-
-
-export default c;
+export default c
