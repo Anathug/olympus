@@ -1,6 +1,7 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopRepeat, DirectionalLight, Color } from 'three'
+import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
 import { Howl } from 'howler'
+import ParticleSystem from '../World/Thruster'
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -15,8 +16,8 @@ c.init = options => {
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
-  c.firstIndexCamera = 1
-  c.activeCam = 1
+  c.firstIndexCamera = 0
+  c.activeCam = 0
   c.cams = []
   c.directionalLights = [
     {
@@ -62,6 +63,28 @@ c.init = options => {
     src: ['./sounds/chap02_r.mp3'],
   })
   c.currentSound = c.soundN
+  c.particleSystem1Container = new Object3D()
+  c.gltf.scene.children[7].add(c.particleSystem1Container)
+  c.particleSystem1Container.position.y -= 0
+
+  c.particleSystem1 = new ParticleSystem({
+    parent: c.particleSystem1Container,
+    camera: c.cams[0],
+    assets: c.assets,
+    offset: new Vector3(0, 0.02, 0)
+  });
+
+  c.particleSystem2Container = new Object3D()
+  c.gltf.scene.children[18].add(c.particleSystem2Container)
+  c.particleSystem2Container.position.y += 1
+
+  c.particleSystem2 = new ParticleSystem({
+    parent: c.particleSystem2Container,
+    camera: c.cams[0],
+    assets: c.assets,
+    offset: new Vector3(0, 0.02, 0)
+  });
+  c.oldProg = 0
 }
 
 c.start = () => {
@@ -81,15 +104,23 @@ c.start = () => {
   c.switchHDRI()
   c.changeFog(150, 10, 0x010218)
   initActiveCamera(c.firstIndexCamera)
+  c.oldProg = c.progress
+  c.soundR.rate(1)
+  c.soundR.volume(1)
+  c.soundN.rate(1)
+  c.soundN.volume(1)
 }
 
 c.update = () => {
-  if (0.37 > c.progress && c.progress > 0.36) forceSwitchCam(1)
-  if (0.38 > c.progress && c.progress > 0.37 && !c.reversed) forceSwitchCam(2)
+
+  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
+  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
+  if (0.37 > c.progress && c.progress > 0.36) forceSwitchCam(0)
+  if (0.38 > c.progress && c.progress > 0.37 && !c.reversed) forceSwitchCam(1)
   if (c.progress < 0.38) {
-    c.disableCam(2)
+    c.disableCam(1)
   } else {
-    c.enableCam(2)
+    c.enableCam(1)
   }
   if (c.progress < 0.47)
     c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
@@ -97,7 +128,12 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
   } else if (c.progress < 0.85)
     c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
-  else c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
+
+  else {
+    c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
+  }
+  c.oldProg = c.progress
+
 
   c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration - 0.01))
   let playbackRate =
@@ -107,8 +143,8 @@ c.update = () => {
   if (playbackRate === 0) {
     playbackRate = 0.0000000000001
   }
-  if (c.activeCam === 1) c.earth.container.position.y = -90 - c.progress * 5
-  if (c.activeCam === 2) c.earth.container.position.y = -180 - c.progress * 20
+  if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 5
+  if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 20
   if (playbackRate > 0) {
     if (c.reversed) {
       //was rev but no more
@@ -132,6 +168,7 @@ c.update = () => {
   }
 
   c.currentSound.rate(Math.abs(playbackRate))
+  c.currentSound.volume(Math.min(1 / Math.abs(playbackRate), 1.0))
   c.changeFog(150 + c.progress * 500, 10 + c.progress * 500, 0x010218)
   c.world.scene.background.lerpColors(new Color(0x010218), new Color(0x000000), c.progress)
 }
