@@ -15,7 +15,7 @@ c.init = options => {
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
-  c.firstIndexCamera = 1
+  c.firstIndexCamera = 0
   c.cams = []
   c.directionalLights = [
     {
@@ -110,10 +110,15 @@ c.start = () => {
   c.changeFog(150, 10, 0x010218)
   initActiveClassCamera(c.firstIndexCamera)
   c.oldProg = c.progress
+  console.log('chap02 start')
+
+  c.soundR.rate(1)
+  c.soundR.volume(1)
+  c.soundN.rate(1)
+  c.soundN.volume(1)
 }
 
 c.update = () => {
-
   c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
   c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
   if (c.progress < 0.47) {
@@ -165,12 +170,6 @@ c.update = () => {
   c.currentSound.rate(Math.abs(playbackRate))
   c.currentSound.volume(Math.min(1 / Math.abs(playbackRate), 1.0))
 }
-
-// c.wheel = () => {
-//   c.sound.stop()
-//   c.sound.seek(c.progress * c.sound.duration())
-//   c.sound.play()
-// }
 
 c.end = () => {
   c.hideChapter('chapter_2')
