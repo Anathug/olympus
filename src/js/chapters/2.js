@@ -82,6 +82,7 @@ c.init = options => {
 }
 
 c.start = () => {
+  c.soundHandler.start(c.progress)
   c.showChapter('chapter_2')
   c.showObjects(c.objects)
   c.handler.allowScroll = true
@@ -94,25 +95,25 @@ c.start = () => {
   c.changeFog(150, 10, 0x010218)
   initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
-  c.soundHandler.start(c.progress)
 }
 
 c.update = () => {
+  console.log(c.progress)
+  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.044), 0.3) - Math.min(Math.max(c.oldProg, 0.044), 0.3)) * 50, c.progress < 0.20)
+  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.232), 0.6) - Math.min(Math.max(c.oldProg, 0.232), 0.6)) * 50, c.progress < 0.50)
 
-  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
-  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
-  if (0.37 > c.progress && c.progress > 0.36) forceSwitchCam(0)
-  if (0.38 > c.progress && c.progress > 0.37) forceSwitchCam(1)
-  if (c.progress < 0.38) {
+  if (0.16 > c.progress && c.progress > 0.15) forceSwitchCam(0)
+  if (0.17 > c.progress && c.progress > 0.16) forceSwitchCam(1)
+  if (c.progress < 0.16) {
     c.disableCam(1)
   } else {
     c.enableCam(1)
   }
-  if (c.progress < 0.47)
+  if (c.progress < 0.15)
     c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
-  else if (c.progress < 0.65) {
+  else if (c.progress < 0.2) {
     c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
-  } else if (c.progress < 0.85)
+  } else if (c.progress < 0.3)
     c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
 
   else {

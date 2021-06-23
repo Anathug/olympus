@@ -66,7 +66,5 @@ export default class SoundHandler {
         this.soundR.stop()
         this.currentSound.stop()
     }
-
-
 }
 
