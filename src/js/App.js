@@ -12,8 +12,6 @@ import Camera from './Camera'
 import World from './World/index'
 
 import Starship from './World/Starship.js'
-import Mars from './World/Mars.js'
-import Earth from './World/Earth.js'
 
 import postVertexShader from '../shaders/post/vertexShader.glsl'
 import postFragmentShader from '../shaders/post/fragmentShader.glsl'
@@ -53,17 +51,14 @@ export default class App {
 
     this.switchHDRI = this.switchHDRI.bind(this)
     this.changeFog = this.changeFog.bind(this)
-
+    this.setConfig()
     this.setScene()
     this.setSpaceHdri()
     this.setStarship()
-    // this.setMars()
-    this.setEarth()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()
     this.setWorld()
-    this.setConfig()
   }
 
   setScene() {
@@ -223,24 +218,6 @@ export default class App {
     this.scene.add(this.starship.container)
   }
 
-  setMars() {
-    this.mars = new Mars({
-      time: this.time,
-      assets: this.assets,
-      world: this.world,
-      debug: this.debug,
-    })
-    this.scene.add(this.mars.container)
-  }
-
-  setEarth() {
-    this.earth = new Earth({
-      time: this.time,
-      assets: this.assets,
-      debug: this.debug,
-    })
-    this.scene.add(this.earth.container)
-  }
   setCamera() {
     this.camera = new Camera({
       sizes: this.sizes,
@@ -271,26 +248,13 @@ export default class App {
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
     })
+    console.log(this.debug)
     this.scene.add(this.world.container)
   }
 
   setConfig() {
     if (window.location.hash === '#debug') {
       this.debug = new dat.GUI({ width: 450 })
-    }
-    if (this.debug) {
-      this.debugFolder = this.debug.addFolder('Fog')
-      this.debugFolder.open()
-      this.debugFolder
-        .addColor(this.params.fog, 'color')
-        .name('Color')
-        .onChange(() => {
-          this.scene.fog.color = new Color(this.params.color)
-        })
-      this.debugFolder.add(this.scene.fog, 'far').step(1).min(0).max(100).name('Far')
-      this.debugFolder.add(this.scene.fog, 'near').step(0.1).min(0).max(10).name('Near')
-      this.debugFolder.open()
-      this.debugFolder.add(this.bloomPass, 'strength').step(0.1).min(0).max(2).name('strength')
     }
   }
 }
