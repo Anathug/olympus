@@ -60,6 +60,7 @@
     "gsap": "^3.6.0",
     "howler": "^2.2.1",
     "lut-loader": "^0.0.2",
-    "regenerator-runtime": "^0.13.7"
+    "regenerator-runtime": "^0.13.7",
+    "stats.js": "^0.17.0"
   }
 }

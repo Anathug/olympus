@@ -1,5 +1,5 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopRepeat, DirectionalLight, Vector3, Object3D } from 'three'
+import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
 import { Howl } from 'howler'
 import ParticleSystem from '../World/Thruster'
 
@@ -12,10 +12,12 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
+  c.earth = options.earth
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
   c.firstIndexCamera = 0
+  c.activeCam = 0
   c.cams = []
   c.directionalLights = [
     {
@@ -24,7 +26,7 @@ c.init = options => {
         x: -30,
         y: 10,
         z: 0,
-        intensity: 0.5,
+        intensity: 0.2,
       },
     },
     {
@@ -33,7 +35,7 @@ c.init = options => {
         x: 50,
         y: 10,
         z: -45,
-        intensity: 1.5,
+        intensity: 1,
       },
     },
     {
@@ -42,7 +44,7 @@ c.init = options => {
         x: 50,
         y: 10,
         z: 45,
-        intensity: 1.5,
+        intensity: 1,
       },
     },
   ]
@@ -53,11 +55,6 @@ c.init = options => {
 
   c.hideObjects(c.objects)
   c.audio = c.assets.sounds.chap02
-
-  // c.listener = new AudioListener();
-  // c.world.container.add(c.listener);
-  // c.sound = new Audio(c.listener);
-  // c.sound.setBuffer(c.assets.sounds.chap02);
 
   c.soundN = new Howl({
     src: ['./sounds/chap02.mp3'],
@@ -97,21 +94,17 @@ c.start = () => {
   c.handler.autoScroll = true
   c.duration = c.soundN.duration()
   c.handler.setAutoScrollSpeed(c.duration)
-  c.world.renderer.switchCam(c.cams[1])
   c.reversed = false
-
   c.soundN.seek(c.progress * c.duration)
   c.soundR.seek(c.duration - c.soundN.seek())
   c.soundN.play()
   c.soundR.stop()
-  c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.earth.container.visible = true
   c.createCams(c.cams)
   c.switchHDRI()
   c.changeFog(150, 10, 0x010218)
-  initActiveClassCamera(c.firstIndexCamera)
+  initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
-  console.log('chap02 start')
-
   c.soundR.rate(1)
   c.soundR.volume(1)
   c.soundN.rate(1)
@@ -119,17 +112,23 @@ c.start = () => {
 }
 
 c.update = () => {
+
   c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
   c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
-  if (c.progress < 0.47) {
-    c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
+  if (0.37 > c.progress && c.progress > 0.36) forceSwitchCam(0)
+  if (0.38 > c.progress && c.progress > 0.37 && !c.reversed) forceSwitchCam(1)
+  if (c.progress < 0.38) {
+    c.disableCam(1)
+  } else {
+    c.enableCam(1)
   }
+  if (c.progress < 0.47)
+    c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
   else if (c.progress < 0.65) {
     c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
-  }
-  else if (c.progress < 0.85) {
+  } else if (c.progress < 0.85)
     c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
-  }
+
   else {
     c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
   }
@@ -144,7 +143,8 @@ c.update = () => {
   if (playbackRate === 0) {
     playbackRate = 0.0000000000001
   }
-
+  if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 5
+  if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 20
   if (playbackRate > 0) {
     if (c.reversed) {
       //was rev but no more
@@ -169,6 +169,8 @@ c.update = () => {
 
   c.currentSound.rate(Math.abs(playbackRate))
   c.currentSound.volume(Math.min(1 / Math.abs(playbackRate), 1.0))
+  c.changeFog(150 + c.progress * 500, 10 + c.progress * 500, 0x010218)
+  c.world.scene.background.lerpColors(new Color(0x010218), new Color(0x000000), c.progress)
 }
 
 c.end = () => {
@@ -176,6 +178,7 @@ c.end = () => {
   c.hideObjects(c.objects)
   c.deleteCams()
   c.allowScroll = false
+  c.earth.container.visible = false
   c.world.renderer.switchCam('default')
 }
 
@@ -218,9 +221,17 @@ const createLights = () => {
   })
 }
 
-const initActiveClassCamera = i => {
-  const cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
-  cameraButtons[i].classList.add('is-active')
+const forceSwitchCam = i => {
+  c.world.renderer.switchCam(c.cams[i])
+  c.activeCam = i
+  c.cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
+  c.cameraButtons[i].classList.add('is-active')
+}
+
+const initActiveCamera = i => {
+  c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+  c.cameraButtons[i].classList.add('is-active')
+  c.world.renderer.switchCam(c.cams[i])
 }
 
 export default c

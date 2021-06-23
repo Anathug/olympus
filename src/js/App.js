@@ -1,11 +1,11 @@
-import { Scene, sRGBEncoding, WebGLRenderer, Color, CubeTexture, Fog } from 'three'
+import { Scene, sRGBEncoding, WebGLRenderer, Color, CubeTexture, Fog, Vector2 } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
-// import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js'
 import { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader.js'
-
+import * as Stats from 'stats.js'
 import * as dat from 'dat.gui'
 
 import Camera from './Camera'
@@ -13,6 +13,7 @@ import World from './World/index'
 
 import Starship from './World/Starship.js'
 import Mars from './World/Mars.js'
+import Earth from './World/Earth.js'
 
 import postVertexShader from '../shaders/post/vertexShader.glsl'
 import postFragmentShader from '../shaders/post/fragmentShader.glsl'
@@ -30,15 +31,23 @@ export default class App {
         near: 10,
         far: 150,
       },
+      bloomPass: {
+        exposure: 1,
+        bloomStrength: 0.2,
+        bloomThreshold: 0,
+        bloomRadius: 0,
+      },
     }
 
     this.counter = 0.0
     this.starship = null
     this.myEffect = null
+    this.bloomPass = null
     this.lut = true
     this.composer = null
     this.spaceCubeMap = null
     this.landingZoneCubeMap = null
+    this.stats = null
 
     this.postprocessing = true
 
@@ -47,19 +56,19 @@ export default class App {
 
     this.setScene()
     this.setSpaceHdri()
-    this.setConfig()
     this.setStarship()
-    this.setMars()
+    // this.setMars()
+    this.setEarth()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()
     this.setWorld()
+    this.setConfig()
   }
 
   setScene() {
     this.scene = new Scene()
     this.scene.fog = new Fog(this.params.fog.color, this.params.fog.near, this.params.fog.far)
-    this.scene.background = new Color(0x010218)
   }
 
   setSpaceHdri() {
@@ -100,17 +109,20 @@ export default class App {
     })
     this.renderer.outputEncoding = sRGBEncoding
 
-    this.renderer.setClearColor(0x212121, 1)
-
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     this.sizes.on('resize', () => {
       this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
+      this.activeCam.aspect = window.innerWidth / window.innerHeight
+      this.activeCam.updateProjectionMatrix()
     })
   }
 
   setRenderer() {
     this.activeCam = this.camera.camera
+    this.stats = new Stats()
+    this.stats.showPanel(1)
+    document.body.appendChild(this.stats.dom)
     if (this.postprocessing) {
       this.composer = new EffectComposer(this.renderer)
       this.renderPass = new RenderPass(this.scene, this.activeCam)
@@ -153,19 +165,30 @@ export default class App {
         lutPass.intensity = 0.2
         this.composer.addPass(lutPass)
       })
+
+      this.bloomPass = new UnrealBloomPass(
+        new Vector2(window.innerWidth, window.innerHeight),
+        1.5,
+        0.4,
+        0.85
+      )
+      this.bloomPass.threshold = this.params.bloomPass.bloomThreshold
+      this.bloomPass.strength = this.params.bloomPass.bloomStrength
+      this.bloomPass.radius = this.params.bloomPass.bloomRadius
+
+      this.composer.addPass(this.bloomPass)
     }
 
     this.time.on('tick', () => {
       this.counter += 0.001
-      if (!this.lut) {
-        // this.composer.removePass(lutPass)
-      }
+      this.stats.begin()
       if (this.postprocessing) {
         customPass.uniforms['amount'].value = this.counter
         this.composer.render()
       } else {
         this.renderer.render(this.scene, this.activeCam)
       }
+      this.stats.end()
     })
 
     if (this.debug) {
@@ -208,6 +231,15 @@ export default class App {
       debug: this.debug,
     })
     this.scene.add(this.mars.container)
+  }
+
+  setEarth() {
+    this.earth = new Earth({
+      time: this.time,
+      assets: this.assets,
+      debug: this.debug,
+    })
+    this.scene.add(this.earth.container)
   }
   setCamera() {
     this.camera = new Camera({
@@ -257,6 +289,8 @@ export default class App {
         })
       this.debugFolder.add(this.scene.fog, 'far').step(1).min(0).max(100).name('Far')
       this.debugFolder.add(this.scene.fog, 'near').step(0.1).min(0).max(10).name('Near')
+      this.debugFolder.open()
+      this.debugFolder.add(this.bloomPass, 'strength').step(0.1).min(0).max(2).name('strength')
     }
   }
 }
