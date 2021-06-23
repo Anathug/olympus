@@ -1,7 +1,9 @@
 import Chapter from '../Chapter'
-import { AnimationMixer, LoopOnce, AmbientLight } from 'three'
+import { AnimationMixer, LoopOnce, AmbientLight, Object3D, Vector3 } from 'three'
+import ParticleSystem from '../World/Thruster'
+import lerp from '../Tools/Lerp'
 
-let c = new Chapter(6)
+let c = new Chapter(4)
 c.title = 'Step c01'
 c.subtitle = 'the journey to mars'
 c.timelineColor = '#e74c3c'
@@ -33,6 +35,18 @@ c.init = options => {
   createAnimation()
   createLights()
   c.hideObjects(c.objects)
+
+  c.particleSystemContainer = new Object3D()
+  c.gltf.scene.children[3].add(c.particleSystemContainer)
+  c.particleSystemContainer.position.y -= 0
+
+  c.particleSystem = new ParticleSystem({
+    parent: c.particleSystemContainer,
+    camera: c.cams[0],
+    assets: c.assets,
+    offset: new Vector3(0, 0.02, 0),
+    scale: 0.03
+  });
 }
 
 c.start = () => {
@@ -42,15 +56,16 @@ c.start = () => {
   c.handler.autoScroll = true
   c.handler.setAutoScrollSpeed(c.animationDuration)
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
+  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.switchHDRI('landing-zone')
   c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
   initActiveClassCamera(c.firstIndexCamera)
+  c.oldProg = c.progress
 }
 
 c.update = () => {
   c.mixer.setTime(c.progress * c.animationDuration)
-  console.log(c.progress)
 
   if (c.progress < 0.2)
     c.handler.updateTimelineDisplay('Step C01', 'the journey to mars')
@@ -58,6 +73,11 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step C02', 'landing of olympus on the martian surface')
   else
     c.handler.updateTimelineDisplay('Step C03', 'olympus III touchdown')
+
+
+  c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
+  c.oldProg = c.progress
+
 }
 
 c.end = () => {

@@ -5,7 +5,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background:black;
+  background: black;
   color: white;
   font-family: 'Favorit Pro', sans-serif;
   font-weight: 300;
@@ -70,6 +70,7 @@ p {
   width: 100%;
   z-index: 100;
   pointer-events: none;
+  opacity: 0;
   .bottom,
   .top {
     height: 8%;
@@ -207,6 +208,8 @@ p {
       min-width: 6rem;
       margin: 0.5rem 0;
       pointer-events: auto;
+      transition: transform cubic-bezier(0.65, 0, 0.35, 1) 1s;
+      transform-origin: right;
       span {
         letter-spacing: 3px;
         font-size: 10px;
@@ -326,6 +329,9 @@ p {
         }
       }
     }
+  }
+  .camera-wrapper.is-disabled {
+    transform: scale(0);
   }
 }
 
