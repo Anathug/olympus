@@ -1,7 +1,7 @@
 import Chapter from '../Chapter'
 import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
-import { Howl } from 'howler'
 import ParticleSystem from '../World/Thruster'
+import SoundHandler from '../Tools/SoundHandler'
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -54,15 +54,9 @@ c.init = options => {
   createLights()
 
   c.hideObjects(c.objects)
-  c.audio = c.assets.sounds.chap02
 
-  c.soundN = new Howl({
-    src: ['./sounds/chap02.mp3'],
-  })
-  c.soundR = new Howl({
-    src: ['./sounds/chap02_r.mp3'],
-  })
-  c.currentSound = c.soundN
+  c.soundHandler = new SoundHandler('./sounds/chap02.mp3', './sounds/chap02_r.mp3')
+
   c.particleSystem1Container = new Object3D()
   c.gltf.scene.children[7].add(c.particleSystem1Container)
   c.particleSystem1Container.position.y -= 0
@@ -92,23 +86,15 @@ c.start = () => {
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  c.duration = c.soundN.duration()
+  c.duration = c.soundHandler.duration
   c.handler.setAutoScrollSpeed(c.duration)
-  c.reversed = false
-  c.soundN.seek(c.progress * c.duration)
-  c.soundR.seek(c.duration - c.soundN.seek())
-  c.soundN.play()
-  c.soundR.stop()
   c.earth.container.visible = true
   c.createCams(c.cams)
   c.switchHDRI()
   c.changeFog(150, 10, 0x010218)
   initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
-  c.soundR.rate(1)
-  c.soundR.volume(1)
-  c.soundN.rate(1)
-  c.soundN.volume(1)
+  c.soundHandler.start(c.progress)
 }
 
 c.update = () => {
@@ -116,7 +102,7 @@ c.update = () => {
   c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
   c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
   if (0.37 > c.progress && c.progress > 0.36) forceSwitchCam(0)
-  if (0.38 > c.progress && c.progress > 0.37 && !c.reversed) forceSwitchCam(1)
+  if (0.38 > c.progress && c.progress > 0.37) forceSwitchCam(1)
   if (c.progress < 0.38) {
     c.disableCam(1)
   } else {
@@ -134,41 +120,13 @@ c.update = () => {
   }
   c.oldProg = c.progress
 
-
   c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration - 0.01))
-  let playbackRate =
-    1 +
-    (c.progress * c.duration - (c.reversed ? c.duration - c.soundR.seek() : c.soundN.seek())) * 2
 
-  if (playbackRate === 0) {
-    playbackRate = 0.0000000000001
-  }
   if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 5
   if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 20
-  if (playbackRate > 0) {
-    if (c.reversed) {
-      //was rev but no more
-      c.currentSound = c.soundN
-      c.soundN.play()
-      c.soundN.seek(c.duration - c.soundR.seek())
-      c.soundR.stop()
-      c.reversed = false
-    }
-    c.soundR.seek(c.duration - c.soundN.seek())
-  } else {
-    if (!c.reversed) {
-      //was not rev but now is
-      c.currentSound = c.soundR
-      c.soundR.play()
-      c.soundR.seek(c.duration - c.soundN.seek())
-      c.soundN.stop()
-      c.reversed = true
-    }
-    c.soundN.seek(c.duration - c.soundR.seek())
-  }
 
-  c.currentSound.rate(Math.abs(playbackRate))
-  c.currentSound.volume(Math.min(1 / Math.abs(playbackRate), 1.0))
+  c.soundHandler.update(c.progress)
+
   c.changeFog(150 + c.progress * 500, 10 + c.progress * 500, 0x010218)
   c.world.scene.background.lerpColors(new Color(0x010218), new Color(0x000000), c.progress)
 }
@@ -180,6 +138,7 @@ c.end = () => {
   c.allowScroll = false
   c.earth.container.visible = false
   c.world.renderer.switchCam('default')
+  c.soundHandler.end()
 }
 
 const createGltfCams = () => {
