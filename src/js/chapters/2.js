@@ -25,7 +25,7 @@ c.init = options => {
         x: -30,
         y: 10,
         z: 0,
-        intensity: 0.5,
+        intensity: 0.2,
       },
     },
     {
@@ -34,7 +34,7 @@ c.init = options => {
         x: 50,
         y: 10,
         z: -45,
-        intensity: 1.5,
+        intensity: 1,
       },
     },
     {
@@ -43,7 +43,7 @@ c.init = options => {
         x: 50,
         y: 10,
         z: 45,
-        intensity: 1.5,
+        intensity: 1,
       },
     },
   ]
@@ -76,12 +76,11 @@ c.start = () => {
   c.soundR.seek(c.duration - c.soundN.seek())
   c.soundN.play()
   c.soundR.stop()
-  c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
   c.earth.container.visible = true
   c.createCams(c.cams)
   c.switchHDRI()
   c.changeFog(150, 10, 0x010218)
-  initActiveClassCamera(c.firstIndexCamera)
+  initActiveCamera(c.firstIndexCamera)
 }
 
 c.update = () => {
@@ -192,9 +191,10 @@ const forceSwitchCam = i => {
   c.cameraButtons[i].classList.add('is-active')
 }
 
-const initActiveClassCamera = i => {
+const initActiveCamera = i => {
   c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
   c.cameraButtons[i].classList.add('is-active')
+  c.world.renderer.switchCam(c.cams[i])
 }
 
 export default c

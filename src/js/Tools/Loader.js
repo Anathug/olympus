@@ -23,31 +23,31 @@ export default class Loader extends EventEmitter {
     this.sounds = {}
     this.fonts = {}
 
-    this.timerHours1 = document.getElementById("timerHours1");
-    this.timerMinutes1 = document.getElementById("timerMinutes1");
-    this.timerSeconds1 = document.getElementById("timerSeconds1");
-    this.timerHours2 = document.getElementById("timerHours2");
-    this.timerMinutes2 = document.getElementById("timerMinutes2");
-    this.timerSeconds2 = document.getElementById("timerSeconds2");
+    this.timerHours1 = document.getElementById('timerHours1')
+    this.timerMinutes1 = document.getElementById('timerMinutes1')
+    this.timerSeconds1 = document.getElementById('timerSeconds1')
+    this.timerHours2 = document.getElementById('timerHours2')
+    this.timerMinutes2 = document.getElementById('timerMinutes2')
+    this.timerSeconds2 = document.getElementById('timerSeconds2')
 
-    this.durationTotal = 100000;
-    this.durationLeft = this.durationTotal;
-    let secondsTotal = this.durationLeft;
-    let minutesTotal = secondsTotal / 60;
-    let hoursTotal = minutesTotal / 24;
+    this.durationTotal = 100000
+    this.durationLeft = this.durationTotal
+    let secondsTotal = this.durationLeft
+    let minutesTotal = secondsTotal / 60
+    let hoursTotal = minutesTotal / 24
 
-    let seconds = Math.floor(secondsTotal) % 60;
-    let minutes = Math.floor(minutesTotal) % 60;
-    let hours = Math.floor(hoursTotal) % 24;
+    let seconds = Math.floor(secondsTotal) % 60
+    let minutes = Math.floor(minutesTotal) % 60
+    let hours = Math.floor(hoursTotal) % 24
 
-    this.timerSeconds1.textContent = ("0" + seconds).slice(-2).charAt(0);
-    this.timerSeconds2.textContent = ("0" + seconds).slice(-2).charAt(1);
+    this.timerSeconds1.textContent = ('0' + seconds).slice(-2).charAt(0)
+    this.timerSeconds2.textContent = ('0' + seconds).slice(-2).charAt(1)
 
-    this.timerMinutes1.textContent = ("0" + minutes).slice(-2).charAt(0);
-    this.timerMinutes2.textContent = ("0" + minutes).slice(-2).charAt(1);
+    this.timerMinutes1.textContent = ('0' + minutes).slice(-2).charAt(0)
+    this.timerMinutes2.textContent = ('0' + minutes).slice(-2).charAt(1)
 
-    this.timerHours1.textContent = ("0" + hours).slice(-2).charAt(0);
-    this.timerHours2.textContent = ("0" + hours).slice(-2).charAt(1);
+    this.timerHours1.textContent = ('0' + hours).slice(-2).charAt(0)
+    this.timerHours2.textContent = ('0' + hours).slice(-2).charAt(1)
 
     this.setLoaders()
     this.setRessourcesList()
@@ -142,31 +142,27 @@ export default class Loader extends EventEmitter {
   }
 
   updateProgress() {
-    let secondsTotal = this.durationLeft;
-    let minutesTotal = secondsTotal / 60;
-    let hoursTotal = minutesTotal / 24;
+    let secondsTotal = this.durationLeft
+    let minutesTotal = secondsTotal / 60
+    let hoursTotal = minutesTotal / 24
 
-    let seconds = Math.floor(secondsTotal) % 60;
-    let minutes = Math.floor(minutesTotal) % 60;
-    let hours = Math.floor(hoursTotal) % 24;
+    let seconds = Math.floor(secondsTotal) % 60
+    let minutes = Math.floor(minutesTotal) % 60
+    let hours = Math.floor(hoursTotal) % 24
 
-    
-    this.timerSeconds1.textContent = ("0" + seconds).slice(-2).charAt(0);
-    this.timerSeconds2.textContent = ("0" + seconds).slice(-2).charAt(1);
+    this.timerSeconds1.textContent = ('0' + seconds).slice(-2).charAt(0)
+    this.timerSeconds2.textContent = ('0' + seconds).slice(-2).charAt(1)
 
-    this.timerMinutes1.textContent = ("0" + minutes).slice(-2).charAt(0);
-    this.timerMinutes2.textContent = ("0" + minutes).slice(-2).charAt(1);
+    this.timerMinutes1.textContent = ('0' + minutes).slice(-2).charAt(0)
+    this.timerMinutes2.textContent = ('0' + minutes).slice(-2).charAt(1)
 
-    this.timerHours1.textContent = ("0" + hours).slice(-2).charAt(0);
-    this.timerHours2.textContent = ("0" + hours).slice(-2).charAt(1);
-
-
-
+    this.timerHours1.textContent = ('0' + hours).slice(-2).charAt(0)
+    this.timerHours2.textContent = ('0' + hours).slice(-2).charAt(1)
   }
 
   progress(xhr) {
     if (xhr.lengthComputable) {
-      this.durationLeft = lerp(this.durationTotal, 0, 1 - Math.pow(1 - xhr.loaded / xhr.total, 4));
+      this.durationLeft = lerp(this.durationTotal, 0, 1 - Math.pow(1 - xhr.loaded / xhr.total, 4))
       this.updateProgress()
       if (this.currentPercent === 100) {
         this.currentPercent = 0
@@ -248,7 +244,6 @@ export default class Loader extends EventEmitter {
   }
   loadComplete(ressource, loaded) {
     this.done++
-    // this.changeMaterial(loaded)
     this.createNestedObject(this[`${ressource.type}s`], ressource.name.split('/'), loaded)
     this.trigger('ressourceLoad', [ressource, loaded])
     if (this.total === this.done) {
@@ -262,17 +257,5 @@ export default class Loader extends EventEmitter {
     }
     if (lastName) base = base[lastName] = value
     return base
-  }
-
-  changeMaterial(object) {
-    // if (!object.scene) return
-    // for (let i = 0; i < object.scene.children.length; i++) {
-    //   object.scene.children[i].traverse((child) => {
-    //     if (child.material) {
-    //       let c = child.material.color
-    //       child.material = new MeshToonMaterial({ color: c })
-    //     }
-    //   })
-    // }
   }
 }
