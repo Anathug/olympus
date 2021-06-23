@@ -8,7 +8,7 @@ import Satellite from '../World/Satellite'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
-c.timelineColor = '#e74c3c'
+c.timelineColor = '#F1C40F'
 
 c.init = options => {
   c.camera = options.world.camera.camera

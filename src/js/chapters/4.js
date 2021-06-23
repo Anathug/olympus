@@ -4,6 +4,9 @@ import ParticleSystem from '../World/Thruster'
 import lerp from '../Tools/Lerp'
 
 let c = new Chapter(4)
+c.title = 'Step c01'
+c.subtitle = 'the journey to mars'
+c.timelineColor = '#e74c3c'
 
 c.init = options => {
   c.assets = options.assets
@@ -51,6 +54,7 @@ c.start = () => {
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
   c.handler.setAutoScrollSpeed(c.animationDuration)
   c.switchHDRI('landing-zone')
@@ -62,8 +66,16 @@ c.start = () => {
 
 c.update = () => {
   c.mixer.setTime(c.progress * c.animationDuration)
+
+  if (c.progress < 0.2)
+    c.handler.updateTimelineDisplay('Step C01', 'the journey to mars')
+  else if (c.progress < 0.95)
+    c.handler.updateTimelineDisplay('Step C02', 'landing of olympus on the martian surface')
+  else
+    c.handler.updateTimelineDisplay('Step C03', 'olympus III touchdown')
+
+
   c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
-  console.log(c.progress)
   c.oldProg = c.progress
 
 }
