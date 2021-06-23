@@ -85,7 +85,6 @@ export default class ParticleSystem {
 
         this.offset = params.offset
         this.scale = params.scale || 1
-        console.log(this.scale)
 
         this._geometry = new THREE.BufferGeometry();
         this._geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3));

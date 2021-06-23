@@ -34,7 +34,6 @@ c.init = options => {
   c.hideObjects(c.objects)
 
   c.particleSystemContainer = new Object3D()
-  console.log(c.gltf)
   c.gltf.scene.children[3].add(c.particleSystemContainer)
   c.particleSystemContainer.position.y -= 0
 
@@ -66,6 +65,7 @@ c.update = () => {
   c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
   console.log(c.progress)
   c.oldProg = c.progress
+
 }
 
 c.end = () => {
