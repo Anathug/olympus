@@ -1,27 +1,6 @@
 import * as THREE from 'three'
 import { MeshStandardMaterial } from 'three'
 import { Object3D, SphereGeometry, MeshBasicMaterial, Mesh } from 'three'
-import ParticleSystem, {
-  Body,
-  BoxZone,
-  Emitter,
-  Color,
-  Life,
-  Mass,
-  Alpha,
-  Gravity,
-  Repulsion,
-  VectorVelocity,
-  MeshRenderer,
-  RandomDrift,
-  Position,
-  Force,
-  Rate,
-  Rotate,
-  Scale,
-  Span,
-  Vector3D,
-} from 'three-nebula'
 
 export default class Starship {
   constructor(options) {
@@ -38,7 +17,6 @@ export default class Starship {
     }
 
     this.createStarship = this.createStarship.bind(this)
-    this.createThrusters = this.createThrusters.bind(this)
     this.createStarship()
     this.setScale()
     if (this.debug) {
@@ -51,71 +29,7 @@ export default class Starship {
     this.setMaterial()
     this.container.add(this.starship)
   }
-  createThrusters() {
-    const createEmitter = ({ position, size, body }) => {
-      const emitter = new Emitter()
 
-      return emitter
-        .setRate(new Rate(1, 0.1))
-        .addInitializers([
-          new Mass(1),
-          new Life(5),
-          new Body(body),
-          new VectorVelocity(new Vector3D(0, -50, 0), 10),
-        ])
-        .addBehaviours([
-          new Rotate('random', 'random'),
-          new Scale(7 * size, 20 * size),
-          new Color('#ffd436', '#300500'),
-          //new Color('#300500', '#000000', 0),
-          new RandomDrift(0.2, 0, 0.5),
-          //new Force(0, -0.2, 0),
-
-          new Alpha(1, 0),
-        ])
-        .setPosition(position)
-        .emit()
-    }
-
-    const mesh = this.assets.models.cloud.scene.children[0] //new Mesh(new SphereGeometry(10, 8, 8), new MeshToonMaterial({ color: '#ffd436', emissive: '#300500', transparent: true }))
-    mesh.material.transparent = true
-    const system = new ParticleSystem()
-    const thrustersEmitter1 = createEmitter({
-      position: {
-        x: 0,
-        y: 5,
-        z: 0,
-      },
-      size: 0.8,
-      body: mesh,
-    })
-
-    const thrustersEmitter2 = createEmitter({
-      position: {
-        x: 0,
-        y: 5,
-        z: 16.8,
-      },
-      size: 0.5,
-      body: mesh,
-    })
-
-    const thrustersEmitter3 = createEmitter({
-      position: {
-        x: 0,
-        y: 5,
-        z: -16.8,
-      },
-      size: 0.5,
-      body: mesh,
-    })
-
-    this.thrusters = system
-      .addEmitter(thrustersEmitter1)
-      .addEmitter(thrustersEmitter2)
-      .addEmitter(thrustersEmitter3)
-      .addRenderer(new MeshRenderer(this.container, THREE))
-  }
   setMaterial() {
     const starshipTexture = this.assets.textures.global.starship
     const colorTexture = starshipTexture.MetalPlates007_1K_Color

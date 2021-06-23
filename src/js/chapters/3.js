@@ -8,7 +8,7 @@ import Satellite from '../World/Satellite'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
-c.timelineColor = '#e74c3c'
+c.timelineColor = '#F1C40F'
 
 c.init = options => {
   c.camera = options.world.camera.camera
@@ -16,6 +16,7 @@ c.init = options => {
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
   c.world = options.world
+  c.earth = options.earth
   c.starship = new Starship(options)
   c.satellite = new Satellite(options)
   c.world.container.add(c.starship.container)
@@ -82,10 +83,8 @@ c.start = () => {
 }
 
 c.update = () => {
-  if (c.progress < 0.75)
-    c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
-  else
-    c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
+  if (c.progress < 0.75) c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
+  else c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
 
   if (c.progress < c.freeViewTime) {
     c.controls.enabled = true

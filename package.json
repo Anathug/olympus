@@ -61,6 +61,6 @@
     "howler": "^2.2.1",
     "lut-loader": "^0.0.2",
     "regenerator-runtime": "^0.13.7",
-    "three-nebula": "^10.0.1"
+    "stats.js": "^0.17.0"
   }
 }
