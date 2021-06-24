@@ -16,11 +16,10 @@ export default class ChapterHandler {
     this.renderer = options.renderer
     this.debug = options.debug
     this.starship = options.starship
-    this.mars = options.mars
 
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 1
+    this.workingChapter = 3
     this.autoScrollSpeed = 0.0001
 
     this.chapProgress = 0
