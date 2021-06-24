@@ -2,10 +2,7 @@ import { Object3D, PointLight, Color } from 'three'
 
 export default class PointLightSource {
   constructor(options) {
-    // Set options
     this.debug = options.debug
-
-    // Set up
     this.container = new Object3D()
     this.container.name = 'Point Light'
     this.params = {
@@ -17,7 +14,6 @@ export default class PointLightSource {
     }
 
     this.createPointLight()
-
     if (this.debug) {
       this.setDebug()
     }
@@ -33,7 +29,6 @@ export default class PointLightSource {
     this.container.add(this.light)
   }
   setDebug() {
-    // Color debug
     this.debugFolder = this.debug.addFolder('Point Light')
     this.debugFolder.open()
     this.debugFolder
@@ -42,13 +37,10 @@ export default class PointLightSource {
       .onChange(() => {
         this.light.color = new Color(this.params.color)
       })
-    //active
-
     this.debugFolder
       .add(this.params, 'visible', false).onChange(() => {
         this.light.visible = this.params.visible
       })
-    //Position debug
     this.debugFolder
       .add(this.light.position, 'x')
       .step(0.1)

@@ -24,14 +24,12 @@ export default class Time extends EventEmitter {
   }
   startTicker() {
     this.tick()
-    // this.trigger('tick')
   }
   tick() {
     const current = Date.now()
     this.delta = current - this.current
     this.elapsed = current - this.start
     this.current = current
-
 
     if (this.delta > 60) {
       this.delta = 60
