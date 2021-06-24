@@ -2,6 +2,7 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
 import { Howl } from 'howler'
 import ParticleSystem from '../World/Thruster'
+import Earth from '../World/Earth.js'
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -12,7 +13,6 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
-  c.earth = options.earth
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
@@ -52,6 +52,7 @@ c.init = options => {
   createGltfCams()
   createAnimation()
   createLights()
+  createEarth(options)
 
   c.hideObjects(c.objects)
   c.audio = c.assets.sounds.chap02
@@ -71,8 +72,8 @@ c.init = options => {
     parent: c.particleSystem1Container,
     camera: c.cams[0],
     assets: c.assets,
-    offset: new Vector3(0, 0.02, 0)
-  });
+    offset: new Vector3(0, 0.02, 0),
+  })
 
   c.particleSystem2Container = new Object3D()
   c.gltf.scene.children[18].add(c.particleSystem2Container)
@@ -82,8 +83,8 @@ c.init = options => {
     parent: c.particleSystem2Container,
     camera: c.cams[0],
     assets: c.assets,
-    offset: new Vector3(0, 0.02, 0)
-  });
+    offset: new Vector3(0, 0.02, 0),
+  })
   c.oldProg = 0
 }
 
@@ -99,7 +100,6 @@ c.start = () => {
   c.soundR.seek(c.duration - c.soundN.seek())
   c.soundN.play()
   c.soundR.stop()
-  c.earth.container.visible = true
   c.createCams(c.cams)
   c.switchHDRI()
   c.changeFog(150, 10, 0x010218)
@@ -112,9 +112,13 @@ c.start = () => {
 }
 
 c.update = () => {
-
-  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50, c.progress < 0.43)
-  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50)
+  c.particleSystem1.Step(
+    (Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50,
+    c.progress < 0.43
+  )
+  c.particleSystem2.Step(
+    (Math.min(Math.max(c.progress, 0.475), 1.0) - Math.min(Math.max(c.oldProg, 0.475), 1.0)) * 50
+  )
   if (0.37 > c.progress && c.progress > 0.36) forceSwitchCam(0)
   if (0.38 > c.progress && c.progress > 0.37 && !c.reversed) forceSwitchCam(1)
   if (c.progress < 0.38) {
@@ -128,12 +132,10 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
   } else if (c.progress < 0.85)
     c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
-
   else {
     c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
   }
   c.oldProg = c.progress
-
 
   c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration - 0.01))
   let playbackRate =
@@ -143,8 +145,7 @@ c.update = () => {
   if (playbackRate === 0) {
     playbackRate = 0.0000000000001
   }
-  if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 5
-  if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 20
+  c.earth.container.position.y = c.activeCam === 0 ? -90 - c.progress * 5 : -180 - c.progress * 20
   if (playbackRate > 0) {
     if (c.reversed) {
       //was rev but no more
@@ -178,7 +179,6 @@ c.end = () => {
   c.hideObjects(c.objects)
   c.deleteCams()
   c.allowScroll = false
-  c.earth.container.visible = false
   c.world.renderer.switchCam('default')
 }
 
@@ -221,9 +221,15 @@ const createLights = () => {
   })
 }
 
+const createEarth = options => {
+  c.earth = new Earth(options, '2')
+  c.objects.push(c.earth.container)
+  c.world.container.add(c.earth.container)
+}
+
 const forceSwitchCam = i => {
-  c.world.renderer.switchCam(c.cams[i])
   c.activeCam = i
+  c.world.renderer.switchCam(c.cams[i])
   c.cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
   c.cameraButtons[i].classList.add('is-active')
 }
