@@ -1,3 +1,3 @@
-function clamp(a, b, c) { return Math.max(b, Math.min(c, a)); }
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
 module.exports = clamp

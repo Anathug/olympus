@@ -2,6 +2,7 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
 import ParticleSystem from '../World/Thruster'
 import SoundHandler from '../Tools/SoundHandler'
+import clamp from '../Tools/Clamp'
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -99,8 +100,9 @@ c.start = () => {
 
 c.update = () => {
   console.log(c.progress)
-  c.particleSystem1.Step((Math.min(Math.max(c.progress, 0.044), 0.3) - Math.min(Math.max(c.oldProg, 0.044), 0.3)) * 50, c.progress < 0.20)
-  c.particleSystem2.Step((Math.min(Math.max(c.progress, 0.232), 0.6) - Math.min(Math.max(c.oldProg, 0.232), 0.6)) * 50, c.progress < 0.50)
+  //steps both particle systems
+  c.particleSystem1.Step((clamp(c.progress, 0.044, 0.3) - clamp(c.oldProg, 0.044, 0.3)) * 50, c.progress < 0.20)
+  c.particleSystem2.Step((clamp(c.progress, 0.232, 0.6) - clamp(c.oldProg, 0.232, 0.6)) * 50, c.progress < 0.50)
 
   if (0.16 > c.progress && c.progress > 0.15) forceSwitchCam(0)
   if (0.17 > c.progress && c.progress > 0.16) forceSwitchCam(1)

@@ -2,7 +2,7 @@ import { Howl } from 'howler'
 
 export default class SoundHandler {
     constructor(soundNormalPath, soundReversePath) {
-
+        //initialize sound handler with a normal version of the track and a reversed one
         this.soundN = new Howl({
             src: [soundNormalPath],
         })
@@ -10,9 +10,10 @@ export default class SoundHandler {
             src: [soundReversePath],
         })
         this.currentSound = this.soundN
-        this.duration = 120//this.soundN.duration()
+        this.duration = 120
     }
     start(progress) {
+        //resets all tracks to their default values
         this.duration = this.soundN.duration()
 
         this.soundN.seek(progress * this.duration)
@@ -28,6 +29,8 @@ export default class SoundHandler {
         this.reversed = false
     }
     update(progress) {
+        //if chapter progress is higher that the track progress, the normal track is played. Otherwise the reverse track is played.
+        //the playback rate is proportional to the difference between the chapter progress and the track progress
         let playbackRate =
             1 +
             (progress * this.duration - (this.reversed ? this.duration - this.soundR.seek() : this.soundN.seek())) * 2
@@ -62,6 +65,7 @@ export default class SoundHandler {
     }
 
     end() {
+        //stops all tracks
         this.soundN.stop()
         this.soundR.stop()
         this.currentSound.stop()

@@ -18,16 +18,19 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.mars = options.mars
 
+    //default chapter params
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 1
+    this.workingChapter = 0
     this.autoScrollSpeed = 0.0001
 
+    //chapter progression
     this.chapProgress = 0
     this.globProgress = this.workingChapter
     this.realProgress = this.workingChapter
     this.currentChapter = this.workingChapter
 
+    //import all chapters
     this.chapters = []
     this.chapters = this.importAll()
 
@@ -48,6 +51,7 @@ export default class ChapterHandler {
   }
 
   setUI() {
+    //creates timeline UI bar an populates it with the imported chapters
     this.timelineChapters = document.getElementById('timelineChapters')
     this.timelineChapElems = document.getElementsByClassName('timelineChap')
     this.timelineChapDisplay = document.getElementById('timelineChapterDisplay')
@@ -94,6 +98,7 @@ export default class ChapterHandler {
       this.updateProgress()
       this.updateCurrentChapter()
     })
+
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
       if (!this.autoScroll) return
@@ -111,6 +116,7 @@ export default class ChapterHandler {
   }
 
   updateProgress() {
+    //eases globProgress towards realProgress and updates timeline UI
     for (let i = 0; i < this.chapters.length; i++) {
       let c = this.timelineChapElems[i]
       let offset = i < this.currentChapter ? this.spacing : 0
@@ -124,6 +130,7 @@ export default class ChapterHandler {
     }
     this.globProgress = lerp(this.globProgress, this.realProgress, 0.03)
 
+    //switches chapters when relevant
     if (this.currentChapter != Math.floor(this.globProgress)) {
       this.chapters[this.currentChapter].end()
       this.timelineChapElems[this.currentChapter].classList.remove('current')
