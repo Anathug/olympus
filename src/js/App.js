@@ -39,6 +39,7 @@ export default class App {
       },
     }
 
+    console.log(this.sizes);
     this.counter = 0.0
     this.starship = null
     this.myEffect = null
@@ -108,10 +109,9 @@ export default class App {
       powerPreference: 'high-performance',
     })
     this.renderer.outputEncoding = sRGBEncoding
-
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
-    this.sizes.on('resize', () => {
+    window.addEventListener('resize', () => {
       this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
       this.activeCam.aspect = window.innerWidth / window.innerHeight
       this.activeCam.updateProjectionMatrix()
