@@ -8,7 +8,7 @@ export default class Earth {
     this.index = index
     this.container = new Object3D()
     this.container.name = 'Earth'
-
+    this.sphere = null
     this.createEarth()
     this.setEarth()
 
@@ -20,8 +20,9 @@ export default class Earth {
     const texture = this.assets.textures.global.earth.earth
     const geometry = new SphereGeometry(5, 64, 64)
     const material = new MeshBasicMaterial({ map: texture })
-    const sphere = new Mesh(geometry, material)
-    this.container.add(sphere)
+    this.sphere = new Mesh(geometry, material)
+    this.sphere.rotation.set(-1.4 , 2.1, 1.8)
+    this.container.add(this.sphere)
   }
 
   setEarth() {
@@ -50,8 +51,8 @@ export default class Earth {
       .min(-1000)
       .max(1000)
       .name('Rotation Z')
-    this.debugFolder.add(this.container.rotation, 'x').step(0.1).min(-4).max(4).name('Rotation X')
-    this.debugFolder.add(this.container.rotation, 'y').step(0.1).min(-4).max(4).name('Rotation Y')
-    this.debugFolder.add(this.container.rotation, 'z').step(0.1).min(-4).max(4).name('Position Z')
+    this.debugFolder.add(this.sphere.rotation, 'x').step(0.1).min(-4).max(4).name('Rotation X')
+    this.debugFolder.add(this.sphere.rotation, 'y').step(0.1).min(-4).max(4).name('Rotation Y')
+    this.debugFolder.add(this.sphere.rotation, 'z').step(0.1).min(-4).max(4).name('Position Z')
   }
 }
