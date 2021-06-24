@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import lerp from '../Tools/Lerp'
 import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
+import Earth from '../World/Earth.js'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
@@ -16,11 +17,9 @@ c.init = options => {
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
   c.world = options.world
-  c.earth = options.earth
   c.starship = new Starship(options)
   c.satellite = new Satellite(options)
   c.world.container.add(c.starship.container)
-
   c.starship.container.visible = true
   c.starship.container.children[0].children.forEach(e => {
     e.visible = false
@@ -53,6 +52,8 @@ c.init = options => {
   c.lastCamPos = new Vector3(0, 0, 0)
   c.circlePos = new Vector3(0, 0, 0)
   createLights()
+  createEarth(options)
+
 }
 
 c.start = () => {
@@ -75,7 +76,6 @@ c.start = () => {
   c.starship.container.children[0].children[13].visible = true
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
-
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.circle.style.visibility = 'hidden'
@@ -152,6 +152,7 @@ c.update = () => {
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
   c.controls.enabled = true
+
 }
 
 c.end = () => {
@@ -177,6 +178,12 @@ const createLights = () => {
     c.world.container.add(light)
     c.objects.push(light)
   })
+}
+
+const createEarth = options => {
+  c.earth = new Earth(options, '3')
+  c.objects.push(c.earth.container)
+  c.world.container.add(c.earth.container)
 }
 
 export default c

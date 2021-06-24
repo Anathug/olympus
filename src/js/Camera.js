@@ -27,7 +27,7 @@ export default class Camera {
       45,
       this.sizes.viewport.width / this.sizes.viewport.height,
       0.1,
-      1000
+      10000
     )
     this.container.add(this.camera)
     this.sizes.on('resize', () => {
