@@ -1,6 +1,8 @@
 import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
+import normalizeWheel from 'normalize-wheel';
+
 // eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
 
@@ -93,7 +95,7 @@ export default class ChapterHandler {
       this.updateProgress()
       this.updateCurrentChapter()
     })
-    window.addEventListener('mousewheel', e => this.mouseWheel(e))
+    window.addEventListener('wheel', e => this.mouseWheel(e))
     this.time.on('tick', () => {
       if (!this.autoScroll) return
       this.realProgress = clamp(
@@ -236,9 +238,12 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
+    console.log(event.deltaY);
+    const normalized = normalizeWheel(event);
+    console.log(normalized.pixelY)
     if (!this.allowScroll) return
     this.realProgress = clamp(
-      (this.realProgress += event.deltaY * 0.0001),
+      (this.realProgress += normalized.pixelY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
