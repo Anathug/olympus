@@ -114,9 +114,9 @@ export default class ChapterHandler {
         0,
         this.chapters.length - 0.001
       )
+      console.log(delta / 16.7)
       now = Date.now()
     })
-    this.checkLongestAudio()
   }
 
   updateCurrentChapter() {
@@ -271,10 +271,6 @@ export default class ChapterHandler {
     )
   }
 
-  checkLongestAudio() {
-    console.log(this.longestDuration)
-
-  }
 
   setAutoScrollSpeed(duration) {
     this.autoScrollSpeed = 1 / 60 / duration

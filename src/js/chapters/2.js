@@ -128,7 +128,7 @@ c.update = () => {
 
   if (0.17 > c.progress && c.progress > 0.16 && !c.reversed) {
     hideMovieLayout()
-   forceSwitchCam(1)
+    forceSwitchCam(1)
   }
 
   if (c.progress < 0.16) {
@@ -210,7 +210,6 @@ const createEarth = options => {
   c.earth = new Earth(options, '2')
   c.objects.push(c.earth.container)
   c.world.container.add(c.earth.container)
-  console.log(c.earth);
 }
 
 const forceSwitchCam = i => {

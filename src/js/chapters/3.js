@@ -30,6 +30,7 @@ c.init = options => {
   c.time = 0
   c.objects.push(c.starship.container)
   c.objects.push(c.satellite.container)
+  createEarth(options)
   c.objects.forEach(object => {
     object.visible = false
   })
@@ -50,7 +51,6 @@ c.init = options => {
     if (c.ready == 2)
       c.handler.trySetup()
   });
-  createEarth(options)
 }
 
 c.start = () => {
@@ -178,7 +178,6 @@ const createEarth = options => {
   c.earth.container.scale.set(16, 16, 16)
   c.objects.push(c.earth.container)
   c.world.container.add(c.earth.container)
-  console.log(c.earth);
 }
 
 export default c
