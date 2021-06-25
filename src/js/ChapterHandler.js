@@ -238,9 +238,7 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
-    console.log(event.deltaY);
     const normalized = normalizeWheel(event);
-    console.log(normalized.pixelY)
     if (!this.allowScroll) return
     this.realProgress = clamp(
       (this.realProgress += normalized.pixelY * 0.0001),
