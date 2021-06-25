@@ -201,6 +201,7 @@ const createEarth = options => {
   c.earth = new Earth(options, '2')
   c.objects.push(c.earth.container)
   c.world.container.add(c.earth.container)
+  console.log(c.earth);
 }
 
 const forceSwitchCam = i => {
