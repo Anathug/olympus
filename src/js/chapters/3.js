@@ -1,10 +1,9 @@
 import Chapter from '../Chapter'
-import Launcher from '../World/Launcher'
-import { Clock, Vector3, DirectionalLight } from 'three'
-import gsap from 'gsap'
-import lerp from '../Tools/Lerp'
+import { Vector3, DirectionalLight } from 'three'
 import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
+import SoundHandler from '../Tools/SoundHandler'
+import Earth from '../World/EarthBis.js'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
@@ -16,27 +15,13 @@ c.init = options => {
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
   c.world = options.world
-  c.earth = options.earth
   c.starship = new Starship(options)
   c.satellite = new Satellite(options)
   c.world.container.add(c.starship.container)
-
   c.starship.container.visible = true
   c.starship.container.children[0].children.forEach(e => {
     e.visible = false
   })
-
-  c.directionalLights = [
-    {
-      name: 'firstDirectionalLightSource',
-      position: {
-        x: -30,
-        y: 10,
-        z: 0,
-        intensity: 2,
-      },
-    },
-  ]
   c.world.container.add(c.satellite.container)
   c.freeViewTime = 0.3
   c.transTime = 0.05
@@ -45,6 +30,7 @@ c.init = options => {
   c.time = 0
   c.objects.push(c.starship.container)
   c.objects.push(c.satellite.container)
+  createEarth(options)
   c.objects.forEach(object => {
     object.visible = false
   })
@@ -52,11 +38,24 @@ c.init = options => {
   c.circle = document.getElementById('circle')
   c.lastCamPos = new Vector3(0, 0, 0)
   c.circlePos = new Vector3(0, 0, 0)
-  createLights()
+
+  c.soundHandler = new SoundHandler('./sounds/chap03.mp3', './sounds/chap03_r.mp3')
+  c.ready = 0
+  c.soundHandler.soundN.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
+  c.soundHandler.soundR.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
 }
 
 c.start = () => {
   c.showChapter('chapter_3')
+  c.lensflareContainer.getObjectByName('Lensflare').position.z = - 5000
   c.controls.enabled = true
   c.controls.autoRotate = true
   c.controls.autoRotateSpeed = 0.2
@@ -76,13 +75,19 @@ c.start = () => {
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
 
+  c.duration = c.soundHandler.duration
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  c.handler.setAutoScrollSpeed(c.duration)
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
+
+  c.soundHandler.start(c.progress)
+  c.lensflareContainer.visible = true
 }
 
 c.update = () => {
+  c.soundHandler.update(c.progress)
   if (c.progress < 0.75) c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
   else c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
 
@@ -152,9 +157,11 @@ c.update = () => {
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
   c.controls.enabled = true
+
 }
 
 c.end = () => {
+  c.soundHandler.end()
   c.hideChapter('chapter_3')
   c.allowScroll = false
   c.objects.forEach(object => {
@@ -166,17 +173,11 @@ c.end = () => {
   c.crosshair.style.visibility = 'hidden'
 }
 
-const createLights = () => {
-  c.directionalLights.forEach(directionalLight => {
-    const light = new DirectionalLight(directionalLight.color, directionalLight.intensity)
-    light.position.set(
-      directionalLight.position.x,
-      directionalLight.position.z,
-      directionalLight.position.z
-    )
-    c.world.container.add(light)
-    c.objects.push(light)
-  })
+const createEarth = options => {
+  c.earth = new Earth(options, '3')
+  c.earth.container.scale.set(16, 16, 16)
+  c.objects.push(c.earth.container)
+  c.world.container.add(c.earth.container)
 }
 
 export default c

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-    <title>THREE.js Template</title>
+    <title>Olympus</title>
   </head>
 
   <body>
@@ -40,7 +40,7 @@
           ><span class="timerSubtext">S</span></span
         >
       </div>
-      <div id="headphones">
+      <div class="loaderBottom" id="headphones">
         <svg
           width="24"
           height="22"
@@ -54,6 +54,9 @@
           />
         </svg>
         <h3>Radio check. Have you got your headphones on ?</h3>
+      </div>
+      <div class="loaderBottom" id="clickToStart">
+        <h3>[Click To Start The Experience]</h3>
       </div>
     </div>
     <canvas id="_canvas"></canvas>
@@ -95,26 +98,7 @@
           <canvas id="sound" height="30px" width="70px"></canvas>
         </div>
       </div>
-      <div class="middle-right-wrapper">
-        <!-- <div class="camera-wrapper is-active">
-          <div class="overflow-hidden relative">
-            <span>cam 01</span>
-          </div>
-          <div class="circle">
-            <div class="red-circle"></div>
-            <div class="white-circle"></div>
-          </div>
-        </div>
-        <div class="camera-wrapper">
-          <div class="overflow-hidden relative">
-            <span>cam 02</span>
-          </div>
-          <div class="circle">
-            <div class="red-circle"></div>
-            <div class="white-circle"></div>
-          </div>
-        </div> -->
-      </div>
+      <div class="middle-right-wrapper"></div>
       <div class="bottom-right-wrapper">
         <div class="infos">
           <span>+ 00:24:31</span>
@@ -158,9 +142,7 @@
         <button class="global-cta start-experience">start experience</button>
       </div>
     </section>
-    <section class="chapter_1">
-      <button class="global-cta">start lucas le bg la hmm</button>
-    </section>
+    <section class="chapter_1"></section>
     <section class="chapter_2">
       <button>start starship</button>
     </section>
@@ -169,5 +151,8 @@
       <span id="circle"></span>
     </section>
     <section class="chapter_4"></section>
+    <div class="chapter-transition">
+      <p>test sentence</p>
+    </div>
   </body>
 </html>

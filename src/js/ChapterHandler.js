@@ -1,6 +1,8 @@
 import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
+import normalizeWheel from 'normalize-wheel'
+
 // eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
 
@@ -16,20 +18,27 @@ export default class ChapterHandler {
     this.renderer = options.renderer
     this.debug = options.debug
     this.starship = options.starship
-    this.mars = options.mars
+    this.lensflareContainer = options.lensflareContainer
 
+    //default chapter params
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 1
+    this.workingChapter = 0
     this.autoScrollSpeed = 0.0001
 
+    //chapter progression
     this.chapProgress = 0
     this.globProgress = this.workingChapter
     this.realProgress = this.workingChapter
     this.currentChapter = this.workingChapter
 
+    //import all chapters
     this.chapters = []
+    this.chaptersReady = 0
+    this.longestDuration = 0
     this.chapters = this.importAll()
+
+    this.chapterTransition = document.querySelector('.chapter-transition')
 
     this.switchHDRI = options.switchHDRI
     this.changeFog = options.changeFog
@@ -48,6 +57,7 @@ export default class ChapterHandler {
   }
 
   setUI() {
+    //creates timeline UI bar an populates it with the imported chapters
     this.timelineChapters = document.getElementById('timelineChapters')
     this.timelineChapElems = document.getElementsByClassName('timelineChap')
     this.timelineChapDisplay = document.getElementById('timelineChapterDisplay')
@@ -94,14 +104,18 @@ export default class ChapterHandler {
       this.updateProgress()
       this.updateCurrentChapter()
     })
-    window.addEventListener('mousewheel', e => this.mouseWheel(e))
+    window.addEventListener('wheel', e => this.mouseWheel(e))
+    let now = Date.now()
     this.time.on('tick', () => {
       if (!this.autoScroll) return
+      let delta = Date.now() - now
       this.realProgress = clamp(
-        (this.realProgress += this.autoScrollSpeed),
+        (this.realProgress += this.autoScrollSpeed * delta / 16.7),
         0,
         this.chapters.length - 0.001
       )
+      console.log(delta / 16.7)
+      now = Date.now()
     })
   }
 
@@ -111,6 +125,7 @@ export default class ChapterHandler {
   }
 
   updateProgress() {
+    //eases globProgress towards realProgress and updates timeline UI
     for (let i = 0; i < this.chapters.length; i++) {
       let c = this.timelineChapElems[i]
       let offset = i < this.currentChapter ? this.spacing : 0
@@ -124,6 +139,7 @@ export default class ChapterHandler {
     }
     this.globProgress = lerp(this.globProgress, this.realProgress, 0.03)
 
+    //switches chapters when relevant
     if (this.currentChapter != Math.floor(this.globProgress)) {
       this.chapters[this.currentChapter].end()
       this.timelineChapElems[this.currentChapter].classList.remove('current')
@@ -138,6 +154,15 @@ export default class ChapterHandler {
     }
     this.chapProgress = this.globProgress % 1
     this.chapters[this.currentChapter].progress = this.chapProgress
+    // const duration = this.chapters[this.currentChapter].duration
+
+    if (this.chapProgress > 0.95) {
+      this.chapterTransition.style.opacity = (this.chapProgress - 0.95) * 40
+    } else if (this.chapProgress < 0.05) {
+      this.chapterTransition.style.opacity = 1 - this.chapProgress * 40
+    } else {
+      this.chapProgress = 0
+    }
   }
 
   updateTimelineDisplay(title, subtitle) {
@@ -237,16 +262,24 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
+    const normalized = normalizeWheel(event)
     if (!this.allowScroll) return
     this.realProgress = clamp(
-      (this.realProgress += event.deltaY * 0.0001),
+      (this.realProgress += normalized.pixelY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
   }
 
+
   setAutoScrollSpeed(duration) {
     this.autoScrollSpeed = 1 / 60 / duration
+  }
+
+  trySetup() {
+    this.chaptersReady++
+    if (this.chaptersReady == this.chapters.length)
+      this.setup()
   }
 
   async importAll() {
@@ -260,6 +293,7 @@ export default class ChapterHandler {
         chap.default.world = this.world
         chap.default.time = this.time
         chap.default.mouse = this.mouse
+        chap.default.lensflareContainer = this.lensflareContainer
 
         chap.default.switchHDRI = this.switchHDRI
         chap.default.changeFog = this.changeFog
@@ -275,9 +309,11 @@ export default class ChapterHandler {
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
+        // if(chap.default.animationDuration && (chap.default.animationDuration > this.longestDuration) ) {
+        //   this.longestDuration = chap.default.animationDuration  
+        // }
         if (a.length == r.keys().length) {
           this.chapters = a
-          this.setup()
         }
       })
     })
