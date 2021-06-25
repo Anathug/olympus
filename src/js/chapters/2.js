@@ -120,8 +120,17 @@ c.update = () => {
   c.particleSystem1.Step((clamp(c.progress, 0.044, 0.3) - clamp(c.oldProg, 0.044, 0.3)) * 50, c.progress < 0.20)
   c.particleSystem2.Step((clamp(c.progress, 0.232, 0.6) - clamp(c.oldProg, 0.232, 0.6)) * 50, c.progress < 0.50)
 
-  if (0.16 > c.progress && c.progress > 0.15) forceSwitchCam(0)
-  if (0.17 > c.progress && c.progress > 0.16) forceSwitchCam(1)
+
+  if (0.16 > c.progress && c.progress > 0.15) {
+    forceSwitchCam(0)
+    showMovieLayout()
+  }
+
+  if (0.17 > c.progress && c.progress > 0.16 && !c.reversed) {
+    hideMovieLayout()
+   forceSwitchCam(1)
+  }
+
   if (c.progress < 0.16) {
     c.disableCam(1)
   } else {
@@ -215,6 +224,22 @@ const initActiveCamera = i => {
   c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
   c.cameraButtons[i].classList.add('is-active')
   c.world.renderer.switchCam(c.cams[i])
+}
+
+const hideMovieLayout = () => {
+  const toplayout = document.querySelector('.movie-layout .top')
+  const bottomlayout = document.querySelector('.movie-layout .bottom')
+
+  toplayout.classList.add('is-leaving')
+  bottomlayout.classList.add('is-leaving')
+}
+
+const showMovieLayout = () => {
+  const toplayout = document.querySelector('.movie-layout .top')
+  const bottomlayout = document.querySelector('.movie-layout .bottom')
+
+  toplayout.classList.remove('is-leaving')
+  bottomlayout.classList.remove('is-leaving')
 }
 
 export default c

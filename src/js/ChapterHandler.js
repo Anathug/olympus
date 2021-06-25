@@ -1,7 +1,7 @@
 import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
-import normalizeWheel from 'normalize-wheel';
+import normalizeWheel from 'normalize-wheel'
 
 // eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
@@ -35,7 +35,10 @@ export default class ChapterHandler {
     //import all chapters
     this.chapters = []
     this.chaptersReady = 0
+    this.longestDuration = 0
     this.chapters = this.importAll()
+
+    this.chapterTransition = document.querySelector('.chapter-transition')
 
     this.switchHDRI = options.switchHDRI
     this.changeFog = options.changeFog
@@ -90,7 +93,6 @@ export default class ChapterHandler {
   }
 
   setup() {
-    console.log('started')
     this.setUI()
     this.chapters[this.currentChapter].start()
 
@@ -114,6 +116,7 @@ export default class ChapterHandler {
       )
       now = Date.now()
     })
+    this.checkLongestAudio()
   }
 
   updateCurrentChapter() {
@@ -151,6 +154,15 @@ export default class ChapterHandler {
     }
     this.chapProgress = this.globProgress % 1
     this.chapters[this.currentChapter].progress = this.chapProgress
+    // const duration = this.chapters[this.currentChapter].duration
+
+    if (this.chapProgress > 0.95) {
+      this.chapterTransition.style.opacity = (this.chapProgress - 0.95) * 40
+    } else if (this.chapProgress < 0.05) {
+      this.chapterTransition.style.opacity = 1 - this.chapProgress * 40
+    } else {
+      this.chapProgress = 0
+    }
   }
 
   updateTimelineDisplay(title, subtitle) {
@@ -250,13 +262,18 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
-    const normalized = normalizeWheel(event);
+    const normalized = normalizeWheel(event)
     if (!this.allowScroll) return
     this.realProgress = clamp(
       (this.realProgress += normalized.pixelY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
+  }
+
+  checkLongestAudio() {
+    console.log(this.longestDuration)
+
   }
 
   setAutoScrollSpeed(duration) {
@@ -296,9 +313,11 @@ export default class ChapterHandler {
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
+        // if(chap.default.animationDuration && (chap.default.animationDuration > this.longestDuration) ) {
+        //   this.longestDuration = chap.default.animationDuration  
+        // }
         if (a.length == r.keys().length) {
           this.chapters = a
-          // this.setup()
         }
       })
     })
