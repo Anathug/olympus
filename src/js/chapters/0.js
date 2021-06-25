@@ -39,8 +39,8 @@ c.init = () => {
 
 c.start = () => {
   c.soundHandler.start(c.progress)
-  c.duration = c.soundHandler.duration
-  c.handler.setAutoScrollSpeed(c.duration)
+  c.animationDuration = c.soundHandler.duration
+  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.showChapter('chapter_0')
   c.handler.allowScroll = true
   c.handler.autoScroll = true
@@ -132,8 +132,8 @@ const chapterEnd = () => {
   bottomlayout.classList.add('is-active')
 
   setTimeout(() => {
-    toplayout.classList.add('is-leaving')
-    bottomlayout.classList.add('is-leaving')
+    toplayout.classList.remove('is-active')
+    bottomlayout.classList.remove('is-active')
   }, 3000)
 
   c.nextChapter()
