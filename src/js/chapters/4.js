@@ -104,7 +104,6 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-  console.log('EEEENNNNDDDD')
 }
 
 const createGltfCams = () => {

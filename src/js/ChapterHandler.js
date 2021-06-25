@@ -111,7 +111,6 @@ export default class ChapterHandler {
         0,
         this.chapters.length - 0.001
       )
-      console.log(Date.now() - now)
       now = Date.now()
     })
   }
@@ -264,7 +263,6 @@ export default class ChapterHandler {
 
   trySetup() {
     this.chaptersReady++
-    console.log(this.chaptersReady, this.chapters.length)
     if (this.chaptersReady == this.chapters.length)
       this.setup()
   }
