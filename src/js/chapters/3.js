@@ -43,7 +43,6 @@ c.init = options => {
   c.travelTime = 0.4
   c.cameraTarget = new Vector3(0, 0, 0)
   c.time = 0
-  console.log(c.starship)
   c.objects.push(c.starship)
   c.objects.push(c.satellite.container)
   createEarth(options)
