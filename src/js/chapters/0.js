@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import data from '../../../static/database/chap0'
 import clamp from '../Tools/Clamp'
 import EncryptedText from '../EncryptedText'
+import SoundHandler from '../Tools/SoundHandler'
 
 const c = new Chapter(0)
 c.title = 'Introduction'
@@ -22,19 +23,36 @@ c.init = () => {
   c.opened = false
   createInfos()
   createImagePosition()
+  c.soundHandler = new SoundHandler('./sounds/chap00.mp3', './sounds/chap00_r.mp3')
+  c.ready = 0
+  c.soundHandler.soundN.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
+  c.soundHandler.soundR.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
 }
 
 c.start = () => {
-  // c.time.stopTicker()
+  c.soundHandler.start(c.progress)
+  c.duration = c.soundHandler.duration
+  c.handler.setAutoScrollSpeed(c.duration)
   c.showChapter('chapter_0')
-  c.handler.allowScroll = false
-  c.handler.autoScroll = false
+  c.handler.allowScroll = true
+  c.handler.autoScroll = true
   setEvents()
 }
 
-c.update = () => {}
+c.update = () => {
+  c.soundHandler.update(c.progress)
+}
 
 c.end = () => {
+  c.soundHandler.end()
   removeEvents()
   c.hideChapter('chapter_0')
 }
@@ -128,6 +146,7 @@ const chapterEnd = () => {
 const showInfos = (i, image) => {
   c.opened = true
   c.currentImageIndex = i
+  c.handler.autoScroll = false
 
   const blackoverlay = document.querySelector('.black-overlay')
   const container = document.querySelector(`.container-${i}`)
@@ -179,6 +198,7 @@ const showInfos = (i, image) => {
 
 const hideInfos = () => {
   c.opened = false
+  c.handler.autoScroll = true
   const blackoverlay = document.querySelector('.black-overlay')
   const container = document.querySelector(`.container-${c.currentImageIndex}`)
   blackoverlay.classList.remove('is-active')
@@ -192,10 +212,10 @@ const calculateDistance = (elem, mouseX, mouseY) => {
         mouseX - (elem.getBoundingClientRect().left + elem.getBoundingClientRect().width / 2),
         2
       ) +
-        Math.pow(
-          mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
-          2
-        )
+      Math.pow(
+        mouseY - (elem.getBoundingClientRect().top + elem.getBoundingClientRect().height / 2),
+        2
+      )
     )
   )
 }

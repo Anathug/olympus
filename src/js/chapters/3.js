@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import lerp from '../Tools/Lerp'
 import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
+import SoundHandler from '../Tools/SoundHandler'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
@@ -53,6 +54,19 @@ c.init = options => {
   c.lastCamPos = new Vector3(0, 0, 0)
   c.circlePos = new Vector3(0, 0, 0)
   createLights()
+
+  c.soundHandler = new SoundHandler('./sounds/chap03.mp3', './sounds/chap03_r.mp3')
+  c.ready = 0
+  c.soundHandler.soundN.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
+  c.soundHandler.soundR.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
 }
 
 c.start = () => {
@@ -76,13 +90,18 @@ c.start = () => {
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
 
+  c.duration = c.soundHandler.duration
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  c.handler.setAutoScrollSpeed(c.duration)
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
+
+  c.soundHandler.start(c.progress)
 }
 
 c.update = () => {
+  c.soundHandler.update(c.progress)
   if (c.progress < 0.75) c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
   else c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
 
@@ -155,6 +174,7 @@ c.update = () => {
 }
 
 c.end = () => {
+  c.soundHandler.end()
   c.hideChapter('chapter_3')
   c.allowScroll = false
   c.objects.forEach(object => {

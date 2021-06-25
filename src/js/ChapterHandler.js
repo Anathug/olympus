@@ -32,6 +32,7 @@ export default class ChapterHandler {
 
     //import all chapters
     this.chapters = []
+    this.chaptersReady = 0
     this.chapters = this.importAll()
 
     this.switchHDRI = options.switchHDRI
@@ -87,6 +88,7 @@ export default class ChapterHandler {
   }
 
   setup() {
+    console.log('started')
     this.setUI()
     this.chapters[this.currentChapter].start()
 
@@ -100,13 +102,17 @@ export default class ChapterHandler {
     })
 
     window.addEventListener('mousewheel', e => this.mouseWheel(e))
+    let now = Date.now()
     this.time.on('tick', () => {
       if (!this.autoScroll) return
+      let delta = Date.now() - now
       this.realProgress = clamp(
-        (this.realProgress += this.autoScrollSpeed),
+        (this.realProgress += this.autoScrollSpeed * delta / 16.7),
         0,
         this.chapters.length - 0.001
       )
+      console.log(Date.now() - now)
+      now = Date.now()
     })
   }
 
@@ -256,6 +262,13 @@ export default class ChapterHandler {
     this.autoScrollSpeed = 1 / 60 / duration
   }
 
+  trySetup() {
+    this.chaptersReady++
+    console.log(this.chaptersReady, this.chapters.length)
+    if (this.chaptersReady == this.chapters.length)
+      this.setup()
+  }
+
   async importAll() {
     let r = require.context('./chapters/', true, /\.js$/)
     let a = []
@@ -284,7 +297,7 @@ export default class ChapterHandler {
         a.push(chap.default)
         if (a.length == r.keys().length) {
           this.chapters = a
-          this.setup()
+          // this.setup()
         }
       })
     })

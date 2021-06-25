@@ -1,6 +1,7 @@
 import Chapter from '../Chapter'
 import Cockpit from '../World/chapter_1/Cockpit'
 import gsap from 'gsap'
+import SoundHandler from '../Tools/SoundHandler'
 
 let c = new Chapter(1)
 c.title = 'Step A01'
@@ -16,9 +17,26 @@ c.init = (options) => {
   c.allowMouseMove = false
   createCockpit(options)
   c.hideObjects(c.objects)
+  c.soundHandler = new SoundHandler('./sounds/chap01.mp3', './sounds/chap01_r.mp3')
+  c.ready = 0
+  c.soundHandler.soundN.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
+  c.soundHandler.soundR.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
 }
 
 c.start = () => {
+  c.soundHandler.start(c.progress)
+  c.handler.allowScroll = true
+  c.handler.autoScroll = true
+  c.duration = c.soundHandler.duration
+  c.handler.setAutoScrollSpeed(c.duration)
   c.showChapter('chapter_1')
   c.showObjects(c.objects)
   c.allowMouseMove = true
@@ -27,12 +45,14 @@ c.start = () => {
 }
 
 c.update = () => {
+  c.soundHandler.update(c.progress)
   if (!c.debug && c.allowMouseMove) {
     // mouseMove(c.camera)
   }
 }
 
 c.end = () => {
+  c.soundHandler.end()
   c.hideChapter('chapter_1')
   c.hideObjects(c.objects)
   removeEvents()

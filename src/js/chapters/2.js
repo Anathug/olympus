@@ -57,6 +57,17 @@ c.init = options => {
   c.hideObjects(c.objects)
 
   c.soundHandler = new SoundHandler('./sounds/chap02.mp3', './sounds/chap02_r.mp3')
+  c.ready = 0
+  c.soundHandler.soundN.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
+  c.soundHandler.soundR.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
 
   c.particleSystem1Container = new Object3D()
   c.gltf.scene.children[7].add(c.particleSystem1Container)
@@ -80,6 +91,8 @@ c.init = options => {
     offset: new Vector3(0, 0.02, 0)
   });
   c.oldProg = 0
+
+
 }
 
 c.start = () => {
