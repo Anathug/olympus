@@ -2,13 +2,9 @@ import Chapter from '../Chapter'
 import { Vector3, DirectionalLight } from 'three'
 import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
-<<<<<<< HEAD
-import Earth from '../World/Earth.js'
 import lerp from '../Tools/Lerp'
-=======
 import SoundHandler from '../Tools/SoundHandler'
 import Earth from '../World/EarthBis.js'
->>>>>>> 329c7edfd08b4a3720d38c8d2338e6830681d3b5
 
 let c = new Chapter(3)
 c.title = 'Step B01'
@@ -24,7 +20,6 @@ c.init = options => {
   c.starship = options.assets.models.starship.scene.children[0]
   c.world.container.add(c.starship)
   c.satellite = new Satellite(options)
-<<<<<<< HEAD
 
   c.directionalLights = [
     {
@@ -37,13 +32,11 @@ c.init = options => {
       },
     },
   ]
-=======
-  c.world.container.add(c.starship.container)
-  c.starship.container.visible = true
-  c.starship.container.children[0].children.forEach(e => {
+  c.world.container.add(c.starship)
+  c.starship.visible = true
+  c.starship.children[0].children.forEach(e => {
     e.visible = false
   })
->>>>>>> 329c7edfd08b4a3720d38c8d2338e6830681d3b5
   c.world.container.add(c.satellite.container)
   c.freeViewTime = 0.3
   c.transTime = 0.05
