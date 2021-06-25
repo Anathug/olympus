@@ -5,6 +5,7 @@ import GlobalInteractions from './js/GlobalInteracions'
 import Sizes from './js/Tools/Sizes'
 import Time from './js/Tools/Time'
 import Mouse from './js/Mouse'
+import Howl from 'howler'
 
 const time = new Time()
 const sizes = new Sizes()
@@ -33,23 +34,31 @@ const setLoader = () => {
   let loadDiv = document.querySelector('#loader')
   let timerContainer = document.querySelector('#timerContainer')
   let headphones = document.querySelector('#headphones')
+  let clickToStart = document.querySelector('#clickToStart')
 
   assets.on('ressourcesReady', () => {
-    createApp()
-    createGlobalInteractions()
-    timerContainer.classList.add('fadeout')
+
     headphones.classList.add('fadeout')
-    setTimeout(() => {
-      loadDiv.classList.add('openScene')
+    clickToStart.classList.add('fadein')
+
+    const onStart = () => {
+      timerContainer.classList.add('fadeout')
+      clickToStart.classList.remove('fadein')
+
+      createApp()
+      createGlobalInteractions()
       setTimeout(() => {
-        loadDiv.remove()
-      }, 1000)
-    }, 2000)
+        loadDiv.classList.add('openScene')
+        setTimeout(() => {
+          loadDiv.remove()
+        }, 2000)
+      }, 3000)
+    }
+
+    document.addEventListener("click", onStart, { once: true })
+
   })
 }
 
 
 setLoader()
-
-
-
