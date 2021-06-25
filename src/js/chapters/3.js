@@ -51,6 +51,10 @@ c.init = options => {
   createLights()
   createEarth(options)
 
+  if(c.debug) {
+    setDebug()
+  } 
+
 }
 
 c.start = () => {
@@ -63,6 +67,7 @@ c.start = () => {
   c.satellite.container.scale.set(1, 1, 1)
   c.starship.container.scale.set(0.1, 0.1, 0.1)
   c.anchor = new Vector3(0, 0, 0)
+  // (0, -4.5, -30) position d'arriver du satelite 
   c.satellite.container.position.set(-0, -0, -0 + 4)
   c.satellite.container.visible = true
   c.objects.forEach(object => {
@@ -181,6 +186,28 @@ const createEarth = options => {
   c.earth = new Earth(options, '3')
   c.objects.push(c.earth.container)
   c.world.container.add(c.earth.container)
+}
+
+const setDebug = () => {
+  const debugFolder = c.debug.addFolder('Satelite')
+  debugFolder
+    .add(c.satellite.container.position, 'x')
+    .step(1)
+    .min(-50)
+    .max(50)
+    .name('Position X')
+  debugFolder
+    .add(c.satellite.container.position, 'y')
+    .step(1)
+    .min(-50)
+    .max(50)
+    .name('Position Y')
+  debugFolder
+    .add(c.satellite.container.position, 'z')
+    .step(1)
+    .min(-50)
+    .max(50)
+    .name('Rotation Z')
 }
 
 export default c
