@@ -55,7 +55,7 @@ export default class App {
     this.setConfig()
     this.setScene()
     this.setSpaceHdri()
-    this.setStarship()
+    // this.setStarship()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()

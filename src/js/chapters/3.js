@@ -1,8 +1,9 @@
 import Chapter from '../Chapter'
-import {  Vector3, DirectionalLight } from 'three'
+import { Vector3, DirectionalLight } from 'three'
 import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
 import Earth from '../World/Earth.js'
+import lerp from '../Tools/Lerp'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
@@ -14,13 +15,10 @@ c.init = options => {
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
   c.world = options.world
-  c.starship = new Starship(options)
+  // c.starship = new Starship(options)
+  c.starship = options.assets.models.starship.scene.children[0]
+  c.world.container.add(c.starship)
   c.satellite = new Satellite(options)
-  c.world.container.add(c.starship.container)
-  c.starship.container.visible = true
-  c.starship.container.children[0].children.forEach(e => {
-    e.visible = false
-  })
 
   c.directionalLights = [
     {
@@ -39,7 +37,8 @@ c.init = options => {
   c.travelTime = 0.4
   c.cameraTarget = new Vector3(0, 0, 0)
   c.time = 0
-  c.objects.push(c.starship.container)
+  console.log(c.starship)
+  c.objects.push(c.starship)
   c.objects.push(c.satellite.container)
   c.objects.forEach(object => {
     object.visible = false
@@ -51,9 +50,9 @@ c.init = options => {
   createLights()
   createEarth(options)
 
-  if(c.debug) {
+  if (c.debug) {
     setDebug()
-  } 
+  }
 
 }
 
@@ -63,19 +62,18 @@ c.start = () => {
   c.controls.autoRotate = true
   c.controls.autoRotateSpeed = 0.2
   c.camera.position.set(-30, 0, 0)
-  c.starship.container.position.set(0, -0, -30)
+  c.starship.position.set(0, -0, -20)
   c.satellite.container.scale.set(1, 1, 1)
-  c.starship.container.scale.set(0.1, 0.1, 0.1)
+  // c.starship.scale.set(0.1, 0.1, 0.1)
   c.anchor = new Vector3(0, 0, 0)
   // (0, -4.5, -30) position d'arriver du satelite 
-  c.satellite.container.position.set(-0, -0, -0 + 4)
+  c.satellite.container.position.set(-0, -3.45, -20)
   c.satellite.container.visible = true
   c.objects.forEach(object => {
     object.visible = true
   })
-  c.starship.container.rotation.x = Math.PI / 2
-  c.starship.container.rotation.y = -Math.PI / 2
-  c.starship.container.children[0].children[13].visible = true
+  c.starship.rotation.x = Math.PI / 2
+
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
   c.handler.allowScroll = true
@@ -124,16 +122,19 @@ c.update = () => {
       new Vector3(-c.mouse.x * 10 * freedom, c.mouse.y * 10 * freedom + 3, -15),
       Math.sin((progress * Math.PI) / 2)
     )
-    c.starship.container.position.lerpVectors(
-      new Vector3(0, -0, -30),
-      new Vector3(-c.mouse.x * 5 * freedom, c.mouse.y * 5 * freedom, -24.5),
+    c.starship.position.lerpVectors(
+      new Vector3(0, -0, -20),
+      new Vector3(-c.mouse.x * 5 * freedom, c.mouse.y * 5 * freedom, -13.2),
       Math.sin((progress * Math.PI) / 2)
     )
     c.satellite.container.position.lerpVectors(
-      new Vector3(-0, -0, -0 + 4),
-      new Vector3(-0, -0, -0),
+      new Vector3(-0, -3.45, -20),
+      new Vector3(0, -3.45, -30),
       Math.sin((progress * Math.PI) / 2)
     )
+
+    c.starship.rotation.y = lerp(0, -Math.PI / 4, Math.sin((progress * Math.PI) / 2))
+
     return
   }
   if (c.progress < c.freeViewTime + c.transTime + c.travelTime + c.transTime) {
