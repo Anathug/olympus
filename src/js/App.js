@@ -37,7 +37,6 @@ export default class App {
       },
     }
 
-    console.log(this.sizes);
     this.counter = 0.0
     this.starship = null
     this.myEffect = null
@@ -125,7 +124,7 @@ export default class App {
 
     this.renderer.switchCam = cam => {
       if (cam == 'default') this.activeCam = this.camera.camera
-      else this.activeCam = cam
+      else this.activeCam = cam 
       if (this.postprocessing) {
         this.composer.passes[0].camera = this.activeCam
         this.renderPass.camera = this.activeCam
@@ -248,7 +247,6 @@ export default class App {
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
     })
-    console.log(this.debug)
     this.scene.add(this.world.container)
   }
 

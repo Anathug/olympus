@@ -22,17 +22,17 @@ c.init = options => {
     e.visible = false
   })
 
-  c.directionalLights = [
-    {
-      name: 'firstDirectionalLightSource',
-      position: {
-        x: -30,
-        y: 10,
-        z: 0,
-        intensity: 2,
-      },
-    },
-  ]
+  // c.directionalLights = [
+  //   {
+  //     name: 'firstDirectionalLightSource',
+  //     position: {
+  //       x: -30,
+  //       y: 10,
+  //       z: 0,
+  //       intensity: 2,
+  //     },
+  //   },
+  // ]
   c.world.container.add(c.satellite.container)
   c.freeViewTime = 0.3
   c.transTime = 0.05
@@ -48,13 +48,14 @@ c.init = options => {
   c.circle = document.getElementById('circle')
   c.lastCamPos = new Vector3(0, 0, 0)
   c.circlePos = new Vector3(0, 0, 0)
-  createLights()
+  // createLights()
   createEarth(options)
 
 }
 
 c.start = () => {
   c.showChapter('chapter_3')
+  c.lensflareContainer.getObjectByName('Lensflare').position.z = - 5000
   c.controls.enabled = true
   c.controls.autoRotate = true
   c.controls.autoRotateSpeed = 0.2
@@ -77,6 +78,7 @@ c.start = () => {
   c.handler.autoScroll = true
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
+  c.lensflareContainer.visible = true
 }
 
 c.update = () => {
@@ -179,6 +181,7 @@ const createLights = () => {
 
 const createEarth = options => {
   c.earth = new Earth(options, '3')
+  c.earth.container.scale.set(16 ,16 ,16)
   c.objects.push(c.earth.container)
   c.world.container.add(c.earth.container)
 }

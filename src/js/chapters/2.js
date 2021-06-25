@@ -91,6 +91,9 @@ c.init = options => {
 c.start = () => {
   c.showChapter('chapter_2')
   c.showObjects(c.objects)
+  c.lensflarePositionX = -263
+  c.lensflarePositionY = -291
+  c.lensflareContainer.getObjectByName('Lensflare').position.z = -30
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.duration = c.soundN.duration()
@@ -112,6 +115,9 @@ c.start = () => {
 }
 
 c.update = () => {
+  c.earth.container.rotation.y = 19 + c.progress / 2
+  c.lensflareContainer.getObjectByName('Lensflare').position.x =  c.lensflarePositionX - (c.progress * 50)
+
   c.particleSystem1.Step(
     (Math.min(Math.max(c.progress, 0.09), 0.5) - Math.min(Math.max(c.oldProg, 0.09), 0.5)) * 50,
     c.progress < 0.43

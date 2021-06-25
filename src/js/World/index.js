@@ -1,6 +1,5 @@
-import { AxesHelper, Object3D, DirectionalLight, PointLight } from 'three'
+import { AxesHelper, Object3D, DirectionalLight, AmbientLight } from 'three'
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js'
-import PointLightSource from './PointLight'
 import ChapterHandler from '../ChapterHandler'
 
 export default class World {
@@ -21,6 +20,8 @@ export default class World {
     this.lensflareLights = [
       { h: 0.995, s: 0.5, l: 0.9, x: -263, y: -291, z: -30 },
     ]
+    this.lensflareContainer = new Object3D()
+    this.dirLight = null
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -31,22 +32,14 @@ export default class World {
   }
   init() {
     this.setChapterHandler()
-    // this.setPointLight()
     this.setLights()
   }
 
-  setPointLight() {
-    this.light = new PointLightSource({
-      debug: this.debugFolder,
-    })
-    this.container.add(this.light.container)
-  }
-
   setLights() {
-    const dirLight = new DirectionalLight(0xffffff, 0.05)
-    dirLight.position.set(-1, 0, 0).normalize()
-    dirLight.color.setHSL(0.1, 0.7, 0.5)
-    this.container.add(dirLight)
+    this.dirLight = new DirectionalLight(0xffffff, 0)
+    this.dirLight.position.set(-1, 0, 0).normalize()
+    this.dirLight.color.setHSL(0.1, 0.7, 0.5)
+    this.lensflareContainer.add(this.dirLight)
 
     this.lensflareLights.forEach((lensflareLight,i) => {
       this.addLight(
@@ -59,13 +52,18 @@ export default class World {
         i
       )
     })
+
+    this.ambiantLight = new AmbientLight(0xffffff, 0.1)
+    this.container.add(this.ambiantLight)
+    this.container.add(this.lensflareContainer)
   }
 
   addLight(h, s, l, x, y, z, index) {
-    const light = new PointLight(0xffffff, 1.5, 2000)
-    light.color.setHSL(h, s, l)
+    const light = new DirectionalLight(0xffffff, 1.5, 2000)
+    // light.color.setHSL(h, s, l)
     light.position.set(x, y, z)
-    this.container.add(light)
+    light.name = 'Lensflare'
+    this.lensflareContainer.add(light)
 
     const lensflare = new Lensflare()
     const textureFlare0 = this.assets.textures.global.lensflare.lensflare0
@@ -105,6 +103,7 @@ export default class World {
       starship: this.starship,
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
+      lensflareContainer: this.lensflareContainer
     })
   }
 }

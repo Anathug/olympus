@@ -14,7 +14,6 @@ c.init = options => {
   c.firstIndexCamera = 0
   c.cams = []
   c.allowMouseMove = false
-  c.time = 0
   createGltf()
   createGltfCams()
   createAnimation()
@@ -32,8 +31,7 @@ c.start = () => {
 }
 
 c.update = () => {
-  c.mixer.setTime(c.time * c.animationDuration)
-  c.time += 0.001
+  c.mixer.setTime(c.progress * c.animationDuration)
 }
 
 c.end = () => {
@@ -44,7 +42,6 @@ c.end = () => {
 
 const createGltf = () => {
   c.gltf = c.assets.models.animations.chap01
-  console.log(c.gltf.scene)
   c.gltf.scene.traverse(child => {
     if (child.isMesh === true) {
       child.material.transparent = true

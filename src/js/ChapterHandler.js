@@ -18,6 +18,7 @@ export default class ChapterHandler {
     this.renderer = options.renderer
     this.debug = options.debug
     this.starship = options.starship
+    this.lensflareContainer = options.lensflareContainer
 
     this.allowScroll = false
     this.autoScroll = false
@@ -262,6 +263,7 @@ export default class ChapterHandler {
         chap.default.world = this.world
         chap.default.time = this.time
         chap.default.mouse = this.mouse
+        chap.default.lensflareContainer = this.lensflareContainer
 
         chap.default.switchHDRI = this.switchHDRI
         chap.default.changeFog = this.changeFog
