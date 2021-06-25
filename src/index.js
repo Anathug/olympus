@@ -51,8 +51,8 @@ const setLoader = () => {
         loadDiv.classList.add('openScene')
         setTimeout(() => {
           loadDiv.remove()
-        }, 1000)
-      }, 2000)
+        }, 2000)
+      }, 3000)
     }
 
     document.addEventListener("click", onStart, { once: true })

@@ -78,6 +78,7 @@ c.start = () => {
   c.createCams(c.cams)
   initActiveClassCamera(c.firstIndexCamera)
   c.oldProg = c.progress
+  c.lensflareContainer.visible = false
 }
 
 c.update = () => {

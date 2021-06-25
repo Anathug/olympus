@@ -131,10 +131,6 @@ const chapterEnd = () => {
   toplayout.classList.add('is-active')
   bottomlayout.classList.add('is-active')
 
-  // setTimeout(() => {
-  //   c.time.setTicker()
-  // }, 1000)
-
   setTimeout(() => {
     toplayout.classList.add('is-leaving')
     bottomlayout.classList.add('is-leaving')

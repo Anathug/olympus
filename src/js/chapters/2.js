@@ -3,6 +3,7 @@ import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D 
 import ParticleSystem from '../World/Thruster'
 import SoundHandler from '../Tools/SoundHandler'
 import clamp from '../Tools/Clamp'
+import Earth from '../World/Earth.js'
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -13,7 +14,6 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
-  c.earth = options.earth
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
@@ -53,6 +53,7 @@ c.init = options => {
   createGltfCams()
   createAnimation()
   createLights()
+  createEarth(options)
 
   c.hideObjects(c.objects)
 
@@ -77,8 +78,8 @@ c.init = options => {
     parent: c.particleSystem1Container,
     camera: c.cams[0],
     assets: c.assets,
-    offset: new Vector3(0, 0.02, 0)
-  });
+    offset: new Vector3(0, 0.02, 0),
+  })
 
   c.particleSystem2Container = new Object3D()
   c.gltf.scene.children[18].add(c.particleSystem2Container)
@@ -88,8 +89,8 @@ c.init = options => {
     parent: c.particleSystem2Container,
     camera: c.cams[0],
     assets: c.assets,
-    offset: new Vector3(0, 0.02, 0)
-  });
+    offset: new Vector3(0, 0.02, 0),
+  })
   c.oldProg = 0
 
 
@@ -99,6 +100,9 @@ c.start = () => {
   c.soundHandler.start(c.progress)
   c.showChapter('chapter_2')
   c.showObjects(c.objects)
+  c.lensflarePositionX = -263
+  c.lensflarePositionY = -291
+  c.lensflareContainer.getObjectByName('Lensflare').position.z = -30
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.duration = c.soundHandler.duration
@@ -129,7 +133,6 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step A03', 'Release of the boosters')
   } else if (c.progress < 0.3)
     c.handler.updateTimelineDisplay('Step A04', 'Release of the first stage')
-
   else {
     c.handler.updateTimelineDisplay('Step A05', 'Injection on a transit orbit to Mars')
   }
@@ -151,7 +154,6 @@ c.end = () => {
   c.hideObjects(c.objects)
   c.deleteCams()
   c.allowScroll = false
-  c.earth.container.visible = false
   c.world.renderer.switchCam('default')
   c.soundHandler.end()
 }
@@ -195,9 +197,15 @@ const createLights = () => {
   })
 }
 
+const createEarth = options => {
+  c.earth = new Earth(options, '2')
+  c.objects.push(c.earth.container)
+  c.world.container.add(c.earth.container)
+}
+
 const forceSwitchCam = i => {
-  c.world.renderer.switchCam(c.cams[i])
   c.activeCam = i
+  c.world.renderer.switchCam(c.cams[i])
   c.cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
   c.cameraButtons[i].classList.add('is-active')
 }

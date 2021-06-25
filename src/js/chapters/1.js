@@ -1,21 +1,24 @@
 import Chapter from '../Chapter'
-import Cockpit from '../World/chapter_1/Cockpit'
-import gsap from 'gsap'
 import SoundHandler from '../Tools/SoundHandler'
+import { AnimationMixer, LoopRepeat, AmbientLight, Color } from 'three'
 
 let c = new Chapter(1)
 c.title = 'Step A01'
 c.subtitle = 'Pre-launch countdown'
 c.timelineColor = '#2ecc71'
-const startButton = document.querySelector('.chapter_1 button')
 
-c.init = (options) => {
-  c.camera = options.world.camera.camera
-  c.world = options.world
-  c.mouse = c.world.mouse.mouse
+c.init = options => {
+  c.assets = options.assets
   c.debug = options.debug
+  c.world = options.world
+  c.activecam = 0
+  c.firstIndexCamera = 0
+  c.cams = []
   c.allowMouseMove = false
-  createCockpit(options)
+  createGltf()
+  createGltfCams()
+  createAnimation()
+  createLights()
   c.hideObjects(c.objects)
   c.soundHandler = new SoundHandler('./sounds/chap01.mp3', './sounds/chap01_r.mp3')
   c.ready = 0
@@ -39,56 +42,68 @@ c.start = () => {
   c.handler.setAutoScrollSpeed(c.duration)
   c.showChapter('chapter_1')
   c.showObjects(c.objects)
+  c.createCams(c.cams)
+  c.world.scene.background = new Color(0x010218)
+  initActiveCamera(c.firstIndexCamera)
   c.allowMouseMove = true
-  setCameraPosition()
-  setEvents()
 }
 
 c.update = () => {
   c.soundHandler.update(c.progress)
-  if (!c.debug && c.allowMouseMove) {
-    // mouseMove(c.camera)
-  }
+  c.mixer.setTime(c.progress * c.animationDuration)
 }
 
 c.end = () => {
   c.soundHandler.end()
   c.hideChapter('chapter_1')
   c.hideObjects(c.objects)
-  removeEvents()
+  c.deleteCams()
 }
 
-const setCameraPosition = () => {
-  c.camera.position.set(0, 0.3, 1.3)
-  c.camera.rotation.x = -0.1
+const createGltf = () => {
+  c.gltf = c.assets.models.animations.chap01
+  c.gltf.scene.traverse(child => {
+    if (child.isMesh === true) {
+      child.material.transparent = true
+    }
+  })
+  c.world.container.add(c.gltf.scene)
+  c.objects.push(c.gltf.scene)
 }
 
-const createCockpit = (options) => {
-  c.cockpit = new Cockpit(options)
-  c.objects.push(c.cockpit.container)
-  c.world.container.add(c.cockpit.container)
-}
-const mouseMove = (camera) => {
-  gsap.to(camera.position, {
-    x: c.mouse.x / 5,
-    duration: 2,
-    ease: 'power3.out'
+const createAnimation = () => {
+  const clips = c.assets.models.animations.chap01.animations
+  c.mixer = new AnimationMixer(c.gltf.scene)
+  c.animationDuration = 0
+  clips.forEach(clip => {
+    c.mixer.clipAction(clip).setLoop(LoopRepeat)
+    c.mixer.clipAction(clip).reset().play()
+    if (clip.duration > c.animationDuration) c.animationDuration = clip.duration
+  })
+  clips.forEach(clip => {
+    clip.duration = c.animationDuration
   })
 }
 
-const setEvents = () => {
-  startButton.addEventListener('click', chapterEnd, {
-    once: true
+const createGltfCams = () => {
+  c.gltf.scene.traverse(object => {
+    if (object.isCamera) {
+      c.cams.push(object)
+    }
   })
 }
 
-const removeEvents = () => {
-  startButton.removeEventListener('click', chapterEnd)
+const createLights = () => {
+  const light = new AmbientLight(0x000000, 2)
+  light.position.set(0, 5, 2.5)
+  c.world.container.add(light)
+  c.objects.push(light)
 }
 
-const chapterEnd = () => {
-  c.nextChapter()
+const initActiveCamera = i => {
+  c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+  c.cameraButtons[i].classList.add('is-active')
+  c.world.renderer.switchCam(c.cams[i])
 }
 
-
-export default c;
+export default c

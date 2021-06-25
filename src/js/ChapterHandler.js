@@ -1,6 +1,8 @@
 import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
+import normalizeWheel from 'normalize-wheel';
+
 // eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
 
@@ -16,7 +18,7 @@ export default class ChapterHandler {
     this.renderer = options.renderer
     this.debug = options.debug
     this.starship = options.starship
-    this.mars = options.mars
+    this.lensflareContainer = options.lensflareContainer
 
     //default chapter params
     this.allowScroll = false
@@ -100,8 +102,7 @@ export default class ChapterHandler {
       this.updateProgress()
       this.updateCurrentChapter()
     })
-
-    window.addEventListener('mousewheel', e => this.mouseWheel(e))
+    window.addEventListener('wheel', e => this.mouseWheel(e))
     let now = Date.now()
     this.time.on('tick', () => {
       if (!this.autoScroll) return
@@ -249,9 +250,10 @@ export default class ChapterHandler {
   }
 
   mouseWheel(event) {
+    const normalized = normalizeWheel(event);
     if (!this.allowScroll) return
     this.realProgress = clamp(
-      (this.realProgress += event.deltaY * 0.0001),
+      (this.realProgress += normalized.pixelY * 0.0001),
       0,
       this.chapters.length - 0.001
     )
@@ -278,6 +280,7 @@ export default class ChapterHandler {
         chap.default.world = this.world
         chap.default.time = this.time
         chap.default.mouse = this.mouse
+        chap.default.lensflareContainer = this.lensflareContainer
 
         chap.default.switchHDRI = this.switchHDRI
         chap.default.changeFog = this.changeFog
