@@ -3,7 +3,7 @@ import { Vector3, DirectionalLight } from 'three'
 import Starship from '../World/Starship'
 import Satellite from '../World/Satellite'
 import SoundHandler from '../Tools/SoundHandler'
-import Earth from '../World/Earth.js'
+import Earth from '../World/EarthBis.js'
 
 let c = new Chapter(3)
 c.title = 'Step B01'
@@ -178,6 +178,7 @@ const createEarth = options => {
   c.earth.container.scale.set(16, 16, 16)
   c.objects.push(c.earth.container)
   c.world.container.add(c.earth.container)
+  console.log(c.earth);
 }
 
 export default c
