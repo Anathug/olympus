@@ -2,6 +2,7 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopOnce, AmbientLight, Object3D, Vector3 } from 'three'
 import ParticleSystem from '../World/Thruster'
 import lerp from '../Tools/Lerp'
+import SoundHandler from '../Tools/SoundHandler'
 
 let c = new Chapter(4)
 c.title = 'Step c01'
@@ -47,6 +48,19 @@ c.init = options => {
     offset: new Vector3(0, 0.02, 0),
     scale: 0.03
   });
+
+  c.soundHandler = new SoundHandler('./sounds/chap04.mp3', './sounds/chap04_r.mp3')
+  c.ready = 0
+  c.soundHandler.soundN.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
+  c.soundHandler.soundR.once('load', function () {
+    c.ready++
+    if (c.ready == 2)
+      c.handler.trySetup()
+  });
 }
 
 c.start = () => {
@@ -54,9 +68,11 @@ c.start = () => {
   c.showObjects(c.objects)
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  c.handler.setAutoScrollSpeed(c.animationDuration)
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
-  c.handler.setAutoScrollSpeed(c.animationDuration)
+
+  c.duration = c.soundHandler.duration
+  c.handler.setAutoScrollSpeed(c.duration)
+  c.soundHandler.start(c.progress)
   c.switchHDRI('landing-zone')
   c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
@@ -66,6 +82,7 @@ c.start = () => {
 }
 
 c.update = () => {
+  c.soundHandler.update(c.progress)
   c.mixer.setTime(c.progress * c.animationDuration)
 
   if (c.progress < 0.2)
@@ -82,6 +99,7 @@ c.update = () => {
 }
 
 c.end = () => {
+  c.soundHandler.update(c.progress)
   c.hideChapter('chapter_4')
   c.hideObjects(c.objects)
   c.deleteCams()

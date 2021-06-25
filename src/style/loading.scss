@@ -57,7 +57,7 @@
   width:100%;
 }
 
-#headphones{
+.loaderBottom{
   position: absolute;
   bottom: 8%;
   text-align: center;
@@ -67,7 +67,6 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin: 12px 0;
-  color: #F1C40F;
   opacity: 1;
 
   -webkit-transition: opacity 0.5s;
@@ -77,6 +76,15 @@
   transition: opacity 0.5s;
 }
 
+#headphones{
+  color: #F1C40F;
+}
+
+#clickToStart{
+  color: #fff;
+  opacity: 0;
+}
+
 
 #timerContainer.fadeout{
   opacity: 0;
@@ -84,6 +92,10 @@
 
 #headphones.fadeout{
   opacity: 0;
+}
+
+#clickToStart.fadein{
+  opacity: 1;
 }
 
 #loader.openScene{

@@ -45,7 +45,6 @@ export default class Starship {
     truc.material.roughnessMap = roughnessTexture
 
     // this.starship.children[13].traverse((child) => {
-    //   console.log(child.material)
     //   child.material = new MeshBasicMaterial({ map: colorTexture })
     //   // child.material.map = colorTexture
     // })
