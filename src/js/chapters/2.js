@@ -119,6 +119,9 @@ c.update = () => {
   //steps both particle systems
   c.particleSystem1.Step((clamp(c.progress, 0.044, 0.3) - clamp(c.oldProg, 0.044, 0.3)) * 50, c.progress < 0.20)
   c.particleSystem2.Step((clamp(c.progress, 0.232, 0.6) - clamp(c.oldProg, 0.232, 0.6)) * 50, c.progress < 0.50)
+  c.soundHandler.update(c.progress)
+  c.lensflareContainer.getObjectByName('Lensflare').position.x = c.lensflarePositionX - c.progress * 100
+  c.earth.container.rotation.y = 0.5 + c.progress
 
 
   if (0.16 > c.progress && c.progress > 0.15) {

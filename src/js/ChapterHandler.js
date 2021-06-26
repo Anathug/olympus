@@ -23,7 +23,7 @@ export default class ChapterHandler {
     //default chapter params
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 0
+    this.workingChapter = 2
     this.autoScrollSpeed = 0.0001
 
     //chapter progression
@@ -114,7 +114,6 @@ export default class ChapterHandler {
         0,
         this.chapters.length - 0.001
       )
-      console.log(delta / 16.7)
       now = Date.now()
     })
   }
