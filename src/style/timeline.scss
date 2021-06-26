@@ -89,10 +89,6 @@
   transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.timelineTitle:hover {
-  cursor: pointer;
-}
-
 .timelineChap {
   .timelineTitle {
     transform: scale(0.8);

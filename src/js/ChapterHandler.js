@@ -2,6 +2,7 @@ import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
 import normalizeWheel from 'normalize-wheel'
+import GlobalInteractions from './GlobalInteractions'
 
 // eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
@@ -19,6 +20,7 @@ export default class ChapterHandler {
     this.debug = options.debug
     this.starship = options.starship
     this.lensflareContainer = options.lensflareContainer
+    this.globalInteractions = new GlobalInteractions(this.options)
 
     //default chapter params
     this.allowScroll = false
@@ -293,6 +295,7 @@ export default class ChapterHandler {
         chap.default.time = this.time
         chap.default.mouse = this.mouse
         chap.default.lensflareContainer = this.lensflareContainer
+        chap.default.globalInteractions = this.globalInteractions
 
         chap.default.switchHDRI = this.switchHDRI
         chap.default.changeFog = this.changeFog
