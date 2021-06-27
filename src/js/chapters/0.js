@@ -29,7 +29,7 @@ c.start = () => {
   c.handler.autoScroll = true
   c.soundHandlers[c.index].start(c.progress)
   c.animationDuration = c.soundHandlers[c.index].duration
-  c.subtitlesHandlers[c.index].start(c.animationDuration)
+  c.subtitlesHandlers[c.index].start(c.animationDuration, true)
   c.handler.setAutoScrollSpeed(c.animationDuration)
   c.showChapter('chapter_0')
   setEvents()
