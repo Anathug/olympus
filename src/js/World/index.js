@@ -16,6 +16,8 @@ export default class World {
     this.switchHDRI = options.switchHDRI
     this.changeFog = options.changeFog
     this.bloomPass = options.bloomPass
+    this.soundHandlers = options.soundHandlers
+    this.subtitlesHandlers = options.subtitlesHandlers
     this.container = new Object3D()
     this.container.name = 'World'
     this.lensflareLights = [
@@ -106,6 +108,8 @@ export default class World {
       changeFog: this.changeFog,
       lensflareContainer: this.lensflareContainer,
       bloomPass: this.bloomPass,
+      soundHandlers: this.soundHandlers,
+      subtitlesHandlers: this.subtitlesHandlers
     })
   }
 }

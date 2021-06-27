@@ -21,12 +21,14 @@ export default class ChapterHandler {
     this.starship = options.starship
     this.lensflareContainer = options.lensflareContainer
     this.bloomPass = options.bloomPass
-    this.globalInteractions = new GlobalInteractions(this.options)
+    this.soundHandlers = options.soundHandlers,
+      this.subtitlesHandlers = options.subtitlesHandlers,
+      this.globalInteractions = new GlobalInteractions(this.options)
 
     //default chapter params
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 0
+    this.workingChapter = 2
     this.autoScrollSpeed = 0.0001
 
     //chapter progression
@@ -37,7 +39,6 @@ export default class ChapterHandler {
 
     //import all chapters
     this.chapters = []
-    this.chaptersReady = 0
     this.longestDuration = 0
     this.chapters = this.importAll()
 
@@ -57,6 +58,7 @@ export default class ChapterHandler {
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
+
   }
 
   setUI() {
@@ -278,12 +280,6 @@ export default class ChapterHandler {
     this.autoScrollSpeed = 1 / 60 / duration
   }
 
-  trySetup() {
-    this.chaptersReady++
-    if (this.chaptersReady == this.chapters.length)
-      this.setup()
-  }
-
   async importAll() {
     let r = require.context('./chapters/', true, /\.js$/)
     let a = []
@@ -310,6 +306,8 @@ export default class ChapterHandler {
         chap.default.deleteCams = this.deleteCams
         chap.default.enableCam = this.enableCam
         chap.default.disableCam = this.disableCam
+        chap.default.soundHandlers = this.soundHandlers
+        chap.default.subtitlesHandlers = this.subtitlesHandlers
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
@@ -318,6 +316,7 @@ export default class ChapterHandler {
         // }
         if (a.length == r.keys().length) {
           this.chapters = a
+          this.setup()
         }
       })
     })
