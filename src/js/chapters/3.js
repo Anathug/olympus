@@ -78,15 +78,15 @@ c.start = () => {
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
 
-  c.duration = c.soundHandlers[c.index].duration
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  c.handler.setAutoScrollSpeed(c.duration)
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
 
   c.soundHandlers[c.index].start(c.progress)
+  c.duration = c.soundHandlers[c.index].duration
   c.subtitlesHandlers[c.index].start(c.duration)
+  c.handler.setAutoScrollSpeed(c.duration)
   c.lensflareContainer.visible = true
 
   c.earth.container.rotation.set(0.4, 3, 3.1)
