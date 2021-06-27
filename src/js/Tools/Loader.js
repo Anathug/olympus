@@ -6,7 +6,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 import lerp from '../Tools/Lerp'
 
-import { AudioLoader, FontLoader, TextureLoader, MeshToonMaterial } from 'three'
+import { AudioLoader, FontLoader, TextureLoader } from 'three'
 
 export default class Loader extends EventEmitter {
   constructor() {
@@ -160,10 +160,15 @@ export default class Loader extends EventEmitter {
     this.timerHours2.textContent = ('0' + hours).slice(-2).charAt(1)
   }
 
+  autoIncrement() {
+    this.timerSeconds2.textContent = Math.floor(Math.random() * 10);
+  }
+
   progress(xhr) {
     if (xhr.lengthComputable) {
       this.durationLeft = lerp(this.durationTotal, 0, 1 - Math.pow(1 - xhr.loaded / xhr.total, 4))
       this.updateProgress()
+      this.autoIncrement()
       if (this.currentPercent === 100) {
         this.currentPercent = 0
       }
@@ -248,6 +253,7 @@ export default class Loader extends EventEmitter {
     this.trigger('ressourceLoad', [ressource, loaded])
     if (this.total === this.done) {
       this.trigger('ressourcesReady')
+      this.timerSeconds2.textContent = 0
     }
   }
   createNestedObject(base, names, value) {

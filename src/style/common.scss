@@ -104,6 +104,10 @@ p {
   width: 100%;
   z-index: 100;
   pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+  &.hidden {
+    opacity: 0;
+  }
 
   .horizontal-line {
     width: 100%;
@@ -341,7 +345,6 @@ p {
   position: relative;
 }
 
-
 //transition between chapters
 
 .chapter-transition {
@@ -358,6 +361,112 @@ p {
   opacity: 0;
   pointer-events: none;
   p {
-    color: #F1C40F
+    color: #f1c40f;
+  }
+}
+
+.credit {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: ease-in-out 0.5s;
+  &.is-active {
+    opacity: 1;
+  }
+  &-wrapper {
+    width: 50%;
+    text-align: center;
+    max-width: 700px;
+    h3 {
+      font-size: 6rem;
+      letter-spacing: 35px;
+      @media (max-width: 1280px) {
+        font-size: 7vw;
+        letter-spacing: 3vw;
+      }
+    }
+    span {
+      font-size: 1.2rem;
+      letter-spacing: 5px;
+      margin-bottom: 2rem;
+      display: inline-block;
+    }
+    .description {
+      margin: 1rem 0;
+    }
+    button {
+      position: relative;
+      margin: auto;
+      margin-top: 10rem;
+      display: none;
+      pointer-events: auto;
+      transition-delay: 0.5s;
+      &:hover {
+        cursor: pointer;
+      }
+      &.visible {
+        display: none;
+        // display: block;
+      }
+    }
+  }
+  .bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    box-sizing: border-box;
+    .names {
+      margin: 0 1.2rem;
+      span {
+        font-size: 8px;
+        color: grey;
+      }
+      p {
+        letter-spacing: 3px;
+        font-size: 12px;
+      }
+    }
+    .collegues,
+    .thanks {
+      display: flex;
+      align-items: flex-end;
+    }
+    .logos {
+      display: flex;
+      align-items: flex-end;
+      img:nth-child(2) {
+        margin-left: 3rem;
+      }
+    }
+  }
+}
+
+.mobile-restriction {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 200000;
+  background-color: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  p {
+    width: 600px;
+  }
+  @media (max-width: 768px) {
+    display: flex;
   }
 }

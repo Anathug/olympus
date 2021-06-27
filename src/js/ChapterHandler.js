@@ -2,6 +2,7 @@ import lerp from '../js/Tools/Lerp'
 import ease from '../js/Tools/Ease'
 import clamp from '../js/Tools/Clamp'
 import normalizeWheel from 'normalize-wheel'
+import GlobalInteractions from './GlobalInteractions'
 
 // eslint-disable-next-line no-unused-vars
 import regeneratorRuntime from 'regenerator-runtime'
@@ -19,6 +20,10 @@ export default class ChapterHandler {
     this.debug = options.debug
     this.starship = options.starship
     this.lensflareContainer = options.lensflareContainer
+    this.bloomPass = options.bloomPass
+    this.soundHandlers = options.soundHandlers,
+      this.subtitlesHandlers = options.subtitlesHandlers,
+      this.globalInteractions = new GlobalInteractions(this.options)
 
     //default chapter params
     this.allowScroll = false
@@ -34,7 +39,6 @@ export default class ChapterHandler {
 
     //import all chapters
     this.chapters = []
-    this.chaptersReady = 0
     this.longestDuration = 0
     this.chapters = this.importAll()
 
@@ -54,6 +58,7 @@ export default class ChapterHandler {
     this.updateProgress = this.updateProgress.bind(this)
     this.updateCurrentChapter = this.updateCurrentChapter.bind(this)
     this.mouseWheel = this.mouseWheel.bind(this)
+
   }
 
   setUI() {
@@ -114,7 +119,6 @@ export default class ChapterHandler {
         0,
         this.chapters.length - 0.001
       )
-      console.log(delta / 16.7)
       now = Date.now()
     })
   }
@@ -156,12 +160,12 @@ export default class ChapterHandler {
     this.chapters[this.currentChapter].progress = this.chapProgress
     // const duration = this.chapters[this.currentChapter].duration
 
-    if (this.chapProgress > 0.95) {
+    if (this.chapProgress > 0.95 && this.currentChapter != 4) {
       this.chapterTransition.style.opacity = (this.chapProgress - 0.95) * 40
-    } else if (this.chapProgress < 0.05) {
+    } else if (this.chapProgress < 0.05 && this.currentChapter != 0) {
       this.chapterTransition.style.opacity = 1 - this.chapProgress * 40
     } else {
-      this.chapProgress = 0
+      this.chapterTransition.style.opacity = 0
     }
   }
 
@@ -276,12 +280,6 @@ export default class ChapterHandler {
     this.autoScrollSpeed = 1 / 60 / duration
   }
 
-  trySetup() {
-    this.chaptersReady++
-    if (this.chaptersReady == this.chapters.length)
-      this.setup()
-  }
-
   async importAll() {
     let r = require.context('./chapters/', true, /\.js$/)
     let a = []
@@ -294,6 +292,8 @@ export default class ChapterHandler {
         chap.default.time = this.time
         chap.default.mouse = this.mouse
         chap.default.lensflareContainer = this.lensflareContainer
+        chap.default.globalInteractions = this.globalInteractions
+        chap.default.bloomPass = this.bloomPass
 
         chap.default.switchHDRI = this.switchHDRI
         chap.default.changeFog = this.changeFog
@@ -306,6 +306,8 @@ export default class ChapterHandler {
         chap.default.deleteCams = this.deleteCams
         chap.default.enableCam = this.enableCam
         chap.default.disableCam = this.disableCam
+        chap.default.soundHandlers = this.soundHandlers
+        chap.default.subtitlesHandlers = this.subtitlesHandlers
         chap.default.progress = 0
         chap.default.init(this.options)
         a.push(chap.default)
@@ -314,6 +316,7 @@ export default class ChapterHandler {
         // }
         if (a.length == r.keys().length) {
           this.chapters = a
+          this.setup()
         }
       })
     })

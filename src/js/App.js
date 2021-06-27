@@ -5,6 +5,9 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js'
 import { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader.js'
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js';
+
 import * as Stats from 'stats.js'
 import * as dat from 'dat.gui'
 
@@ -23,6 +26,8 @@ export default class App {
     this.time = options.time
     this.sizes = options.sizes
     this.mouse = options.mouse
+    this.soundHandlers = options.soundHandlers
+    this.subtitlesHandlers = options.subtitlesHandlers
     this.params = {
       fog: {
         color: 0x010218,
@@ -41,20 +46,20 @@ export default class App {
     this.starship = null
     this.myEffect = null
     this.bloomPass = null
+    this.FXAAShader = null
+    this.copyPass = null
     this.lut = true
-    this.composer = null
+    this.composer1 = null
+    this.composer2 = null
     this.spaceCubeMap = null
     this.landingZoneCubeMap = null
     this.stats = null
-
-    this.postprocessing = true
 
     this.switchHDRI = this.switchHDRI.bind(this)
     this.changeFog = this.changeFog.bind(this)
     this.setConfig()
     this.setScene()
     this.setSpaceHdri()
-    this.setStarship()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()
@@ -99,14 +104,17 @@ export default class App {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      antialias: true,
       powerPreference: 'high-performance',
     })
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     window.addEventListener('resize', () => {
+      const pixelRatio = this.renderer.getPixelRatio();
       this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
+      this.FXAAShader.material.uniforms['resolution'].value.x = 1 / (this.sizes.viewport.width * pixelRatio);
+      this.FXAAShader.material.uniforms['resolution'].value.y = 1 / (this.sizes.viewport.height * pixelRatio);
+      this.composer1.setSize(this.sizes.viewport.width, this.sizes.viewport.height);
       this.activeCam.aspect = window.innerWidth / window.innerHeight
       this.activeCam.updateProjectionMatrix()
     })
@@ -114,24 +122,29 @@ export default class App {
 
   setRenderer() {
     this.activeCam = this.camera.camera
-    this.stats = new Stats()
-    this.stats.showPanel(1)
-    document.body.appendChild(this.stats.dom)
-    if (this.postprocessing) {
-      this.composer = new EffectComposer(this.renderer)
-      this.renderPass = new RenderPass(this.scene, this.activeCam)
-    }
+    // this.stats = new Stats()
+    // this.stats.showPanel(1)
+    // document.body.appendChild(this.stats.dom)
+
+    this.renderPass = new RenderPass(this.scene, this.activeCam)
+
+    this.FXAAShader = new ShaderPass(FXAAShader)
+    this.copyPass = new ShaderPass(CopyShader)
+
+    this.composer1 = new EffectComposer(this.renderer)
+    this.composer1.addPass(this.renderPass)
+    this.composer1.addPass(this.FXAAShader)
+    this.composer1.setSize(this.sizes.viewport.width, this.sizes.viewport.height);
+    const pixelRatio = this.renderer.getPixelRatio();
+
+    this.FXAAShader.material.uniforms['resolution'].value.x = 1 / (this.sizes.viewport.width * pixelRatio)
+    this.FXAAShader.material.uniforms['resolution'].value.y = 1 / (this.sizes.viewport.height * pixelRatio)
 
     this.renderer.switchCam = cam => {
       if (cam == 'default') this.activeCam = this.camera.camera
-      else this.activeCam = cam 
-      if (this.postprocessing) {
-        this.composer.passes[0].camera = this.activeCam
-        this.renderPass.camera = this.activeCam
-      }
-    }
-    if (this.postprocessing) {
-      this.composer.addPass(this.renderPass)
+      else this.activeCam = cam
+      this.composer1.passes[0].camera = this.activeCam
+      this.renderPass.camera = this.activeCam
     }
 
     this.myEffect = {
@@ -143,68 +156,41 @@ export default class App {
       fragmentShader: postFragmentShader,
     }
 
-    let customPass = null
+    this.customPass = null
 
-    if (this.postprocessing) {
-      customPass = new ShaderPass(this.myEffect)
-      customPass.renderToScreen = true
-      this.composer.addPass(customPass)
+    this.customPass = new ShaderPass(this.myEffect)
+    this.customPass.renderToScreen = true
+    this.composer1.addPass(this.customPass)
 
-      let lutMap
-      let lutPass = new LUTPass()
+    let lutMap
+    let lutPass = new LUTPass()
 
-      new LUTCubeLoader().load('lut/WGFX_Luts_23.cube', result => {
-        lutMap = result
-        lutPass.lut = lutMap.texture
-        lutPass.intensity = 0.2
-        this.composer.addPass(lutPass)
-      })
+    new LUTCubeLoader().load('lut/WGFX_Luts_23.cube', result => {
+      lutMap = result
+      lutPass.lut = lutMap.texture
+      lutPass.intensity = 0.2
+      this.composer1.addPass(lutPass)
+    })
 
-      this.bloomPass = new UnrealBloomPass(
-        new Vector2(window.innerWidth, window.innerHeight),
-        1.5,
-        0.4,
-        0.85
-      )
-      this.bloomPass.threshold = this.params.bloomPass.bloomThreshold
-      this.bloomPass.strength = this.params.bloomPass.bloomStrength
-      this.bloomPass.radius = this.params.bloomPass.bloomRadius
+    this.bloomPass = new UnrealBloomPass(
+      new Vector2(window.innerWidth, window.innerHeight),
+      1.5,
+      0.4,
+      0.85
+    )
+    this.bloomPass.threshold = this.params.bloomPass.bloomThreshold
+    this.bloomPass.strength = this.params.bloomPass.bloomStrength
+    this.bloomPass.radius = this.params.bloomPass.bloomRadius
 
-      this.composer.addPass(this.bloomPass)
-    }
+    this.composer1.addPass(this.bloomPass)
 
     this.time.on('tick', () => {
       this.counter += 0.001
-      this.stats.begin()
-      if (this.postprocessing) {
-        customPass.uniforms['amount'].value = this.counter
-        this.composer.render()
-      } else {
-        this.renderer.render(this.scene, this.activeCam)
-      }
-      this.stats.end()
+      // this.stats.begin()
+      this.customPass.uniforms['amount'].value = this.counter
+      this.composer1.render()
+      // this.stats.end()
     })
-
-    if (this.debug) {
-      this.renderOnBlur = { activated: true }
-      const folder = this.debug.addFolder('Renderer')
-      folder.open()
-      this.lut = { activated: true }
-      folder
-        .add(this.lut, 'activated')
-        .name('lut')
-        .listen()
-        .onChange(() => {
-          if (this.lut) {
-            this.composer.addPass(lutPass)
-            this.lut = false
-          } else {
-            this.composer.removePass(lutPass)
-            this.lut = true
-          }
-        })
-      folder.add(this.renderOnBlur, 'activated').name('Render on window blur')
-    }
   }
 
   setStarship() {
@@ -246,6 +232,9 @@ export default class App {
       renderer: this.renderer,
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
+      bloomPass: this.bloomPass,
+      soundHandlers: this.soundHandlers,
+      subtitlesHandlers: this.subtitlesHandlers
     })
     this.scene.add(this.world.container)
   }

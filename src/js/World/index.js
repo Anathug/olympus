@@ -15,6 +15,9 @@ export default class World {
     this.starship = options.starship
     this.switchHDRI = options.switchHDRI
     this.changeFog = options.changeFog
+    this.bloomPass = options.bloomPass
+    this.soundHandlers = options.soundHandlers
+    this.subtitlesHandlers = options.subtitlesHandlers
     this.container = new Object3D()
     this.container.name = 'World'
     this.lensflareLights = [
@@ -41,7 +44,7 @@ export default class World {
     this.dirLight.color.setHSL(0.1, 0.7, 0.5)
     this.lensflareContainer.add(this.dirLight)
 
-    this.lensflareLights.forEach((lensflareLight,i) => {
+    this.lensflareLights.forEach((lensflareLight, i) => {
       this.addLight(
         lensflareLight.h,
         lensflareLight.s,
@@ -53,7 +56,7 @@ export default class World {
       )
     })
 
-    this.ambiantLight = new AmbientLight(0xffffff, 0.1)
+    this.ambiantLight = new AmbientLight(0xffffff, 0.2)
     this.container.add(this.ambiantLight)
     this.container.add(this.lensflareContainer)
   }
@@ -76,16 +79,16 @@ export default class World {
     lensflare.addElement(new LensflareElement(textureFlare3, 70, 1))
     light.add(lensflare)
 
-    if(this.debug) {
+    if (this.debug) {
 
-    this.debugFolder = this.debug.addFolder(`Lensflare + ${index}`)
-    this.debugFolder.open()
-    this.debugFolder.add(light.position, 'x').step(1).min(-400).max(-200).name('Position X')
-    this.debugFolder.add(light.position, 'y').step(1).min(-400).max(-200).name('Position Y')
-    this.debugFolder.add(light.position, 'z').step(1).min(-5000).max(5000).name('Position Z')
-    this.debugFolder.add(light.scale, 'x').step(0.1).min(0).max(3).name('Scale X')
-    this.debugFolder.add(light.scale, 'y').step(0.1).min(0).max(3).name('Scale Y')
-    this.debugFolder.add(light.scale, 'z').step(0.1).min(0).max(3).name('Scale Z')
+      this.debugFolder = this.debug.addFolder(`Lensflare + ${index}`)
+      this.debugFolder.open()
+      this.debugFolder.add(light.position, 'x').step(1).min(-400).max(-200).name('Position X')
+      this.debugFolder.add(light.position, 'y').step(1).min(-400).max(-200).name('Position Y')
+      this.debugFolder.add(light.position, 'z').step(1).min(-5000).max(5000).name('Position Z')
+      this.debugFolder.add(light.scale, 'x').step(0.1).min(0).max(3).name('Scale X')
+      this.debugFolder.add(light.scale, 'y').step(0.1).min(0).max(3).name('Scale Y')
+      this.debugFolder.add(light.scale, 'z').step(0.1).min(0).max(3).name('Scale Z')
     }
   }
 
@@ -103,7 +106,10 @@ export default class World {
       starship: this.starship,
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
-      lensflareContainer: this.lensflareContainer
+      lensflareContainer: this.lensflareContainer,
+      bloomPass: this.bloomPass,
+      soundHandlers: this.soundHandlers,
+      subtitlesHandlers: this.subtitlesHandlers
     })
   }
 }

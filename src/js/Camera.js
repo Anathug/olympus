@@ -47,23 +47,23 @@ export default class Camera {
       this.renderer.domElement
     )
     this.orbitControls.enabled = false
-     this.orbitControls.enableKeys = true
-     this.orbitControls.enableZoom = false
-     this.orbitControls.enablePan = false
+    this.orbitControls.enableKeys = true
+    this.orbitControls.enableZoom = false
+    this.orbitControls.enablePan = false
 
-     this.orbitControls.minPolarAngle = Math.PI / 3
-     this.orbitControls.maxPolarAngle = Math.PI / 3 * 2
+    this.orbitControls.minPolarAngle = Math.PI / 3
+    this.orbitControls.maxPolarAngle = Math.PI / 3 * 2
 
-     this.orbitControls.enableDamping = true
-     this.orbitControls.dampingFactor = 0.05
+    this.orbitControls.enableDamping = true
+    this.orbitControls.dampingFactor = 0.05
 
-     this.orbitControls.autoRotate = false
-     this.orbitControls.autoRotateSpeed = -0.2
+    this.orbitControls.autoRotate = false
+    this.orbitControls.autoRotateSpeed = -0.2
 
     this.orbitControls.target.set(0, 0, 0)
-     this.camera.lookAt(0, 0, 0)
+    this.camera.lookAt(0, 0, 0)
 
-     this.orbitControls.saveState()
+    this.orbitControls.saveState()
 
 
     if (this.debug) {
@@ -84,8 +84,8 @@ export default class Camera {
       this.debugFolder
         .add(this.camera.position, 'z')
         .step(0.1)
-        .min(-15)
-        .max(15)
+        .min(-100)
+        .max(100)
         .name('Position Z')
       this.debugFolder
         .add(this.camera.rotation, 'x')

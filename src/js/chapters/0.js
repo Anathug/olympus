@@ -3,7 +3,6 @@ import gsap from 'gsap'
 import data from '../../../static/database/chap0'
 import clamp from '../Tools/Clamp'
 import EncryptedText from '../EncryptedText'
-import SoundHandler from '../Tools/SoundHandler'
 
 const c = new Chapter(0)
 c.title = 'Introduction'
@@ -23,36 +22,27 @@ c.init = () => {
   c.opened = false
   createInfos()
   createImagePosition()
-  c.soundHandler = new SoundHandler('./sounds/chap00.mp3', './sounds/chap00_r.mp3')
-  c.ready = 0
-  c.soundHandler.soundN.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
-  c.soundHandler.soundR.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
 }
 
 c.start = () => {
-  c.soundHandler.start(c.progress)
-  c.animationDuration = c.soundHandler.duration
-  c.handler.setAutoScrollSpeed(c.animationDuration)
-  c.showChapter('chapter_0')
   c.handler.allowScroll = true
   c.handler.autoScroll = true
+  c.soundHandlers[c.index].start(c.progress)
+  c.animationDuration = c.soundHandlers[c.index].duration
+  c.subtitlesHandlers[c.index].start(c.animationDuration, true)
+  c.handler.setAutoScrollSpeed(c.animationDuration)
+  c.showChapter('chapter_0')
   setEvents()
 }
 
 c.update = () => {
-  c.soundHandler.update(c.progress)
+  c.soundHandlers[c.index].update(c.progress)
+  c.subtitlesHandlers[c.index].update(c.progress)
 }
 
 c.end = () => {
-  c.soundHandler.end()
+  c.soundHandlers[c.index].end()
+  c.subtitlesHandlers[c.index].end()
   removeEvents()
   c.hideChapter('chapter_0')
 }
