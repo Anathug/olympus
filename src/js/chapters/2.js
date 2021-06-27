@@ -1,8 +1,6 @@
 import Chapter from '../Chapter'
 import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
 import ParticleSystem from '../World/Thruster'
-import SoundHandler from '../Tools/SoundHandler'
-import SubtitlesHandler from '../Tools/SubtitlesHandler'
 import clamp from '../Tools/Clamp'
 import Earth from '../World/Earth.js'
 import threeDecimals from '../Tools/Decimals'
@@ -57,22 +55,7 @@ c.init = options => {
   createAnimation()
   createLights()
   createEarth(options)
-
   c.hideObjects(c.objects)
-
-  c.soundHandler = new SoundHandler('./sounds/chap02.mp3', './sounds/chap02_r.mp3')
-  c.subtitleHandler = new SubtitlesHandler('./subtitles/chap02.tsv')
-  c.ready = 0
-  c.soundHandler.soundN.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
-  c.soundHandler.soundR.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
 
   c.particleSystem1Container = new Object3D()
   c.gltf.scene.children[7].add(c.particleSystem1Container)
@@ -101,7 +84,7 @@ c.init = options => {
 }
 
 c.start = () => {
-  c.soundHandler.start(c.progress)
+  c.soundHandlers[c.index].start(c.progress)
   c.showChapter('chapter_2')
   c.showObjects(c.objects)
   c.lensflarePositionX = -263
@@ -109,9 +92,9 @@ c.start = () => {
   c.lensflareContainer.getObjectByName('Lensflare').position.z = -30
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  c.duration = c.soundHandler.duration
+  c.duration = c.soundHandlers[c.index].duration
   c.handler.setAutoScrollSpeed(c.duration)
-  c.subtitleHandler.start(c.duration)
+  c.subtitlesHandlers[c.index].start(c.duration)
   c.earth.container.visible = true
   c.createCams(c.cams)
   c.switchHDRI()
@@ -125,7 +108,7 @@ c.update = () => {
   //steps both particle systems
   c.particleSystem1.Step((clamp(c.progress, 0.044, 0.3) - clamp(c.oldProg, 0.044, 0.3)) * 50, c.progress < 0.20)
   c.particleSystem2.Step((clamp(c.progress, 0.232, 0.6) - clamp(c.oldProg, 0.232, 0.6)) * 50, c.progress < 0.50)
-  c.soundHandler.update(c.progress)
+  c.soundHandlers[c.index].update(c.progress)
   c.lensflareContainer.getObjectByName('Lensflare').position.x = c.lensflarePositionX - c.progress * 100
   c.earth.container.rotation.y = 0.5 + c.progress
 
@@ -166,8 +149,8 @@ c.update = () => {
   if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 20
   if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 30
 
-  c.soundHandler.update(c.progress)
-  c.subtitleHandler.update(c.progress)
+  c.soundHandlers[c.index].update(c.progress)
+  c.subtitlesHandlers[c.index].update(c.progress)
 
   c.changeFog(150 + c.progress * 500, 10 + c.progress * 500, 0x010218)
   c.world.scene.background.lerpColors(new Color(0x010218), new Color(0x000000), c.progress)
@@ -179,8 +162,8 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-  c.soundHandler.end()
-  c.subtitleHandler.end()
+  c.soundHandlers[c.index].end()
+  c.subtitlesHandlers[c.index].end()
 }
 
 const createGltfCams = () => {

@@ -2,7 +2,6 @@ import SoundButton from './SoundButton'
 
 export default class GlobalInteractions {
   constructor(options) {
-    console.log(options);
     this.time = options.time
     this.sizes = options.sizes
     this.mouse = options.mouse

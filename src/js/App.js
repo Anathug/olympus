@@ -23,6 +23,8 @@ export default class App {
     this.time = options.time
     this.sizes = options.sizes
     this.mouse = options.mouse
+    this.soundHandlers = options.soundHandlers
+    this.subtitlesHandlers = options.subtitlesHandlers
     this.params = {
       fog: {
         color: 0x010218,
@@ -54,7 +56,6 @@ export default class App {
     this.setConfig()
     this.setScene()
     this.setSpaceHdri()
-    // this.setStarship()
     this.createRenderer()
     this.setCamera()
     this.setRenderer()
@@ -184,27 +185,6 @@ export default class App {
       }
       this.stats.end()
     })
-
-    if (this.debug) {
-      this.renderOnBlur = { activated: true }
-      const folder = this.debug.addFolder('Renderer')
-      folder.open()
-      this.lut = { activated: true }
-      folder
-        .add(this.lut, 'activated')
-        .name('lut')
-        .listen()
-        .onChange(() => {
-          if (this.lut) {
-            this.composer.addPass(lutPass)
-            this.lut = false
-          } else {
-            this.composer.removePass(lutPass)
-            this.lut = true
-          }
-        })
-      folder.add(this.renderOnBlur, 'activated').name('Render on window blur')
-    }
   }
 
   setStarship() {
@@ -247,6 +227,8 @@ export default class App {
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
       bloomPass: this.bloomPass,
+      soundHandlers: this.soundHandlers,
+      subtitlesHandlers: this.subtitlesHandlers
     })
     this.scene.add(this.world.container)
   }

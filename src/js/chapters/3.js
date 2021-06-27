@@ -1,10 +1,7 @@
 import Chapter from '../Chapter'
-import { Vector3, DirectionalLight } from 'three'
-import Starship from '../World/Starship'
+import { Vector3 } from 'three'
 import Satellite from '../World/Satellite'
 import lerp from '../Tools/Lerp'
-import SoundHandler from '../Tools/SoundHandler'
-import SubtitlesHandler from '../Tools/SubtitlesHandler'
 import Earth from '../World/EarthBis.js'
 
 let c = new Chapter(3)
@@ -17,7 +14,6 @@ c.init = options => {
   c.mouse = c.world.mouse.mouse
   c.debug = options.debug
   c.world = options.world
-  // c.starship = new Starship(options)
   c.starship = options.assets.models.starship.scene.children[0]
   c.world.container.add(c.starship)
   c.satellite = new Satellite(options)
@@ -58,20 +54,6 @@ c.init = options => {
   if (c.debug) {
     setDebug()
   }
-
-  c.soundHandler = new SoundHandler('./sounds/chap03.mp3', './sounds/chap03_r.mp3')
-  c.subtitleHandler = new SubtitlesHandler('./subtitles/chap00.tsv')
-  c.ready = 0
-  c.soundHandler.soundN.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
-  c.soundHandler.soundR.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
 }
 
 c.start = () => {
@@ -96,21 +78,21 @@ c.start = () => {
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
 
-  c.duration = c.soundHandler.duration
+  c.duration = c.soundHandlers[c.index].duration
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.handler.setAutoScrollSpeed(c.duration)
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
 
-  c.soundHandler.start(c.progress)
-  c.subtitleHandler.start(c.duration)
+  c.soundHandlers[c.index].start(c.progress)
+  c.subtitlesHandlers[c.index].start(c.duration)
   c.lensflareContainer.visible = true
 }
 
 c.update = () => {
-  c.soundHandler.update(c.progress)
-  c.subtitleHandler.update(c.progress)
+  c.soundHandlers[c.index].update(c.progress)
+  c.subtitlesHandlers[c.index].update(c.progress)
   if (c.progress < 0.75) c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
   else c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
   c.earth.container.rotation.y = 0.5 + c.progress / 3
@@ -188,8 +170,8 @@ c.update = () => {
 }
 
 c.end = () => {
-  c.soundHandler.end()
-  c.subtitleHandler.end()
+  c.soundHandlers[c.index].end()
+  c.subtitlesHandlers[c.index - 1].end()
   c.hideChapter('chapter_3')
   c.allowScroll = false
   c.objects.forEach(object => {

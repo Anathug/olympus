@@ -2,8 +2,6 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopOnce, AmbientLight, Object3D, Vector3 } from 'three'
 import ParticleSystem from '../World/Thruster'
 import lerp from '../Tools/Lerp'
-import SoundHandler from '../Tools/SoundHandler'
-import SubtitlesHandler from '../Tools/SubtitlesHandler'
 
 let c = new Chapter(4)
 c.title = 'Step c01'
@@ -55,20 +53,6 @@ c.init = options => {
     offset: new Vector3(0, 0.02, 0),
     scale: 0.03
   });
-
-  c.soundHandler = new SoundHandler('./sounds/chap04.mp3', './sounds/chap04_r.mp3')
-  c.subtitleHandler = new SubtitlesHandler('./subtitles/chap04.tsv')
-  c.ready = 0
-  c.soundHandler.soundN.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
-  c.soundHandler.soundR.once('load', function () {
-    c.ready++
-    if (c.ready == 2)
-      c.handler.trySetup()
-  });
 }
 
 c.start = () => {
@@ -78,10 +62,10 @@ c.start = () => {
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
   c.cameraButtonsWrapper.style.display = 'none'
-  c.duration = c.soundHandler.duration
+  c.duration = c.soundHandlers[c.index].duration
   c.handler.setAutoScrollSpeed(c.duration)
-  c.soundHandler.start(c.progress)
-  c.subtitleHandler.start(c.duration)
+  c.soundHandlers[c.index].start(c.progress)
+  c.subtitlesHandlers[c.index].start(c.duration)
   c.switchHDRI('landing-zone')
   c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
@@ -90,11 +74,12 @@ c.start = () => {
   c.oldProg = c.progress
   c.lensflareContainer.visible = false
   c.bloomPass.strength = 0
+
 }
 
 c.update = () => {
-  c.soundHandler.update(c.progress)
-  c.subtitleHandler.update(c.progress)
+  c.soundHandlers[c.index].update(c.progress)
+  c.subtitlesHandlers[c.index].update(c.progress)
   c.mixer.setTime(c.progress * c.animationDuration)
 
   if (c.progress < 0.2)
@@ -128,8 +113,8 @@ c.update = () => {
 }
 
 c.end = () => {
-  c.soundHandler.update(c.progress)
-  c.subtitleHandler.end()
+  c.soundHandlers[c.index].update(c.progress)
+  c.subtitlesHandlers[c.index].end()
   c.hideChapter('chapter_4')
   c.hideObjects(c.objects)
   c.deleteCams()
