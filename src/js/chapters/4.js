@@ -18,10 +18,12 @@ c.init = options => {
   c.credit = document.querySelector('.credit')
   c.creditButton = c.credit.querySelector('button')
   c.timeline = document.querySelector('#timelineDiv')
+  c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+  c.cameraButtonsWrapper = document.querySelector('.middle-right-wrapper')
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
-  c.firstIndexCamera = 0
+  c.firstIndexCamera = 1
   c.cams = []
   c.marscColor = 0xffd38a
   c.directionalLights = [
@@ -75,7 +77,7 @@ c.start = () => {
   c.handler.allowScroll = true
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
-
+  c.cameraButtonsWrapper.style.display = 'none'
   c.duration = c.soundHandler.duration
   c.handler.setAutoScrollSpeed(c.duration)
   c.soundHandler.start(c.progress)
@@ -84,6 +86,7 @@ c.start = () => {
   c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
   initActiveClassCamera(c.firstIndexCamera)
+  initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
   c.lensflareContainer.visible = false
   c.bloomPass.strength = 0
@@ -102,6 +105,14 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step C03', 'olympus III touchdown')
   c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
   c.oldProg = c.progress
+
+  if (0.20 > c.progress && c.progress > 0.19) {
+    forceSwitchCam(0)
+  }
+
+  if (0.19 > c.progress && c.progress > 0.18) {
+    forceSwitchCam(1)
+  }
 
   if (c.progress > 0.19) {
     c.layout.style.opacity = 1 - (c.progress - 0.19) * 30
@@ -124,7 +135,7 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-
+  c.cameraButtonsWrapper.style.display = 'flex'
   c.bloomPass.strength = 0.2
 }
 
@@ -171,5 +182,19 @@ const createLights = () => {
     c.objects.push(light)
   })
 }
+
+const forceSwitchCam = i => {
+  c.activeCam = i
+  c.world.renderer.switchCam(c.cams[i])
+  c.cameraButtons.forEach(cameraButton => cameraButton.classList.remove('is-active'))
+  c.cameraButtons[i].classList.add('is-active')
+}
+
+const initActiveCamera = i => {
+  c.cameraButtons = document.querySelectorAll('.middle-right-wrapper .camera-wrapper')
+  c.cameraButtons[i].classList.add('is-active')
+  c.world.renderer.switchCam(c.cams[i])
+}
+
 
 export default c

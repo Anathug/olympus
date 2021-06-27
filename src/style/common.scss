@@ -441,3 +441,22 @@ p {
     }
   }
 }
+
+.mobile-restriction {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 200000;
+  background-color: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  p {
+    width: 600px;
+  }
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
