@@ -99,12 +99,15 @@ c.update = () => {
   c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
   c.oldProg = c.progress
 
-  if (c.progress > 0.95) {
-    c.layout.style.opacity = 1 - (c.progress - 0.95) * 30
-    c.timeline.style.opacity = 1 - (c.progress - 0.95) * 30
-    c.credit.style.opacity = (c.progress - 0.95) * 30
+  if (c.progress > 0.19) {
+    c.layout.style.opacity = 1 - (c.progress - 0.19) * 30
+    c.timeline.style.opacity = 1 - (c.progress - 0.19) * 30
+    c.credit.style.opacity = (c.progress - 0.19) * 30
     c.creditButton.classList.add('visible')
   } else {
+    c.layout.style.opacity = 1
+    c.timeline.style.opacity = 1
+    c.credit.style.opacity = 0
     c.creditButton.classList.remove('visible')
   }
 }
@@ -116,9 +119,7 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-  c.layout.style.opacity = 1
-  c.timeline.style.opacity = 1
-  c.credit.style.opacity = 0
+
   c.bloomPass.strength = 0.2
 }
 
@@ -129,13 +130,13 @@ const createGltfCams = () => {
 }
 
 const createGltf = () => {
-  c.gltf = c.assets.models.animations.chap06
+  c.gltf = c.assets.models.animations.chap04
   c.world.container.add(c.gltf.scene)
   c.objects.push(c.gltf.scene)
 }
 
 const createAnimation = () => {
-  const clips = c.assets.models.animations.chap06.animations
+  const clips = c.assets.models.animations.chap04.animations
   c.mixer = new AnimationMixer(c.gltf.scene)
   c.animationDuration = 0
   clips.forEach(clip => {

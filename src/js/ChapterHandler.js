@@ -26,7 +26,7 @@ export default class ChapterHandler {
     //default chapter params
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 4
+    this.workingChapter = 0
     this.autoScrollSpeed = 0.0001
 
     //chapter progression
