@@ -62,7 +62,7 @@ c.start = () => {
   c.controls.enabled = true
   c.controls.autoRotate = true
   c.controls.autoRotateSpeed = 0.2
-  c.camera.position.set(-30, 0, 0)
+  c.camera.position.set(-10, 3, 40)
   c.starship.position.set(0, -0, -20)
   c.satellite.container.scale.set(1, 1, 1)
   // c.starship.scale.set(0.1, 0.1, 0.1)
@@ -88,6 +88,8 @@ c.start = () => {
   c.soundHandlers[c.index].start(c.progress)
   c.subtitlesHandlers[c.index].start(c.duration)
   c.lensflareContainer.visible = true
+
+  c.earth.container.rotation.set(0.4, 3, 3.1)
 }
 
 c.update = () => {

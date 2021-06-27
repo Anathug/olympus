@@ -38,6 +38,9 @@ c.start = () => {
 c.update = () => {
   c.soundHandlers[c.index].update(c.progress)
   c.mixer.setTime(c.progress * c.animationDuration)
+  if (c.progress > 0.95) {
+    c.globalInteractions.transitionTitle(' ')
+  }
 }
 
 c.end = () => {

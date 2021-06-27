@@ -4,7 +4,7 @@
       "src": "./textures/images/chapter0/board-1.jpg",
       "alt": "",
       "title": "Emily Brennan",
-      "description": ""
+      "description": "Emily is 28 years old and has been dedicated to her passion for space for over twenty years. Her goal is clear: she will be the first to set foot on the Red Planet. Since she was eleven, she has been attending ISDA youth training camps. She is the only one to have attended four and was quickly spotted by the organisation for her courage and dedication.<br><br>As a student in planetology and now a teacher at SUPAERO in Toulouse, she has managed both her schooling and her intensive training.<br><br>Supported by her grandfather, she has always kept her goals in mind since she was 4 years old.<br><br>Today her efforts are paying off as she has been selected for the Oympus III mission, which aims to land on Mars, what a joy! We are going to share this epic journey with her."
     },
     {
       "src": "./textures/images/chapter0/board-2.jpg",
@@ -21,8 +21,8 @@
     {
       "src": "./textures/images/chapter0/board-4.jpg",
       "alt": "",
-      "title": "",
-      "description": ""
+      "title": "Liy",
+      "description": "Emily, qu’on  surnomait Lily a grandi auprès d’une famille aimante dans une maison au sud de Toulouse. Ses parents, ingenieurs en aeronotique et scientifiques, lui ont transmis leur fibre de la science dès son plus jeune âge.<br><br>Or c’est son grand-père qui a été la pièce maîtresse dans son engouement pour l’espace. Ils ont noué une relation fusionelle très vite et ont partagé des centaines d’heures à regarder les étoiles. Des souvenirs gravés dans sa mémoire.<br><br>À l’âge de 4 ans, son grand père lui a offert son premier télescope. Ce cadeau bouleversera très rapidement son avenir."
     },
     {
       "src": "./textures/images/chapter0/board-5.jpg",
@@ -47,6 +47,30 @@
       "alt": "",
       "title": "The red planet",
       "description": "Mars is the second closest planet to our own, after Venus.<br><br> It is on average 220 million km from the Sun (the Earth is 150 million km from our star). The calculation seems simple: if we make the difference between the two, we get 70 million km. In reality, however, both stars are in motion around the Sun, and what is more, their orbits are not circular but elliptical.<br><br>Theoretically, the closest the Red Planet can come to us is 54.6 million km.<br>But for this to happen, the two planets must be aligned with the Sun, one at aphelion (Earth) and the other at perihelion (Mars)."
+    },
+    {
+      "src": "./textures/images/chapter0/board-9.jpg",
+      "alt": "",
+      "title": "Mars explorations",
+      "description": "The search for life on Mars is a fascinating and eventful story, and it is a testament to the inescapable attraction we have for this multifaceted planet.<br><br>Numerous studies and missions have been carried out to learn more about our neighbour.<br><br>On 12 April 1963, a spectrographic analysis of the planet was carried out to determine whether its atmosphere contained water. The results were not very encouraging, revealing that the thin layer of gas surrounding Mars contains only a tiny fraction of water, much less than over the driest deserts on Earth. But this discovery did not stop researchers from exploring. In July 1965, the Mariner spacecraft captured the first photographs of the Martian surface during its flyby. At the time, the black and white images showed a deserted world, studded with craters and empty of all channels.<br><br>On 20 July 1976, Viking 1 was the first human aircraft to land on the Martian surface. The mission, which was originally intended to last only 90 days, was to last six years, during which time an impressive amount of images and meteorological data were collected and various experiments were conducted.<br><br>In 2015, when the Mars Reconnaissance Orbiter provided the first evidence of liquid water on the surface of Mars, the planet became popular again, and the film The Martian inspired a whole new generation of budding astronauts. The Curiosity rover, which has been exploring the Martian surface since 2012, has since provided new evidence suggesting that the Red Planet may indeed have hosted life.<br><br>Finally, Mars 2020 is the latest mission to search for traces of life on the Red Planet. It reached its destination on 18 February 2021 and on board was the Perseverance rover. During its 18-month primary mission, which is expected to be extended, it will collect several soil cores from different sites chosen for their geological characteristics."
+    },
+    {
+      "src": "./textures/images/chapter0/board-10.jpg",
+      "alt": "",
+      "title": "The earth",
+      "description": "The Earth is the third planet in order of distance from the Sun and the fifth largest in the Solar System in both mass and diameter. It is also the only celestial object known to harbour life.<br><br>According to radiometric dating, the Earth was formed 4.54 billion years ago. It has a single natural satellite, the Moon, which formed shortly afterwards.<br><br>Life is thought to have arisen in the oceans at least 3.5 billion years ago, which affected the atmosphere and the Earth's surface.<br><br>A combination of factors such as the Earth's distance from the Sun (about 150 million kilometres), its atmosphere, its ozone layer, its magnetic field and its geological evolution allowed life to evolve and develop.<br><br>Throughout the evolutionary history of life, biodiversity has undergone long periods of expansion occasionally punctuated by mass extinctions; about 99% of the species that once lived on Earth are now extinct.<br><br>About 71% of the planet's surface is covered by water - notably oceans, but also lakes and rivers, making up the hydrosphere - and the remaining 29% is made up of continents and islands.<br><br>In 2021, more than 7.8 billion people live on Earth and depend on its biosphere and natural resources for their survival."
+    },
+    {
+      "src": "./textures/images/chapter0/board-11.jpg",
+      "alt": "",
+      "title": "Emily's Grandfather",
+      "description": "Emily's grandfather, Alain, has a lot to do with his granddaughter's passion. Born in 1944, he was an astrophysicist at the Institute for Research in Astrophysics and Planetology, IRAP (Univ. Toulouse, CNRS, Cnes), and graduated from SUPAERO, the Higher Institute of Aeronautics and Space in Toulouse.<br><br>He is a planetary scientist, specialised in the exploration of the Solar System and has participated in numerous missions to explore the Solar System.<br><br>When Emily was 4 years old, he was sent to work on instruments to observe Mars. It was during this time that the little girl fell into this vast universe.<br><br>Emily and Alain have become very close, sharing every weekend to devote themselves to this still too little known world. A passion that drives them and has made them almost inseparable. Emily had the chance to visit several observatories and spend hours behind her telescope.<br><br>Today, he fully supports his granddaughter in her desire to conquer Mars and accompanies her to each of her training sessions."
+    },
+    {
+      "src": "./textures/images/chapter0/board-12.jpg",
+      "alt": "",
+      "title": "Convocation for The Olympus III Mission",
+      "description": "Olympus III: a mission to change humanity.<br><br>ISDA (Independent Space Discovery Agency) is a French organisation specialising in astronautics and space flight. The company develops space exploration projects, notably to Mars with Olympus.<br><br>Emily Brennan, 28, has finally been selected to take part in this legendary mission, an event she has been waiting for since she was a child. She tells her grandfather, with whom she has a close relationship.<br><br>Her departure is in an hour."
     }
   ]
 }
