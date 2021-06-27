@@ -43,7 +43,7 @@ c.init = options => {
   c.hideObjects(c.objects)
 
   c.particleSystemContainer = new Object3D()
-  c.gltf.scene.children[3].add(c.particleSystemContainer)
+  c.gltf.scene.children[6].add(c.particleSystemContainer)
   c.particleSystemContainer.position.y -= 0
 
   c.particleSystem = new ParticleSystem({
@@ -51,7 +51,7 @@ c.init = options => {
     camera: c.cams[0],
     assets: c.assets,
     offset: new Vector3(0, 0.02, 0),
-    scale: 0.03
+    scale: 0.02
   });
 }
 
@@ -62,10 +62,14 @@ c.start = () => {
   c.handler.autoScroll = true
   c.world.renderer.switchCam(c.cams[c.firstIndexCamera])
   c.cameraButtonsWrapper.style.display = 'none'
+
+
+  c.soundHandlers[c.index].start(c.progress)
   c.duration = c.soundHandlers[c.index].duration
   c.handler.setAutoScrollSpeed(c.duration)
-  c.soundHandlers[c.index].start(c.progress)
   c.subtitlesHandlers[c.index].start(c.duration)
+
+
   c.switchHDRI('landing-zone')
   c.changeFog(10, 0, c.marscColor)
   c.createCams(c.cams)
@@ -88,7 +92,7 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step C02', 'landing of olympus on the martian surface')
   else
     c.handler.updateTimelineDisplay('Step C03', 'olympus III touchdown')
-  c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
+  c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 0.2) - Math.min(Math.max(c.oldProg, 0), 0.2)) * lerp(50, 5, c.progress), c.progress < 0.165)
   c.oldProg = c.progress
 
   if (0.20 > c.progress && c.progress > 0.19) {

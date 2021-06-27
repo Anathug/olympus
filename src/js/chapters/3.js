@@ -62,7 +62,7 @@ c.start = () => {
   c.controls.enabled = true
   c.controls.autoRotate = true
   c.controls.autoRotateSpeed = 0.2
-  c.camera.position.set(-30, 0, 0)
+  c.camera.position.set(-10, 0, 20)
   c.starship.position.set(0, -0, -20)
   c.satellite.container.scale.set(1, 1, 1)
   // c.starship.scale.set(0.1, 0.1, 0.1)
@@ -78,15 +78,15 @@ c.start = () => {
   c.world.scene.fog.far = 2000
   c.switchHDRI('space')
 
-  c.duration = c.soundHandlers[c.index].duration
   c.handler.allowScroll = true
   c.handler.autoScroll = true
-  c.handler.setAutoScrollSpeed(c.duration)
   c.circle.style.visibility = 'hidden'
   c.crosshair.style.visibility = 'hidden'
 
   c.soundHandlers[c.index].start(c.progress)
+  c.duration = c.soundHandlers[c.index].duration
   c.subtitlesHandlers[c.index].start(c.duration)
+  c.handler.setAutoScrollSpeed(c.duration)
   c.lensflareContainer.visible = true
 }
 
