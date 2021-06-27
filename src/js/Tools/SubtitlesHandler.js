@@ -46,11 +46,8 @@ export default class SubtitlesHandler {
             case 'italic':
                 this.container.className = 'subtitlesItalic'
                 break;
-            case 'bold':
-                this.container.className = 'subtitlesBold'
-                break;
-            case 'center':
-                this.container.className = 'subtitlesCenter'
+            case 'empty':
+                this.container.className = 'subtitlesEmpty'
                 break;
             default:
                 this.container.className = ''
@@ -58,8 +55,11 @@ export default class SubtitlesHandler {
         }
     }
 
+    clear() {
+    }
+
     end() {
         this.container.textContent = ''
-        this.container.className = ''
+        this.container.className = 'subtitlesEmpty'
     }
 }
