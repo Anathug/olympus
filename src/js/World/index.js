@@ -56,7 +56,7 @@ export default class World {
       )
     })
 
-    this.ambiantLight = new AmbientLight(0xffffff, 0.1)
+    this.ambiantLight = new AmbientLight(0xffffff, 0.2)
     this.container.add(this.ambiantLight)
     this.container.add(this.lensflareContainer)
   }
