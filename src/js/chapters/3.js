@@ -113,6 +113,7 @@ c.update = () => {
   c.subtitleHandler.update(c.progress)
   if (c.progress < 0.75) c.handler.updateTimelineDisplay('Step B01', 'satellite docking')
   else c.handler.updateTimelineDisplay('Step B02', 'rendezvous with the refuelling satelLite')
+  c.earth.container.rotation.y = 0.5 + c.progress / 3
 
   if (c.progress < c.freeViewTime) {
     c.controls.enabled = true

@@ -6,7 +6,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 import lerp from '../Tools/Lerp'
 
-import { AudioLoader, FontLoader, TextureLoader, MeshToonMaterial } from 'three'
+import { AudioLoader, FontLoader, TextureLoader } from 'three'
 
 export default class Loader extends EventEmitter {
   constructor() {

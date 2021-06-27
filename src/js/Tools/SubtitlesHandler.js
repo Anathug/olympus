@@ -24,6 +24,8 @@ export default class SubtitlesHandler {
 
     start(duration) {
         this.duration = duration
+        this.container.textContent = ''
+        this.container.className = 'subtitlesEmpty'
     }
 
     update(progress) {

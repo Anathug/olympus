@@ -14,6 +14,10 @@ c.init = options => {
   c.assets = options.assets
   c.debug = options.debug
   c.world = options.world
+  c.layout = document.querySelector('.experience-layout')
+  c.credit = document.querySelector('.credit')
+  c.creditButton = c.credit.querySelector('button')
+  c.timeline = document.querySelector('#timelineDiv')
   c.allowScroll = true
   c.autoScroll = true
   c.allowMouseMove = false
@@ -82,6 +86,7 @@ c.start = () => {
   initActiveClassCamera(c.firstIndexCamera)
   c.oldProg = c.progress
   c.lensflareContainer.visible = false
+  c.bloomPass.strength = 0
 }
 
 c.update = () => {
@@ -95,11 +100,20 @@ c.update = () => {
     c.handler.updateTimelineDisplay('Step C02', 'landing of olympus on the martian surface')
   else
     c.handler.updateTimelineDisplay('Step C03', 'olympus III touchdown')
-
-
   c.particleSystem.Step((Math.min(Math.max(c.progress, 0), 1) - Math.min(Math.max(c.oldProg, 0), 1)) * lerp(50, 5, c.progress))
   c.oldProg = c.progress
 
+  if (c.progress > 0.19) {
+    c.layout.style.opacity = 1 - (c.progress - 0.19) * 30
+    c.timeline.style.opacity = 1 - (c.progress - 0.19) * 30
+    c.credit.style.opacity = (c.progress - 0.19) * 30
+    c.creditButton.classList.add('visible')
+  } else {
+    c.layout.style.opacity = 1
+    c.timeline.style.opacity = 1
+    c.credit.style.opacity = 0
+    c.creditButton.classList.remove('visible')
+  }
 }
 
 c.end = () => {
@@ -110,6 +124,8 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
+
+  c.bloomPass.strength = 0.2
 }
 
 const createGltfCams = () => {
@@ -119,13 +135,13 @@ const createGltfCams = () => {
 }
 
 const createGltf = () => {
-  c.gltf = c.assets.models.animations.chap06
+  c.gltf = c.assets.models.animations.chap04
   c.world.container.add(c.gltf.scene)
   c.objects.push(c.gltf.scene)
 }
 
 const createAnimation = () => {
-  const clips = c.assets.models.animations.chap06.animations
+  const clips = c.assets.models.animations.chap04.animations
   c.mixer = new AnimationMixer(c.gltf.scene)
   c.animationDuration = 0
   clips.forEach(clip => {

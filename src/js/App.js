@@ -124,7 +124,7 @@ export default class App {
 
     this.renderer.switchCam = cam => {
       if (cam == 'default') this.activeCam = this.camera.camera
-      else this.activeCam = cam 
+      else this.activeCam = cam
       if (this.postprocessing) {
         this.composer.passes[0].camera = this.activeCam
         this.renderPass.camera = this.activeCam
@@ -246,6 +246,7 @@ export default class App {
       renderer: this.renderer,
       switchHDRI: this.switchHDRI,
       changeFog: this.changeFog,
+      bloomPass: this.bloomPass,
     })
     this.scene.add(this.world.container)
   }
