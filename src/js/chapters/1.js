@@ -65,6 +65,9 @@ const createGltf = () => {
   c.gltf.scene.traverse(child => {
     if (child.isMesh === true) {
       child.material.transparent = true
+      if (child.name === 'HELMET_GLASS' || child.name === 'HELMET_GLASS001') {
+        child.material.transparent = false
+      }
     }
   })
   c.world.container.add(c.gltf.scene)

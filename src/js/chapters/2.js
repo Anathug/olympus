@@ -132,7 +132,7 @@ c.update = () => {
     showMovieLayout()
   }
 
-  if (0.17 > c.progress && c.progress > 0.16 && !c.reversed) {
+  if (0.17 > c.progress && c.progress > 0.16) {
     hideMovieLayout()
     forceSwitchCam(1)
   }
