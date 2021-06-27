@@ -114,7 +114,6 @@ export default class ChapterHandler {
         0,
         this.chapters.length - 0.001
       )
-      console.log(delta / 16.7)
       now = Date.now()
     })
   }
