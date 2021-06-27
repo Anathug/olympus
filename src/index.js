@@ -1,7 +1,7 @@
 import '@style/style.scss'
 import App from '@js/App'
 import Assets from './js/Tools/Loader'
-import GlobalInteractions from './js/GlobalInteracions'
+import GlobalInteractions from './js/GlobalInteractions'
 import Sizes from './js/Tools/Sizes'
 import Time from './js/Tools/Time'
 import Mouse from './js/Mouse'

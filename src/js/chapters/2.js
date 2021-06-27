@@ -4,6 +4,8 @@ import ParticleSystem from '../World/Thruster'
 import SoundHandler from '../Tools/SoundHandler'
 import clamp from '../Tools/Clamp'
 import Earth from '../World/Earth.js'
+import threeDecimals from '../Tools/Decimals'
+
 
 let c = new Chapter(2)
 c.title = 'Step A02'
@@ -113,12 +115,16 @@ c.start = () => {
   c.changeFog(150, 10, 0x010218)
   initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
+  c.globalInteractions.transitionTitle('ma bite sur un tatami')
 }
 
 c.update = () => {
   //steps both particle systems
   c.particleSystem1.Step((clamp(c.progress, 0.044, 0.3) - clamp(c.oldProg, 0.044, 0.3)) * 50, c.progress < 0.20)
   c.particleSystem2.Step((clamp(c.progress, 0.232, 0.6) - clamp(c.oldProg, 0.232, 0.6)) * 50, c.progress < 0.50)
+  c.soundHandler.update(c.progress)
+  c.lensflareContainer.getObjectByName('Lensflare').position.x = c.lensflarePositionX - c.progress * 100
+  c.earth.container.rotation.y = 0.5 + c.progress
 
 
   if (0.16 > c.progress && c.progress > 0.15) {
@@ -133,8 +139,13 @@ c.update = () => {
 
   if (c.progress < 0.16) {
     c.disableCam(1)
+    c.globalInteractions.updateDistanceLayout(0)
+    c.globalInteractions.updateVelocityLayout(0)
   } else {
     c.enableCam(1)
+    // mettre au moment ou ca décolle
+    c.globalInteractions.updateDistanceLayout(threeDecimals((c.progress - 0.16) * 100000))
+    c.globalInteractions.updateVelocityLayout(clamp(threeDecimals((c.progress - 0.16) * 100000), 0, 9999))
   }
   if (c.progress < 0.15)
     c.handler.updateTimelineDisplay('Step A02', 'Takeoff of the Olympus rocket')
@@ -149,8 +160,8 @@ c.update = () => {
 
   c.mixer.setTime(Math.min(c.progress * c.duration, c.animationDuration - 0.01))
 
-  if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 5
-  if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 20
+  if (c.activeCam === 0) c.earth.container.position.y = -90 - c.progress * 20
+  if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 30
 
   c.soundHandler.update(c.progress)
 

@@ -1,114 +1,121 @@
 #timelineDiv {
-    position: absolute;
-    z-index: 200;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 25%;
-    margin: 0;
-    overflow-y: clip;
-    text-transform: uppercase;
-    
-    transition-duration: 0.2s;
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-    transform: translate(-45%,0);
-  }
-  
-  
-  #timelineDiv:hover {
-    transform: translate(0,0);
-  }
-  
-  #timelineDevider {
-    background: white;
-    position: absolute;
-    left: 50%;
-    width: 1px;
-    height: 100%;
-  }
-  
-  #timelineChapters {
-    position: absolute;
-    display: flex;
-    flex-flow: column;
-    width: 100%;
-    top: 15%;
-  }
-  
-  .timelineChap {
-    width: 50%;
-    height: 0;
-    right: 0;
-    margin: 0;
-    display: flex;
-    flex-flow: row-reverse;
-  }
-  
-  .current {
-    visibility: hidden;
-  }
-  
-  .timelineTriangle {
-    width: 0;
-    height: 0;
-    display: inline-block;
-    border-top: 10px solid transparent;
-    border-right: 10px solid #fff;
-    border-bottom: 10px solid transparent;
-    margin: -5px 0 0 20px;
-  }
-  .timelineSubtitle {
-    display: none;
-  }
-  
-  #timelineChapterDisplay {
-    position: absolute;
-    margin-left: 50%;
-    width: 100%;
-    top: 15%;
-  }
-  
-  #timelineChapterDisplay .timelineTriangle {
-    border-top: 10px solid transparent;
-    border-left: 10px solid #fff;
-    border-right: 0px solid #fff;
-    border-bottom: 10px solid transparent;
-    margin: 0 20px 0 0;
-  }
+  position: absolute;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 25%;
+  margin: 0;
+  overflow-y: clip;
+  text-transform: uppercase;
 
-  .timelineTitle{
-    font-size: 10px;
-    line-height: 130%;    
-    text-align: right;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
+  transition-duration: 0.2s;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  transform: translate(-45%, 0);
+}
+
+#timelineDiv:hover {
+  transform: translate(0, 0);
+}
+
+#timelineDevider {
+  background: white;
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+}
+
+#timelineChapters {
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  top: 15%;
+}
+
+.timelineChap {
+  width: 50%;
+  height: 0;
+  right: 0;
+  margin: 0;
+  display: flex;
+  flex-flow: row-reverse;
+}
+
+.current {
+  visibility: hidden;
+}
+
+.timelineTriangle {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  border-top: 10px solid transparent;
+  border-right: 10px solid #fff;
+  border-bottom: 10px solid transparent;
+  margin: -5px 0 0 20px;
+}
+.timelineSubtitle {
+  display: none;
+}
+
+#timelineChapterDisplay {
+  position: absolute;
+  margin-left: 50%;
+  width: 100%;
+  top: 15%;
+}
+
+#timelineChapterDisplay .timelineTriangle {
+  border-top: 10px solid transparent;
+  border-left: 10px solid #fff;
+  border-right: 0px solid #fff;
+  border-bottom: 10px solid transparent;
+  margin: 0 20px 0 0;
+}
+
+.timelineTitle {
+  font-size: 12px;
+  line-height: 130%;
+  text-align: right;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transform: scale(0.8);
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.timelineChap {
+  .timelineTitle {
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
   }
-  
-  .timelineTitle:hover{
+  .timelineTitle:hover {
+    transform: scale(1);
     cursor: pointer;
   }
+}
 
-  #timelineChapterDisplay .timelineTitle {
-    display: inline-block;
-    background: #f1c40f;
-    color: black;
-    font-size: 18px;
-    line-height: 130%;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-  }
-  
-  #timelineChapterDisplay .timelineSubtitle {
-    display: block;
-    margin: 10px 30px;
-    font-size: 18px;
-    line-height: 130%;  
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    width: 280px;
-  }
-  
+#timelineChapterDisplay .timelineTitle {
+  display: inline-block;
+  background: #f1c40f;
+  color: black;
+  font-size: 18px;
+  line-height: 130%;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+#timelineChapterDisplay .timelineSubtitle {
+  display: block;
+  margin: 10px 30px;
+  font-size: 18px;
+  line-height: 130%;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  width: 280px;
+}
