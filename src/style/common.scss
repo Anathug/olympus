@@ -104,6 +104,10 @@ p {
   width: 100%;
   z-index: 100;
   pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+  &.hidden {
+    opacity: 0;
+  }
 
   .horizontal-line {
     width: 100%;
@@ -373,6 +377,10 @@ p {
   justify-content: center;
   opacity: 0;
   pointer-events: none;
+  transition: ease-in-out 0.5s;
+  &.is-active {
+    opacity: 1;
+  }
   &-wrapper {
     width: 50%;
     text-align: center;
@@ -400,11 +408,13 @@ p {
       margin-top: 10rem;
       display: none;
       pointer-events: auto;
+      transition-delay: 0.5s;
       &:hover {
         cursor: pointer;
       }
       &.visible {
-        display: block;
+        display: none;
+        // display: block;
       }
     }
   }
