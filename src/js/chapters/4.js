@@ -77,7 +77,7 @@ c.start = () => {
   initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
   c.lensflareContainer.visible = false
-  c.bloomPass.strength = 0
+  c.bloomPass.strength = 0.1
 
 }
 
@@ -104,14 +104,18 @@ c.update = () => {
   }
 
   if (c.progress > 0.19) {
-    c.layout.style.opacity = 1 - (c.progress - 0.19) * 30
-    c.timeline.style.opacity = 1 - (c.progress - 0.19) * 30
-    c.credit.style.opacity = (c.progress - 0.19) * 30
+    c.layout.classList.add('hidden')
+    c.timeline.classList.add('hidden')
+  } else {
+    c.layout.classList.remove('hidden')
+    c.timeline.classList.remove('hidden')
+    c.credit.classList.remove('is-active')
+  }
+  if (c.progress > 0.20) {
+    c.credit.classList.add('is-active')
     c.creditButton.classList.add('visible')
   } else {
-    c.layout.style.opacity = 1
-    c.timeline.style.opacity = 1
-    c.credit.style.opacity = 0
+    c.credit.classList.remove('is-active')
     c.creditButton.classList.remove('visible')
   }
 }
@@ -124,7 +128,7 @@ c.end = () => {
   c.deleteCams()
   c.allowScroll = false
   c.world.renderer.switchCam('default')
-  c.cameraButtonsWrapper.style.display = 'flex'
+  c.cameraButtonsWrapper.style.display = 'block'
   c.bloomPass.strength = 0.2
 }
 
