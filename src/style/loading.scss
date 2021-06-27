@@ -1,63 +1,49 @@
-
-#loader{
+#loader {
   height: 100vh;
   width: 100vw;
   position: absolute;
   z-index: 10000;
-  background:black;
-  clip-path: polygon(
-    0 0%, 100% 0%, 100% 100%, 0 100%,
-    0 50%, 100% 50%, 100% 50%, 0 50%
-  );
-  -webkit-transition: clip-path 1s;
-  -moz-transition: clip-path 1s;
-  -ms-transition: clip-path 1s;
-  -o-transition: clip-path 1s;
+  background: black;
+  clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%, 0 50%, 100% 50%, 100% 50%, 0 50%);
   transition: clip-path 1s;
 }
 
 #timerContainer {
   display: flex;
-  margin: auto;
   color: white;
   height: 100vh;
-  width: fit-content;
-  align-items:center;
+  align-items: center;
+  justify-content: center;
   opacity: 1;
-
-  -webkit-transition: opacity 0.5s;
-  -moz-transition: opacity 0.5s;
-  -ms-transition: opacity 0.5s;
-  -o-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 
-.timerBlock{
-  display:flex;
-  flex-direction:column;
+.timerBlock {
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  height:86px;
+  height: 86px;
   width: 57px;
   justify-content: flex-start;
 }
 
-.timerSurtext{
+.timerSurtext {
   height: 72px;
   font-size: 72px;
   line-height: 72px;
   font-family: 'DS-DIGI';
-  width:100%
+  width: 100%;
 }
 
-.timerSubtext{
+.timerSubtext {
   height: 14px;
   font-size: 14px;
   line-height: 14px;
-  color: #F4D03F;
-  width:100%;
+  color: #f4d03f;
+  width: 100%;
 }
 
-.loaderBottom{
+.loaderBottom {
   position: absolute;
   bottom: 8%;
   text-align: center;
@@ -68,40 +54,31 @@
   text-transform: uppercase;
   margin: 12px 0;
   opacity: 1;
-
-  -webkit-transition: opacity 0.5s;
-  -moz-transition: opacity 0.5s;
-  -ms-transition: opacity 0.5s;
-  -o-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 
-#headphones{
-  color: #F1C40F;
+#headphones {
+  color: #f1c40f;
 }
 
-#clickToStart{
+#clickToStart {
   color: #fff;
   opacity: 0;
 }
 
-
-#timerContainer.fadeout{
+#timerContainer.fadeout {
   opacity: 0;
 }
 
-#headphones.fadeout{
+#headphones.fadeout {
   opacity: 0;
 }
 
-#clickToStart.fadein{
+#clickToStart.fadein {
   opacity: 1;
 }
 
-#loader.openScene{
-  transition-timing-function: cubic-bezier( 0.51, 0, 0.2, 1 );
-  clip-path: polygon( 
-    0 0%, 100% 0%, 100% 100%, 0 100%,
-    0 95%, 100% 95%, 100% 5%, 0 5%
-  );
+#loader.openScene {
+  transition-timing-function: cubic-bezier(0.51, 0, 0.2, 1);
+  clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%, 0 95%, 100% 95%, 100% 5%, 0 5%);
 }
