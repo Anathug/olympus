@@ -2,6 +2,7 @@ import Chapter from '../Chapter'
 import { AnimationMixer, LoopRepeat, DirectionalLight, Color, Vector3, Object3D } from 'three'
 import ParticleSystem from '../World/Thruster'
 import SoundHandler from '../Tools/SoundHandler'
+import SubtitlesHandler from '../Tools/SubtitlesHandler'
 import clamp from '../Tools/Clamp'
 import Earth from '../World/Earth.js'
 import threeDecimals from '../Tools/Decimals'
@@ -60,6 +61,7 @@ c.init = options => {
   c.hideObjects(c.objects)
 
   c.soundHandler = new SoundHandler('./sounds/chap02.mp3', './sounds/chap02_r.mp3')
+  c.subtitleHandler = new SubtitlesHandler('./subtitles/chap02.tsv')
   c.ready = 0
   c.soundHandler.soundN.once('load', function () {
     c.ready++
@@ -109,6 +111,7 @@ c.start = () => {
   c.handler.autoScroll = true
   c.duration = c.soundHandler.duration
   c.handler.setAutoScrollSpeed(c.duration)
+  c.subtitleHandler.start(c.duration)
   c.earth.container.visible = true
   c.createCams(c.cams)
   c.switchHDRI()
@@ -164,6 +167,7 @@ c.update = () => {
   if (c.activeCam === 1) c.earth.container.position.y = -180 - c.progress * 30
 
   c.soundHandler.update(c.progress)
+  c.subtitleHandler.update(c.progress)
 
   c.changeFog(150 + c.progress * 500, 10 + c.progress * 500, 0x010218)
   c.world.scene.background.lerpColors(new Color(0x010218), new Color(0x000000), c.progress)
@@ -176,6 +180,7 @@ c.end = () => {
   c.allowScroll = false
   c.world.renderer.switchCam('default')
   c.soundHandler.end()
+  c.subtitleHandler.end()
 }
 
 const createGltfCams = () => {

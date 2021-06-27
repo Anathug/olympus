@@ -4,6 +4,7 @@ import data from '../../../static/database/chap0'
 import clamp from '../Tools/Clamp'
 import EncryptedText from '../EncryptedText'
 import SoundHandler from '../Tools/SoundHandler'
+import SubtitlesHandler from '../Tools/SubtitlesHandler'
 
 const c = new Chapter(0)
 c.title = 'Introduction'
@@ -24,6 +25,7 @@ c.init = () => {
   createInfos()
   createImagePosition()
   c.soundHandler = new SoundHandler('./sounds/chap00.mp3', './sounds/chap00_r.mp3')
+  c.subtitleHandler = new SubtitlesHandler('./subtitles/chap00.tsv')
   c.ready = 0
   c.soundHandler.soundN.once('load', function () {
     c.ready++
@@ -40,6 +42,7 @@ c.init = () => {
 c.start = () => {
   c.soundHandler.start(c.progress)
   c.animationDuration = c.soundHandler.duration
+  c.subtitleHandler.start(c.animationDuration)
   c.handler.setAutoScrollSpeed(c.animationDuration)
   c.showChapter('chapter_0')
   c.handler.allowScroll = true
@@ -49,10 +52,12 @@ c.start = () => {
 
 c.update = () => {
   c.soundHandler.update(c.progress)
+  c.subtitleHandler.update(c.progress)
 }
 
 c.end = () => {
   c.soundHandler.end()
+  c.subtitleHandler.end()
   removeEvents()
   c.hideChapter('chapter_0')
 }
