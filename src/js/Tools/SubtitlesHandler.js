@@ -1,6 +1,7 @@
 export default class SubtitlesHandler {
-  constructor(subtitlePath, trackDuration) {
+  constructor(subtitlePath) {
     this.container = document.querySelector('#subtitlesContainer')
+    this.wrapper = document.querySelector('#subtitlesWrapper')
     this.currentIndex = 0
     this.subtitles = []
     fetch(subtitlePath)
@@ -22,10 +23,12 @@ export default class SubtitlesHandler {
       })
   }
 
-  start(duration) {
+  start(duration, center = false) {
     this.duration = duration
     this.container.textContent = ''
     this.container.className = 'subtitlesEmpty'
+    this.wrapper.className = center ? 'subtitlesCenter' : 'subtitlesBottom'
+    console.log(center)
   }
 
   update(progress) {
@@ -63,5 +66,6 @@ export default class SubtitlesHandler {
   end() {
     this.container.textContent = ''
     this.container.className = 'subtitlesEmpty'
+    this.wrapper.className = ''
   }
 }
