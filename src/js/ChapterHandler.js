@@ -20,12 +20,13 @@ export default class ChapterHandler {
     this.debug = options.debug
     this.starship = options.starship
     this.lensflareContainer = options.lensflareContainer
+    this.bloomPass = options.bloomPass
     this.globalInteractions = new GlobalInteractions(this.options)
 
     //default chapter params
     this.allowScroll = false
     this.autoScroll = false
-    this.workingChapter = 2
+    this.workingChapter = 4
     this.autoScrollSpeed = 0.0001
 
     //chapter progression
@@ -157,12 +158,12 @@ export default class ChapterHandler {
     this.chapters[this.currentChapter].progress = this.chapProgress
     // const duration = this.chapters[this.currentChapter].duration
 
-    if (this.chapProgress > 0.95) {
+    if (this.chapProgress > 0.95 && this.currentChapter != 4) {
       this.chapterTransition.style.opacity = (this.chapProgress - 0.95) * 40
-    } else if (this.chapProgress < 0.05) {
+    } else if (this.chapProgress < 0.05 && this.currentChapter != 0) {
       this.chapterTransition.style.opacity = 1 - this.chapProgress * 40
     } else {
-      this.chapProgress = 0
+      this.chapterTransition.style.opacity = 0
     }
   }
 
@@ -296,6 +297,7 @@ export default class ChapterHandler {
         chap.default.mouse = this.mouse
         chap.default.lensflareContainer = this.lensflareContainer
         chap.default.globalInteractions = this.globalInteractions
+        chap.default.bloomPass = this.bloomPass
 
         chap.default.switchHDRI = this.switchHDRI
         chap.default.changeFog = this.changeFog
