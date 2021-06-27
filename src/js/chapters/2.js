@@ -101,7 +101,6 @@ c.start = () => {
   c.changeFog(150, 10, 0x010218)
   initActiveCamera(c.firstIndexCamera)
   c.oldProg = c.progress
-  c.globalInteractions.transitionTitle('ma bite sur un tatami')
 }
 
 c.update = () => {
@@ -112,14 +111,19 @@ c.update = () => {
   c.lensflareContainer.getObjectByName('Lensflare').position.x = c.lensflarePositionX - c.progress * 100
   c.earth.container.rotation.y = 0.5 + c.progress
 
-
-  if (0.16 > c.progress && c.progress > 0.15) {
-    forceSwitchCam(0)
+  if (0.04 > c.progress && c.progress > 0.03) {
     showMovieLayout()
   }
 
-  if (0.17 > c.progress && c.progress > 0.16) {
+  if (0.05 > c.progress && c.progress > 0.04) {
     hideMovieLayout()
+  }
+
+  if (0.16 > c.progress && c.progress > 0.15) {
+    forceSwitchCam(0)
+  }
+
+  if (0.17 > c.progress && c.progress > 0.16) {
     forceSwitchCam(1)
   }
 
