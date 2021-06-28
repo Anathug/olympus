@@ -88,7 +88,7 @@ export default class App {
     if (string === 'space') {
       this.scene.background = this.spaceCubeMap
     } else if (string === 'landing-zone') {
-      this.scene.background = new Color(0xffd38a)
+      this.scene.background = new Color(0xc6bc9b)
     } else {
       this.scene.background = new Color(0x010218)
     }

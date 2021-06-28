@@ -23,7 +23,7 @@ c.init = options => {
   c.allowMouseMove = false
   c.firstIndexCamera = 1
   c.cams = []
-  c.marscColor = 0xffd38a
+  c.marscColor = 0xc6bc9b
   c.directionalLights = [
     {
       name: 'firstAmbientLight',

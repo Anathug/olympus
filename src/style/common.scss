@@ -413,8 +413,7 @@ p {
         cursor: pointer;
       }
       &.visible {
-        display: none;
-        // display: block;
+        display: block;
       }
     }
   }
@@ -431,6 +430,7 @@ p {
       span {
         font-size: 8px;
         color: grey;
+        letter-spacing: 3px;
       }
       p {
         letter-spacing: 3px;
