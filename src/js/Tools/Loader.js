@@ -29,6 +29,13 @@ export default class Loader extends EventEmitter {
     this.timerHours2 = document.getElementById('timerHours2')
     this.timerMinutes2 = document.getElementById('timerMinutes2')
     this.timerSeconds2 = document.getElementById('timerSeconds2')
+    this.loaderLineWrapper = document.querySelector('.loaderLine')
+    this.loaderLine = document.querySelector('.loaderLine .line')
+
+    this.setIntervalProgress = null
+
+    this.loaderLine.style.transition = 'transform cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.2s';
+
 
     this.durationTotal = 100000
     this.durationLeft = this.durationTotal
@@ -51,7 +58,7 @@ export default class Loader extends EventEmitter {
 
     this.setLoaders()
     this.setRessourcesList()
-    this.updateProgress()
+    this.setIntervalProgress = setInterval(this.autoIncrement, 300)
   }
   setLoaders() {
     const dracoLoader = new DRACOLoader()
@@ -162,13 +169,19 @@ export default class Loader extends EventEmitter {
 
   autoIncrement() {
     this.timerSeconds2.textContent = Math.floor(Math.random() * 10);
+    this.timerSeconds1.textContent = Math.floor(Math.random() * 10);
+    this.timerSeconds2.textContent = Math.floor(Math.random() * 10);
+
+    this.timerMinutes1.textContent = Math.floor(Math.random() * 10);
+    this.timerMinutes2.textContent = Math.floor(Math.random() * 10);
+
+    this.timerHours1.textContent = Math.floor(Math.random() * 10);
+    this.timerHours2.textContent = Math.floor(Math.random() * 10);
   }
 
   progress(xhr) {
     if (xhr.lengthComputable) {
       this.durationLeft = lerp(this.durationTotal, 0, 1 - Math.pow(1 - xhr.loaded / xhr.total, 4))
-      this.updateProgress()
-      this.autoIncrement()
       if (this.currentPercent === 100) {
         this.currentPercent = 0
       }
@@ -251,9 +264,21 @@ export default class Loader extends EventEmitter {
     this.done++
     this.createNestedObject(this[`${ressource.type}s`], ressource.name.split('/'), loaded)
     this.trigger('ressourceLoad', [ressource, loaded])
+    this.loaderLine.style.transform = `scaleX(${this.done / this.total})`
+
     if (this.total === this.done) {
       this.trigger('ressourcesReady')
+      this.loaderLineWrapper.style.opacity = 0
+      this.timerSeconds1.textContent = 0
       this.timerSeconds2.textContent = 0
+
+      this.timerMinutes1.textContent = 0
+      this.timerMinutes2.textContent = 0
+
+      this.timerHours1.textContent = 0
+      this.timerHours2.textContent = 0
+
+      clearInterval(this.setIntervalProgress);
     }
   }
   createNestedObject(base, names, value) {
