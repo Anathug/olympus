@@ -23,42 +23,28 @@ export default class Loader extends EventEmitter {
     this.sounds = {}
     this.fonts = {}
 
-    this.timerHours1 = document.getElementById('timerHours1')
-    this.timerMinutes1 = document.getElementById('timerMinutes1')
-    this.timerSeconds1 = document.getElementById('timerSeconds1')
-    this.timerHours2 = document.getElementById('timerHours2')
-    this.timerMinutes2 = document.getElementById('timerMinutes2')
-    this.timerSeconds2 = document.getElementById('timerSeconds2')
-    this.loaderLineWrapper = document.querySelector('.loaderLine')
     this.loaderLine = document.querySelector('.loaderLine .line')
-
     this.setIntervalProgress = null
-
     this.loaderLine.style.transition = 'transform cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.2s';
-
 
     this.durationTotal = 100000
     this.durationLeft = this.durationTotal
-    let secondsTotal = this.durationLeft
-    let minutesTotal = secondsTotal / 60
-    let hoursTotal = minutesTotal / 24
 
-    let seconds = Math.floor(secondsTotal) % 60
-    let minutes = Math.floor(minutesTotal) % 60
-    let hours = Math.floor(hoursTotal) % 24
-
-    this.timerSeconds1.textContent = ('0' + seconds).slice(-2).charAt(0)
-    this.timerSeconds2.textContent = ('0' + seconds).slice(-2).charAt(1)
-
-    this.timerMinutes1.textContent = ('0' + minutes).slice(-2).charAt(0)
-    this.timerMinutes2.textContent = ('0' + minutes).slice(-2).charAt(1)
-
-    this.timerHours1.textContent = ('0' + hours).slice(-2).charAt(0)
-    this.timerHours2.textContent = ('0' + hours).slice(-2).charAt(1)
-
+    this.setLoaderAnimationDelay()
     this.setLoaders()
     this.setRessourcesList()
     this.setIntervalProgress = setInterval(this.autoIncrement, 300)
+  }
+
+  setLoaderAnimationDelay() {
+    const spans = document.querySelectorAll('#timerContainer span')
+    const bottomSpans = document.querySelectorAll('.loaderBottom h3 span')
+    spans.forEach((span, i) => {
+      span.style.animationDelay = `${(1 + i) / 10}s`
+    })
+    bottomSpans.forEach((span, i) => {
+      span.style.animationDelay = `${0.2 + (i / 10)}s`
+    })
   }
   setLoaders() {
     const dracoLoader = new DRACOLoader()
@@ -148,36 +134,6 @@ export default class Loader extends EventEmitter {
     ]
   }
 
-  updateProgress() {
-    let secondsTotal = this.durationLeft
-    let minutesTotal = secondsTotal / 60
-    let hoursTotal = minutesTotal / 24
-
-    let seconds = Math.floor(secondsTotal) % 60
-    let minutes = Math.floor(minutesTotal) % 60
-    let hours = Math.floor(hoursTotal) % 24
-
-    this.timerSeconds1.textContent = ('0' + seconds).slice(-2).charAt(0)
-    this.timerSeconds2.textContent = ('0' + seconds).slice(-2).charAt(1)
-
-    this.timerMinutes1.textContent = ('0' + minutes).slice(-2).charAt(0)
-    this.timerMinutes2.textContent = ('0' + minutes).slice(-2).charAt(1)
-
-    this.timerHours1.textContent = ('0' + hours).slice(-2).charAt(0)
-    this.timerHours2.textContent = ('0' + hours).slice(-2).charAt(1)
-  }
-
-  autoIncrement() {
-    this.timerSeconds2.textContent = Math.floor(Math.random() * 10);
-    this.timerSeconds1.textContent = Math.floor(Math.random() * 10);
-    this.timerSeconds2.textContent = Math.floor(Math.random() * 10);
-
-    this.timerMinutes1.textContent = Math.floor(Math.random() * 10);
-    this.timerMinutes2.textContent = Math.floor(Math.random() * 10);
-
-    this.timerHours1.textContent = Math.floor(Math.random() * 10);
-    this.timerHours2.textContent = Math.floor(Math.random() * 10);
-  }
 
   progress(xhr) {
     if (xhr.lengthComputable) {
@@ -268,16 +224,6 @@ export default class Loader extends EventEmitter {
 
     if (this.total === this.done) {
       this.trigger('ressourcesReady')
-      this.loaderLineWrapper.style.opacity = 0
-      this.timerSeconds1.textContent = 0
-      this.timerSeconds2.textContent = 0
-
-      this.timerMinutes1.textContent = 0
-      this.timerMinutes2.textContent = 0
-
-      this.timerHours1.textContent = 0
-      this.timerHours2.textContent = 0
-
       clearInterval(this.setIntervalProgress);
     }
   }

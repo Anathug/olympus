@@ -73,27 +73,23 @@ const setLoader = () => {
   let loadDiv = document.querySelector('#loader')
   let timerContainer = document.querySelector('#timerContainer')
   let headphones = document.querySelector('#headphones')
-  let clickToStart = document.querySelector('#clickToStart')
+  const loaderLineWrapper = document.querySelector('.loaderLine')
 
   assets.on('ressourcesReady', () => {
 
     headphones.classList.add('fadeout')
-    clickToStart.classList.add('fadein')
 
-    const onStart = () => {
-      timerContainer.classList.add('fadeout')
-      clickToStart.classList.remove('fadein')
+    timerContainer.classList.add('fadeout')
 
-      createApp()
-      createGlobalInteractions()
+    loaderLineWrapper.style.opacity = 0
+    createApp()
+    createGlobalInteractions()
+    setTimeout(() => {
+      loadDiv.classList.add('openScene')
       setTimeout(() => {
-        loadDiv.classList.add('openScene')
-        setTimeout(() => {
-          loadDiv.remove()
-        }, 2000)
-      }, 3000)
-    }
-    document.addEventListener("click", onStart, { once: true })
+        loadDiv.remove()
+      }, 2000)
+    }, 3000)
   })
 }
 

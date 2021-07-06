@@ -11,34 +11,15 @@
   <body>
     <div id="loader">
       <div id="timerContainer">
-        <span class="timerBlock"><span class="timerSurtext">T</span></span>
-        <span class="timerBlock"><span class="timerSurtext">-</span></span>
-        <span class="timerBlock"
-          ><span class="timerSurtext" id="timerHours1">0</span
-          ><span class="timerSubtext">H</span></span
-        >
-        <span class="timerBlock"
-          ><span class="timerSurtext" id="timerHours2">0</span
-          ><span class="timerSubtext">H</span></span
-        >
-        <span class="timerBlock"><span class="timerSurtext">:</span></span>
-        <span class="timerBlock"
-          ><span class="timerSurtext" id="timerMinutes1">0</span
-          ><span class="timerSubtext">M</span></span
-        >
-        <span class="timerBlock"
-          ><span class="timerSurtext" id="timerMinutes2">0</span
-          ><span class="timerSubtext">M</span></span
-        >
-        <span class="timerBlock"><span class="timerSurtext">:</span></span>
-        <span class="timerBlock"
-          ><span class="timerSurtext" id="timerSeconds1">0</span
-          ><span class="timerSubtext">S</span></span
-        >
-        <span class="timerBlock"
-          ><span class="timerSurtext" id="timerSeconds2">0</span
-          ><span class="timerSubtext">S</span></span
-        >
+        <div class="overflow-hidden relative">
+          <img src="./icons/logo.svg" alt="logo of olympus" style="margin-bottom: 1rem" />
+        </div>
+        <div class="overflow-hidden relative">
+          <p>
+            <span>A</span> <span>JOURNEY</span> <span>TO</span> <span>THE</span> <span>RED</span>
+            <span>PLANET</span>
+          </p>
+        </div>
       </div>
       <div class="loaderLine">
         <div class="line"></div>
@@ -56,10 +37,9 @@
             fill="white"
           />
         </svg>
-        <h3>Radio check. Have you got your headphones on ?</h3>
-      </div>
-      <div class="loaderBottom" id="clickToStart">
-        <h3>[Click To Start The Experience]</h3>
+        <div class="overflow-hidden relative">
+          <h3><span>Radio</span> <span>check.</span> <span>Have</span> <span>you</span> <span>got</span> <span>your</span> <span>headphones</span> <span>on</span> <span>? </span></sh3>
+        </div>
       </div>
     </div>
     <canvas id="_canvas"></canvas>
